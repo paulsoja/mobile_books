@@ -1,18 +1,22 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.spasinnya.mentoring.data.repository.loginRepo
 import com.spasinnya.mentoring.domain.usecase.LoginUseCase
 import com.spasinnya.mentoring.domain.usecase.createLoginUseCase
-import com.spasinnya.mentoring.presentation.base.BaseViewModel
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-) : BaseViewModel() {
+) : ViewModel() {
 
     companion object {
-        val Factory: ViewModelProvider.Factory = factory {
-            LoginViewModel(loginUseCase = createLoginUseCase(loginRepo))
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                LoginViewModel(loginUseCase = createLoginUseCase(loginRepo))
+            }
         }
     }
 }
