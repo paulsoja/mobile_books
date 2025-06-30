@@ -9,6 +9,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spasinnya.mentoring.presentation.homeflow.home.HomeScreen
+import com.spasinnya.mentoring.presentation.homeflow.lessons.LessonsScreen
+import com.spasinnya.mentoring.presentation.homeflow.weeks.WeeksScreen
 import com.spasinnya.mentoring.presentation.navigation.Screen
 
 @Composable
@@ -48,13 +50,26 @@ fun HomeFlowContainer() {
         composable<Screen.HomeFlow.HomeScreen> {
             HomeScreen(
                 navigateToSettings = {  },
+                navigateToLessons = {
+                    navController.navigate(Screen.HomeFlow.LessonsScreen)
+                }
             )
         }
         composable<Screen.HomeFlow.WeeksScreen> {
-
+            WeeksScreen(
+                navigateBack = { navController.navigateUp() },
+            )
         }
         composable<Screen.HomeFlow.LessonsScreen> {
+            LessonsScreen(
+                navigateBack = { navController.navigateUp() },
+                onActionClicked = {
 
+                },
+                navigateToWeek = {
+                    navController.navigate(Screen.HomeFlow.WeeksScreen)
+                }
+            )
         }
     }
 }

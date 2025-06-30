@@ -7,7 +7,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 
 @Composable
-fun TelldusTheme(
+fun BooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     colors: ColorPalette = colorPalette(),
     content: @Composable () -> Unit,
@@ -18,7 +18,7 @@ fun TelldusTheme(
     ) {
         MaterialTheme(
             colors = colors.materialColors,
-            typography = AppTypography(),
+            typography = appTypography(),
             content = content
         )
     }
