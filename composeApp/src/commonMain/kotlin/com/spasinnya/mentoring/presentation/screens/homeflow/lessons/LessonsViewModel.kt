@@ -1,10 +1,17 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
-import com.spasinnya.mentoring.presentation.base.BaseViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 
-class LessonsViewModel() : BaseViewModel() {
+class LessonsViewModel() : ViewModel() {
 
     companion object {
-        val Factory = factory { LessonsViewModel() }
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                LessonsViewModel()
+            }
+        }
     }
 }
