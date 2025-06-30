@@ -17,7 +17,7 @@ import books.composeapp.generated.resources.raleway_thin
 import org.jetbrains.compose.resources.Font
 
 @Composable
-fun RalewayFamily() = FontFamily(
+fun ralewayFamily() = FontFamily(
     Font(Res.font.raleway_semi_bold, weight = FontWeight.SemiBold),
     Font(Res.font.raleway_medium, weight = FontWeight.Medium),
     Font(Res.font.raleway_regular, weight = FontWeight.Normal),
@@ -30,8 +30,8 @@ fun RalewayFamily() = FontFamily(
 )
 
 @Composable
-fun AppTypography() = Typography().run {
-    val fontFamily = RalewayFamily()
+fun appTypography() = Typography().run {
+    val fontFamily = ralewayFamily()
     copy(
         h1 = this.h1.copy(fontFamily = fontFamily),
         h2 = this.h2.copy(fontFamily = fontFamily),

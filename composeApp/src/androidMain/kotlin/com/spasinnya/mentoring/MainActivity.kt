@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowCompat
 import com.spasinnya.mentoring.presentation.AppContent
+import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +23,9 @@ class MainActivity : ComponentActivity() {
         insets.isAppearanceLightNavigationBars = true
 
         setContent {
-            AppContent()
+            BooksTheme {
+                AppContent()
+            }
         }
     }
 }
