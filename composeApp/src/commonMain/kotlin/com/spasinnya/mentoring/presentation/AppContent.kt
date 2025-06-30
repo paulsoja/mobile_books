@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.spasinnya.mentoring.presentation.authflow.AuthFlowContainer
-import com.spasinnya.mentoring.presentation.homeflow.HomeFlowContainer
+import com.spasinnya.mentoring.presentation.screens.authflow.AuthFlowContainer
+import com.spasinnya.mentoring.presentation.screens.homeflow.HomeFlowContainer
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 
 @Composable
