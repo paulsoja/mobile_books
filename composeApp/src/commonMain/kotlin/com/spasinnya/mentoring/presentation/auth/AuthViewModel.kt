@@ -2,7 +2,7 @@ package com.spasinnya.mentoring.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spasinnya.mentoring.domain.models.EmailPassword
+import com.spasinnya.mentoring.domain.models.Credentials
 import com.spasinnya.mentoring.domain.models.OtpCode
 import com.spasinnya.mentoring.domain.usecase.LoginUseCase
 import com.spasinnya.mentoring.domain.usecase.OtpUseCase
@@ -24,7 +24,7 @@ class AuthViewModel(
         viewModelScope.launch {
             _state.value = AuthState.Loading
             runCatching {
-                loginUseCase(EmailPassword(email, password))
+                loginUseCase(Credentials(email, password))
             }.onSuccess { token ->
                 _state.value = AuthState.LoginSuccess(token)
             }.onFailure { e ->
@@ -37,7 +37,7 @@ class AuthViewModel(
         viewModelScope.launch {
             _state.value = AuthState.Loading
             runCatching {
-                registerUseCase(EmailPassword(email, password))
+                registerUseCase(Credentials(email, password))
             }.onSuccess { token ->
                 _state.value = AuthState.RegisterStep(email, password)
             }.onFailure { e ->
@@ -51,7 +51,7 @@ class AuthViewModel(
             _state.value = AuthState.Loading
 
             runCatching {
-                otpUseCase(EmailPassword(email, password), OtpCode(code))
+                otpUseCase(Credentials(email, password), OtpCode(code))
             }.onSuccess { token ->
                 _state.value = AuthState.OtpSuccess("Registration complete")
             }.onFailure { e ->

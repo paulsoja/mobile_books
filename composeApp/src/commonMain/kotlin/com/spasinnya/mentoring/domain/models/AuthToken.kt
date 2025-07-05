@@ -1,8 +1,10 @@
 package com.spasinnya.mentoring.domain.models
 
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmInline
 
 @Serializable
-data class AuthToken(
+@JvmInline
+value class AuthToken(
     val token: String
 )
