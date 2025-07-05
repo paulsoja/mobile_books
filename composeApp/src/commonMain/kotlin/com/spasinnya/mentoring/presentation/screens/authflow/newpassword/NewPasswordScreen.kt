@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createNewPasswordViewModel
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -28,7 +29,7 @@ fun NewPasswordScreen(
     navigateToSuccess: () -> Unit,
 ) {
 
-    val viewModel: NewPasswordViewModel = viewModel(factory = NewPasswordViewModel.Factory)
+    val viewModel: NewPasswordViewModel = viewModel(factory = createNewPasswordViewModel)
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),

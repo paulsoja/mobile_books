@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.newpassword
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class NewPasswordViewModel() : ViewModel() {
+class NewPasswordViewModel() : BaseMviViewModel<NewPasswordContract.State, NewPasswordContract.Event, NewPasswordContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                NewPasswordViewModel()
-            }
+    override fun createInitialState(): NewPasswordContract.State = NewPasswordContract.State()
+
+    override fun handleEvent(event: NewPasswordContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

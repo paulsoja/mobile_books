@@ -44,6 +44,7 @@ import books.composeapp.generated.resources.ic_back
 import books.composeapp.generated.resources.ic_chevron_right
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLessonsViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -54,7 +55,7 @@ fun LessonsScreen(
     navigateToWeek: (id: Int) -> Unit
 ) {
 
-    val viewModel: LessonsViewModel = viewModel(factory = LessonsViewModel.Factory)
+    val viewModel: LessonsViewModel = viewModel(factory = createLessonsViewModel)
 
     Scaffold(
         modifier = Modifier

@@ -65,6 +65,7 @@ import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -74,7 +75,7 @@ fun HomeScreen(
     navigateToLessons: () -> Unit
 ) {
 
-    val viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),

@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.weeks
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class WeeksViewModel : ViewModel() {
+class WeeksViewModel : BaseMviViewModel<WeeksContract.State, WeeksContract.Event, WeeksContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                WeeksViewModel()
-            }
+    override fun createInitialState(): WeeksContract.State = WeeksContract.State()
+
+    override fun handleEvent(event: WeeksContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

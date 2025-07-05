@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.otp
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class OtpViewModel() : ViewModel() {
+class OtpViewModel() : BaseMviViewModel<OtpContract.State, OtpContract.Event, OtpContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                OtpViewModel()
-            }
+    override fun createInitialState(): OtpContract.State = OtpContract.State()
+
+    override fun handleEvent(event: OtpContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

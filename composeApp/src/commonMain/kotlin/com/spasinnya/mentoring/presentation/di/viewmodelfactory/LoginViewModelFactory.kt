@@ -2,17 +2,13 @@ package com.spasinnya.mentoring.presentation.di.viewmodelfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginViewModel
-import com.spasinnya.mentoring.presentation.di.UseCaseProvider.loginUseCase
-import kotlin.reflect.KClass
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 
-class LoginViewModelFactory : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: KClass<T>, extras: CreationExtras): T {
-        if (modelClass.isInstance(LoginViewModel::class)) {
-            return LoginViewModel(loginUseCase) as T
+inline fun <reified T : ViewModel> create(crossinline initBlock: () -> T): ViewModelProvider.Factory {
+    return viewModelFactory {
+        initializer {
+            initBlock.invoke()
         }
-        throw IllegalArgumentException("Unknown ViewModel class: $modelClass")
     }
 }

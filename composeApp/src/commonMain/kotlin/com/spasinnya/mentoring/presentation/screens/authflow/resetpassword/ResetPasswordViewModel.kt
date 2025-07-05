@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.resetpassword
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class ResetPasswordViewModel() : ViewModel() {
+class ResetPasswordViewModel() : BaseMviViewModel<ResetPasswordContract.State, ResetPasswordContract.Event, ResetPasswordContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                ResetPasswordViewModel()
-            }
+    override fun createInitialState(): ResetPasswordContract.State = ResetPasswordContract.State()
+
+    override fun handleEvent(event: ResetPasswordContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

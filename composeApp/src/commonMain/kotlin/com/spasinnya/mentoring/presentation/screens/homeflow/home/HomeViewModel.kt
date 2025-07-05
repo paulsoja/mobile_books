@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class HomeViewModel() : ViewModel() {
+class HomeViewModel() : BaseMviViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                HomeViewModel()
-            }
+    override fun createInitialState(): HomeContract.State = HomeContract.State()
+
+    override fun handleEvent(event: HomeContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

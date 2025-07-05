@@ -1,17 +1,16 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class RegisterViewModel() : ViewModel() {
+class RegisterViewModel() : BaseMviViewModel<RegisterContract.State, RegisterContract.Event, RegisterContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                RegisterViewModel()
-            }
+    override fun createInitialState(): RegisterContract.State = RegisterContract.State()
+
+    override fun handleEvent(event: RegisterContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
+
 }

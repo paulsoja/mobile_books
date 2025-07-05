@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_repeat
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createResetPasswordViewModel
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -39,7 +40,7 @@ fun ResetPasswordScreen(
     navigateToOtp: () -> Unit
 ) {
 
-    val viewModel: ResetPasswordViewModel = viewModel(factory = ResetPasswordViewModel.Factory)
+    val viewModel: ResetPasswordViewModel = viewModel(factory = createResetPasswordViewModel)
     var email by remember { mutableStateOf("") }
 
     Column(

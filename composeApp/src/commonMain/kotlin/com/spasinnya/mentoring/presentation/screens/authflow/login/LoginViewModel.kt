@@ -1,22 +1,18 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.spasinnya.mentoring.data.repository.loginRepo
 import com.spasinnya.mentoring.domain.usecase.LoginUseCase
-import com.spasinnya.mentoring.domain.usecase.createLoginUseCase
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-) : ViewModel() {
+) : BaseMviViewModel<LoginContract.State, LoginContract.Effect, LoginContract.Event>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                LoginViewModel(loginUseCase = createLoginUseCase(loginRepo))
-            }
+    override fun createInitialState(): LoginContract.State = LoginContract.State()
+
+    override fun handleEvent(event: LoginContract.Effect) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

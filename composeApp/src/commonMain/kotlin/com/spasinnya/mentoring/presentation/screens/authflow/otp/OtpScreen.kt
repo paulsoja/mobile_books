@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createOtpViewModel
 import com.spasinnya.mentoring.presentation.screens.authflow.components.OtpInput
 import org.jetbrains.compose.resources.vectorResource
 
@@ -35,7 +36,7 @@ fun OtpScreen(
     navigateTo: () -> Unit
 ) {
 
-    val viewModel: OtpViewModel = viewModel(factory = OtpViewModel.Factory)
+    val viewModel: OtpViewModel = viewModel(factory = createOtpViewModel)
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),

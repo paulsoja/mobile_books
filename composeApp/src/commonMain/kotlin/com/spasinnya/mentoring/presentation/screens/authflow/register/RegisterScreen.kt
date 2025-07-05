@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createRegisterViewModel
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -43,7 +44,7 @@ fun RegisterScreen(
     navigateToOtp: () -> Unit
 ) {
 
-    val viewModel: RegisterViewModel = viewModel(factory = RegisterViewModel.Factory)
+    val viewModel: RegisterViewModel = viewModel(factory = createRegisterViewModel)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 

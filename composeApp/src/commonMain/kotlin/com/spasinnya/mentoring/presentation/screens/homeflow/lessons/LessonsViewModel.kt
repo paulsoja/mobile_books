@@ -1,17 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class LessonsViewModel() : ViewModel() {
+class LessonsViewModel() : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>() {
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                LessonsViewModel()
-            }
+    override fun createInitialState(): LessonsContract.State = LessonsContract.State()
+
+    override fun handleEvent(event: LessonsContract.Event) {
+        when (event) {
+
+            else -> Unit
         }
     }
 }

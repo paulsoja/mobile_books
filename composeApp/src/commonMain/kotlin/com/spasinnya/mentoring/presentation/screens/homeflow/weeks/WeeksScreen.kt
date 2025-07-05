@@ -45,6 +45,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_back
 import books.composeapp.generated.resources.ic_check
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createWeeksViewModel
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.vectorResource
 
@@ -53,7 +54,7 @@ fun WeeksScreen(
     navigateBack: () -> Unit,
 ) {
 
-    val viewModel: WeeksViewModel = viewModel(factory = WeeksViewModel.Factory)
+    val viewModel: WeeksViewModel = viewModel(factory = createWeeksViewModel)
 
     Column(
         modifier = Modifier

@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
+import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLoginViewModel
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
@@ -44,7 +45,7 @@ fun LoginScreen(
     navigateToHome: () -> Unit
 ) {
 
-    val viewModel: LoginViewModel = viewModel(factory = LoginViewModel.Factory)
+    val viewModel: LoginViewModel = viewModel(factory = createLoginViewModel)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
