@@ -14,8 +14,8 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-private const val API_SCHEME = "https"
-private const val API_HOST   = "web-books-1.onrender.com"
+private const val API_SCHEME = "http"
+private const val API_HOST   = "10.0.2.2:8080"
 
 val httpClient: HttpClient = HttpClient(CIO) {
     install(ContentNegotiation) {

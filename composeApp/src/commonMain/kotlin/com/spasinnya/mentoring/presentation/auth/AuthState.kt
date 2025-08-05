@@ -1,6 +1,6 @@
 package com.spasinnya.mentoring.presentation.auth
 
-import com.spasinnya.mentoring.domain.models.AuthToken
+import com.spasinnya.mentoring.domain.model.AuthToken
 
 sealed class AuthState {
     data object Idle : AuthState()

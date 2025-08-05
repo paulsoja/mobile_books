@@ -1,15 +1,11 @@
 package com.spasinnya.mentoring.presentation.auth
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.spasinnya.mentoring.domain.models.Credentials
-import com.spasinnya.mentoring.domain.models.OtpCode
 import com.spasinnya.mentoring.domain.usecase.LoginUseCase
 import com.spasinnya.mentoring.domain.usecase.OtpUseCase
 import com.spasinnya.mentoring.domain.usecase.RegisterUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class AuthViewModel(
     private val loginUseCase: LoginUseCase,
@@ -20,7 +16,7 @@ class AuthViewModel(
     private val _state = MutableStateFlow<AuthState>(AuthState.Idle)
     val state: StateFlow<AuthState> = _state
 
-    fun login(email: String, password: String) {
+    /*fun login(email: String, password: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
             runCatching {
@@ -31,9 +27,9 @@ class AuthViewModel(
                 _state.value = AuthState.Error(e.message.orEmpty())
             }
         }
-    }
+    }*/
 
-    fun register(email: String, password: String) {
+    /*fun register(email: String, password: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
             runCatching {
@@ -44,9 +40,9 @@ class AuthViewModel(
                 _state.value = AuthState.Error(e.message.orEmpty())
             }
         }
-    }
+    }*/
 
-    fun verifyOtp(email: String, password: String, code: String) {
+    /*fun verifyOtp(email: String, password: String, code: String) {
         viewModelScope.launch {
             _state.value = AuthState.Loading
 
@@ -58,5 +54,5 @@ class AuthViewModel(
                 _state.value = AuthState.Error(e.message.orEmpty())
             }
         }
-    }
+    }*/
 }

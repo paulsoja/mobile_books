@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
 
     private val _state = MutableStateFlow(createInitialState())
-    protected val state: StateFlow<State> = _state.asStateFlow()
+    val state: StateFlow<State> = _state.asStateFlow()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),

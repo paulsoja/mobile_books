@@ -1,7 +1,12 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
+import com.spasinnya.mentoring.domain.model.Email
+import com.spasinnya.mentoring.domain.model.Password
+
 interface RegisterContract {
     data class State(
+        val email: Email = Email.init,
+        val password: Password = Password.init,
         val status: Status = Status.Init,
         val isLoading: Boolean = false,
     )
@@ -14,7 +19,9 @@ interface RegisterContract {
     }
 
     sealed class Event {
-
+        data class EmailChanged(val email: String) : Event()
+        data class PasswordChanged(val password: String) : Event()
+        data class ValidateCredentials(val email: String, val password: String) : Event()
     }
 
     sealed class Effect {

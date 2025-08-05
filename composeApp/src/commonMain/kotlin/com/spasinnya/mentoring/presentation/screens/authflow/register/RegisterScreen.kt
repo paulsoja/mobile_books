@@ -20,9 +20,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
@@ -45,8 +43,7 @@ fun RegisterScreen(
 ) {
 
     val viewModel: RegisterViewModel = viewModel(factory = createRegisterViewModel)
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -84,13 +81,13 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = email,
+            value = state.email.value,
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
             textStyle = MaterialTheme.typography.subtitle1.copy(
                 color = Color(0xFF54595F)
             ),
-            onValueChange = { email = it },
+            onValueChange = { viewModel.dispatchEvent(RegisterContract.Event.EmailChanged(it)) },
             placeholder = {
                 Text(
                     text = "email@website.com",
@@ -112,13 +109,13 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = password,
+            value = state.password.value,
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
             textStyle = MaterialTheme.typography.subtitle1.copy(
                 color = Color(0xFF54595F)
             ),
-            onValueChange = { password = it },
+            onValueChange = { viewModel.dispatchEvent(RegisterContract.Event.PasswordChanged(it)) },
         )
         Spacer(modifier = Modifier.height(24.dp))
         Button(
@@ -127,7 +124,14 @@ fun RegisterScreen(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(0xFF3C4E73)
             ),
-            onClick = { navigateToOtp.invoke() },
+            onClick = {
+                viewModel.dispatchEvent(
+                    RegisterContract.Event.ValidateCredentials(
+                        state.email.value,
+                        state.password.value
+                    )
+                )
+            },
             content = {
                 Text(
                     text = "Зареєструватись",

@@ -1,16 +1,60 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
+import androidx.lifecycle.viewModelScope
+import com.spasinnya.mentoring.domain.model.Credentials
+import com.spasinnya.mentoring.domain.model.Email
+import com.spasinnya.mentoring.domain.model.Password
+import com.spasinnya.mentoring.domain.rules.Validated
+import com.spasinnya.mentoring.domain.usecase.RegisterUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
 
-class RegisterViewModel() : BaseMviViewModel<RegisterContract.State, RegisterContract.Event, RegisterContract.Effect>() {
+class RegisterViewModel(
+    private val registerUseCase: RegisterUseCase
+) : BaseMviViewModel<RegisterContract.State, RegisterContract.Event, RegisterContract.Effect>() {
 
     override fun createInitialState(): RegisterContract.State = RegisterContract.State()
 
     override fun handleEvent(event: RegisterContract.Event) {
         when (event) {
-
-            else -> Unit
+            is RegisterContract.Event.EmailChanged -> setState { copy(email = Email(event.email)) }
+            is RegisterContract.Event.PasswordChanged -> setState { copy(password = Password(event.password)) }
+            is RegisterContract.Event.ValidateCredentials -> validateCredentials(
+                email = event.email,
+                password = event.password,
+                onValid = ::register
+            )
         }
     }
 
+    private fun validateCredentials(email: String, password: String, onValid: (Credentials) -> Unit) {
+        val creds = Credentials.of(email, password)
+        when (creds) {
+            is Validated.Valid -> onValid.invoke(creds.value)
+            is Validated.Invalid -> {
+                creds.errors.forEach {
+                    when (it) {
+                        is Credentials.CredentialsError.Email -> println("Email error: ${it.error}")
+                        is Credentials.CredentialsError.Password -> println("Password error: ${it.error}")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun register(credentials: Credentials) = viewModelScope.launch(Dispatchers.IO) {
+        registerUseCase.invoke(credentials)
+            .onStart {  }
+            .catch {
+
+            }
+            .collectLatest {
+
+            }
+    }
 }

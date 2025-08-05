@@ -1,4 +1,4 @@
-package com.spasinnya.mentoring.domain.models
+package com.spasinnya.mentoring.domain.model
 
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
