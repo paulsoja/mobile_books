@@ -30,5 +30,8 @@ interface RegisterContract {
 
     sealed class ErrorType {
         data object NoConnection : ErrorType()
+        data object UnexpectedError : ErrorType()
+        data class EmailError(val message: Email.Error) : ErrorType()
+        data class PasswordError(val message: Password.Error) : ErrorType()
     }
 }

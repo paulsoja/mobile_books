@@ -10,8 +10,7 @@ fun createLoginUseCase(repository: LoginRepository): LoginUseCase = { credential
 }
 
 fun createRegisterUseCase(repository: RegisterRepository): RegisterUseCase = { credentials ->
-        repository(credentials.toData())
-        //if (!repository(credentials.toData())) throw IllegalArgumentException("Registration failed")
+    repository(credentials.toData())
 }
 
 fun createOtpUseCase(repository: OtpRepository): OtpUseCase = { credentials, code ->

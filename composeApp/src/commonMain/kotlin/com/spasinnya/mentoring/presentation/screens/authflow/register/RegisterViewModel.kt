@@ -7,11 +7,11 @@ import com.spasinnya.mentoring.domain.model.Password
 import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.usecase.RegisterUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
+import com.spasinnya.mentoring.presentation.base.loader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
@@ -39,8 +39,12 @@ class RegisterViewModel(
             is Validated.Invalid -> {
                 creds.errors.forEach {
                     when (it) {
-                        is Credentials.CredentialsError.Email -> println("Email error: ${it.error}")
-                        is Credentials.CredentialsError.Password -> println("Password error: ${it.error}")
+                        is Credentials.CredentialsError.Email -> {
+                            setState { copy(status = RegisterContract.Status.Error(RegisterContract.ErrorType.EmailError(it.error))) }
+                        }
+                        is Credentials.CredentialsError.Password -> {
+                            setState { copy(status = RegisterContract.Status.Error(RegisterContract.ErrorType.PasswordError(it.error))) }
+                        }
                     }
                 }
             }
@@ -49,12 +53,29 @@ class RegisterViewModel(
 
     private fun register(credentials: Credentials) = viewModelScope.launch(Dispatchers.IO) {
         registerUseCase.invoke(credentials)
-            .onStart {  }
+            .loader(isLoading = { setState { copy(isLoading = it) } })
             .catch {
-
+                handleFailures(it)
             }
             .collectLatest {
-
+                // success
             }
+    }
+
+    override fun handleNetworkError() {
+        super.handleNetworkError()
+        setState { copy(status = RegisterContract.Status.Error(RegisterContract.ErrorType.NoConnection))}
+    }
+
+    override fun handleUnexpectedError(throwable: Throwable) {
+        super.handleUnexpectedError(throwable)
+        setState { copy(status = RegisterContract.Status.Error(RegisterContract.ErrorType.UnexpectedError))}
+    }
+
+    override fun handleDomainError(statusCode: String) {
+        super.handleDomainError(statusCode)
+        when (statusCode) {
+
+        }
     }
 }
