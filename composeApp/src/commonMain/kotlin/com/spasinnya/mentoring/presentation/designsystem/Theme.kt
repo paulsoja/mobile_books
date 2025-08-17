@@ -1,29 +1,39 @@
 package com.spasinnya.mentoring.presentation.designsystem
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
 
 @Composable
 fun BooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    colors: ColorPalette = colorPalette(),
     content: @Composable () -> Unit,
 ) {
-
-    CompositionLocalProvider(
-        LocalColors provides colors,
-    ) {
-        MaterialTheme(
-            colors = colors.materialColors,
-            typography = appTypography(),
-            content = content
-        )
-    }
+    MaterialTheme(
+        colorScheme = if (darkTheme) DarkColors else LightColors,
+        typography = appTypography(),
+        content = content
+    )
 }
 
-val LocalColors = staticCompositionLocalOf<ColorPalette> {
-    error("No ColorPalette provided")
-}
+private val LightColors: ColorScheme = lightColorScheme(
+    primary = Primary,
+    onPrimary = OnPrimary,
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    background = Background,
+    onBackground = OnBackground,
+    surface = Surface,
+    onSurface = OnSurface,
+)
+
+private val DarkColors: ColorScheme = darkColorScheme(
+    primary = Primary,
+    onPrimary = OnPrimary,
+    secondary = Secondary,
+    onSecondary = OnSecondary,
+    // TODO define dark variants later;
+)

@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         insets.isAppearanceLightNavigationBars = true
 
         setContent {
-            BooksTheme {
+            BooksTheme(darkTheme = false) {
                 AppContent()
             }
         }
