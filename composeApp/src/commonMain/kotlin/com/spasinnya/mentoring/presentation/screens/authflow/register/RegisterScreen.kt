@@ -10,14 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
@@ -42,8 +41,7 @@ fun RegisterScreen(
 ) {
 
     val viewModel: RegisterViewModel = viewModel(factory = createRegisterViewModel)
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -72,8 +70,8 @@ fun RegisterScreen(
         )
         CoreSpacerVerticalMedium()
         CoreOutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
+            value = state.email.value,
+            onValueChange = { viewModel.dispatchEvent(RegisterContract.Event.EmailChanged(it)) },
             placeholder = "email@website.com",
             textStyle = MaterialTheme.typography.bodySmall.copy(
                 color = Color(0xFF54595F)
@@ -94,8 +92,8 @@ fun RegisterScreen(
         CoreSpacerVerticalMedium()
 
         CoreOutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
+            value = state.password.value,
+            onValueChange = { viewModel.dispatchEvent(RegisterContract.Event.PasswordChanged(it)) },
             textStyle = MaterialTheme.typography.bodySmall.copy(
                 color = Color(0xFF54595F)
             )
@@ -108,7 +106,12 @@ fun RegisterScreen(
             text = "Зареєструватись",
             iconAfter = Res.drawable.ic_arrow_right,
             iconTint = Color.White,
-            onClick = { navigateToOtp.invoke() },
+            onClick = { viewModel.dispatchEvent(
+                RegisterContract.Event.ValidateCredentials(
+                    state.email.value,
+                    state.password.value
+                )
+            ) },
         )
 
         CoreHorizontalDividerWithText("або")

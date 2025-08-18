@@ -1,7 +1,9 @@
 package com.spasinnya.mentoring.data.repository
 
+import com.spasinnya.mentoring.data.model.CredentialsApiRequest
 import com.spasinnya.mentoring.data.net.httpClient
-import com.spasinnya.mentoring.domain.models.AuthToken
+import com.spasinnya.mentoring.data.net.postFlow
+import com.spasinnya.mentoring.domain.model.AuthToken
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
@@ -16,10 +18,10 @@ val loginRepo: LoginRepository = { creds ->
 }
 
 val registerRepo: RegisterRepository = { creds ->
-    val response = httpClient.post("/register") {
-        setBody(creds)
-    }
-    response.status.value in 200..299
+    httpClient.postFlow<CredentialsApiRequest, String>(
+        path = "register",
+        body = creds
+    )
 }
 
 val otpRepo: OtpRepository = { creds, code ->

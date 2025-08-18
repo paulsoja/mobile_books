@@ -2,6 +2,7 @@ package com.spasinnya.mentoring.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.spasinnya.mentoring.data.model.AppError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
 
     private val _state = MutableStateFlow(createInitialState())
-    protected val state: StateFlow<State> = _state.asStateFlow()
+    val state: StateFlow<State> = _state.asStateFlow()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -40,5 +41,26 @@ abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
         viewModelScope.launch {
             _effect.send(builder())
         }
+    }
+
+    protected fun handleFailures(t: Throwable) {
+        when (t) {
+            is AppError.NoConnection -> handleNetworkError()
+            is AppError.Domain -> handleDomainError(t.statusCode)
+            is AppError.Unexpected -> handleUnexpectedError(t)
+            else -> handleUnexpectedError(t)
+        }
+    }
+
+    protected open fun handleDomainError(statusCode: String) {
+
+    }
+
+    protected open fun handleNetworkError() {
+
+    }
+
+    protected open fun handleUnexpectedError(throwable: Throwable) {
+
     }
 }
