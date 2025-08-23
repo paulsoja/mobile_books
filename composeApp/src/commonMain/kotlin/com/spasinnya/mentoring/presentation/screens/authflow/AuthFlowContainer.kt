@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -44,7 +44,7 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
     }
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),
-        backgroundColor = Color(0xFFF5F7FC),
+        contentColor = Color(0xFFF5F7FC),
         topBar = {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),

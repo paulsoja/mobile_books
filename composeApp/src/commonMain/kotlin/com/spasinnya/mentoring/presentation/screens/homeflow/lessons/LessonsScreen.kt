@@ -18,14 +18,11 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.ripple
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,6 +41,11 @@ import books.composeapp.generated.resources.ic_back
 import books.composeapp.generated.resources.ic_chevron_right
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCardWithContent
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLessonsViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
@@ -63,49 +65,18 @@ fun LessonsScreen(
             .background(brush = Brush.verticalGradient(colors = listOf(Color(0xFFF5F7FC), Color(0xFFE7F2F8))))
             .systemBarsPadding()
             .navigationBarsPadding(),
-        backgroundColor = Color.Transparent,
+        containerColor = Color.Transparent,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Наставництво - I",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF3C4E73),
-                            fontSize = 16.sp
-                        )
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
-                        modifier = Modifier.padding(start = 8.dp),
-                        onClick = navigateBack
-                    ) {
-                        Icon(
-                            imageVector = vectorResource(Res.drawable.ic_back),
-                            contentDescription = "",
-                            tint = Color(0xFF3C4E73),
-                            modifier = Modifier.size(32.dp).padding(all = 2.dp)
-                        )
-                    }
-                },
+            CoreTopAppBar(
+                title = "Наставництво - I",
+                onBackClick = navigateBack,
                 actions = {
-                    IconButton(
+                    CoreIconButton(
                         modifier = Modifier.padding(end = 8.dp),
+                        iconRes = Res.drawable.ic_content,
                         onClick = onActionClicked
-                    ) {
-                        Icon(
-                            imageVector = vectorResource(Res.drawable.ic_content),
-                            contentDescription = "",
-                            tint = Color(0xFF3C4E73),
-                            modifier = Modifier.size(32.dp).padding(all = 2.dp)
-                        )
-                    }
-                },
-                backgroundColor = Color(0xFFF5F7FC),
-                elevation = 0.dp
+                    )
+                }
             )
         },
         content = {
@@ -146,18 +117,9 @@ fun LessonsScreen(
 fun LessonItem(
     onClick: () -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(
-                onClick = onClick,
-                indication = ripple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            ),
-        shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color.White,
-        elevation = 1.dp
+    CoreCardWithContent(
+        onClick = onClick,
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 16.dp),
@@ -168,17 +130,12 @@ fun LessonItem(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(
-                    text = "Вступ",
-                    style = MaterialTheme.typography.body1.copy(
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFFDFA672),
-                        fontSize = 14.sp
-                    )
+                CoreTextBody(
+                    text = "Вступ"
                 )
-                Text(
+                CoreTextBody(
                     text = "«Як користуватись книгою»",
-                    style = MaterialTheme.typography.body1.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3C4E73),
                         fontSize = 14.sp

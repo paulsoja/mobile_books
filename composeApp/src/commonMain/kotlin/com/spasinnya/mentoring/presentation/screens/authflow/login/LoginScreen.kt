@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,16 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,11 +25,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
+import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalXLarge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLoginViewModel
 import org.jetbrains.compose.resources.vectorResource
 
@@ -53,170 +58,97 @@ fun LoginScreen(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(36.dp))
-        Text(
+        CoreSpacerVerticalXLarge()
+        CoreTextScreenTitle(
             text = "Раді знову бачити \uD83D\uDC4B",
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.h5.copy(
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF3C4E73)
-            ),
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
+        CoreSpacerVerticalMedium()
+        CoreTextSubtitle(
             text = "Тут вхід в ваш акаунт",
             modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.subtitle1.copy(
-                fontSize = 18.sp,
-                color = Color(0xFF828EA0)
-            ),
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = "Email",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.subtitle1.copy(
-                color = Color(0xFF3C4E73)
-            ),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        CoreSpacerVerticalLarge()
+        // TODO uncomment after creating custom Text Field
+//        CoreTextSubtitle(
+//            text = "Email",
+//            modifier = Modifier.fillMaxWidth(),
+//            textAlign = TextAlign.Start,
+//            style = MaterialTheme.typography.titleMedium.copy(
+//                color = Color(0xFF3C4E73)
+//            ),
+//        )
+//        CoreSpacerVerticalMedium()
+        CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
             singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            textStyle = MaterialTheme.typography.subtitle1.copy(
+            textStyle = MaterialTheme.typography.bodySmall.copy(
                 color = Color(0xFF54595F)
             ),
             onValueChange = { email = it },
-            placeholder = {
-                Text(
-                    text = "email@website.com",
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        color = Color(0xFFB6C3D8)
-                    )
-                )
-            }
+            placeholder = "email@website.com",
+            label = "Email"
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Пароль",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.subtitle1.copy(
-                color = Color(0xFF3C4E73)
-            ),
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
+        CoreSpacerVertical(height = 20.dp)
+        // TODO uncomment after creating custom Text Field
+//        CoreTextSubtitle(
+//            text = "Пароль",
+//            modifier = Modifier.fillMaxWidth(),
+//            textAlign = TextAlign.Start,
+//            style = MaterialTheme.typography.titleMedium.copy(
+//                color = Color(0xFF3C4E73)
+//            ),
+//        )
+//        CoreSpacerVerticalMedium()
+        CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = password,
             singleLine = true,
-            shape = RoundedCornerShape(12.dp),
-            textStyle = MaterialTheme.typography.subtitle1.copy(
+            textStyle = MaterialTheme.typography.bodySmall.copy(
                 color = Color(0xFF54595F)
             ),
             onValueChange = { password = it },
+            label = "Пароль"
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth().height(68.dp),
-            shape = RoundedCornerShape(40.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF3C4E73)
-            ),
+        CorePrimaryButton(
+            text = "Увійти",
             onClick = { navigateToHome.invoke() },
-            content = {
-                Text(
-                    text = "Увійти",
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        color = Color.White,
-                        fontWeight = FontWeight.Normal
-                    )
-                )
-                Spacer(modifier = Modifier.width(24.dp))
-                Icon(
-                    imageVector = vectorResource(Res.drawable.ic_arrow_right),
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
+            iconAfter = Res.drawable.ic_arrow_right
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextButton(onClick = { navigateToResetPassword.invoke() }) {
-            Text(
-                text = "Не пам'ятаєте пароль?",
-                style = MaterialTheme.typography.subtitle1.copy(
-                    color = Color(0xFF3C4E73),
-                    textDecoration = TextDecoration.Underline
-                )
-            )
+
+        CoreSpacerVerticalMedium()
+
+        CoreTextButton(text = "Не пам'ятаєте пароль?") {
+            navigateToResetPassword.invoke()
         }
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Divider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color(0xFFA6B6CE))
-            Text(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .padding(horizontal = 20.dp),
-                text = "або",
-                textAlign = TextAlign.Center
-            )
-            Divider(modifier = Modifier.weight(1f), thickness = 1.dp, color = Color(0xFFA6B6CE))
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        Button(
-            modifier = Modifier.fillMaxWidth().height(68.dp),
-            shape = RoundedCornerShape(40.dp),
-            elevation = null,
+
+        CoreHorizontalDividerWithText(text = "або")
+
+        CoreSpacerVerticalLarge()
+
+        CorePrimaryButton(
+            text = "Увійти з Google",
+            backgroundColor = Color.White,
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.White
+                containerColor = Color.White,
+                contentColor = Color(0xFF3C4E73)
             ),
+            border = BorderStroke(width = 0.dp, color = Color.Transparent),
             onClick = {  },
-            content = {
-                Icon(
-                    imageVector = vectorResource(Res.drawable.ic_google),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-                Spacer(modifier = Modifier.width(24.dp))
-                Text(
-                    text = "Увійти з Google", color = Color(0xFF54595F),
-                    style = MaterialTheme.typography.subtitle1.copy(
-                        color = Color(0xFF54595F),
-                        fontWeight = FontWeight.Normal
-                    )
-                )
-            }
+            iconBefore = Res.drawable.ic_google,
+            iconTint = Color.Unspecified
         )
+
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                text = "Ще не маєте акаунта?",
-                style = MaterialTheme.typography.subtitle2.copy(
-                    color = Color(0xFF828EA0),
-                    fontWeight = FontWeight.Normal
-                )
-            )
-            TextButton(onClick = navigateToRegister) {
-                Text(
-                    text = "Зареєструватись",
-                    style = MaterialTheme.typography.subtitle2.copy(
-                        color = Color(0xFF3C4E73),
-                        fontWeight = FontWeight.Normal,
-                        textDecoration = TextDecoration.Underline
-                    )
-                )
-            }
+            CoreTextBody("Ще не маєте акаунта?")
+
+            CoreTextButton(text = "Зареєструватись", onClick = navigateToRegister)
         }
     }
 }

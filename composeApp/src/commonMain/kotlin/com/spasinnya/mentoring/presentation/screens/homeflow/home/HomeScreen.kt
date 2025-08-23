@@ -2,7 +2,6 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,15 +29,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,9 +60,16 @@ import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerHorizontalWeight
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun HomeScreen(
@@ -78,22 +80,22 @@ fun HomeScreen(
     val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),
-        backgroundColor = Color(0xFFF5F7FC),
+        modifier = Modifier.fillMaxSize().systemBarsPadding(),
+        containerColor = Color(0xFFF5F7FC),
         topBar = {
-            TopBar(onActionClicked = navigateToSettings)
+            CoreTopBar(
+                actionIcon = Res.drawable.ic_settings,
+                onActionClicked = navigateToSettings
+            )
         },
-        content = {
+        content = { padding ->
             Column(
-                modifier = Modifier.fillMaxSize().padding(top = 16.dp),
+                modifier = Modifier.fillMaxSize().padding(top = padding.calculateTopPadding()).padding(top = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                Text(
+                CoreTextScreenTitle(
                     text = "Оберіть Наставництво \uD83D\uDCDA",
                     modifier = Modifier.padding(horizontal = 24.dp),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFF3C4E73)
                 )
                 Pager(
                     pageContent = { pagerState: PagerState, page: Int ->
@@ -111,7 +113,10 @@ fun HomeScreen(
                                 .background(color = Color.Transparent)
                                 .align(Alignment.CenterHorizontally)
                                 .padding(bottom = 24.dp),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+                            horizontalArrangement = Arrangement.spacedBy(
+                                12.dp,
+                                Alignment.CenterHorizontally
+                            )
                         ) {
                             PagerIndicator(
                                 modifier = Modifier,
@@ -123,30 +128,6 @@ fun HomeScreen(
                 )
             }
         }
-    )
-}
-
-@Composable
-private fun TopBar(
-    onActionClicked: () -> Unit
-) = Row(
-    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).padding(end = 8.dp),
-    verticalAlignment = Alignment.CenterVertically
-) {
-    IconButton(onClick = onActionClicked) {
-        Icon(
-            imageVector = vectorResource(Res.drawable.ic_settings),
-            contentDescription = "",
-            tint = Color(0xFF3C4E73),
-            modifier = Modifier.size(32.dp)
-        )
-    }
-    Spacer(modifier = Modifier.weight(1f))
-    Icon(
-        imageVector = vectorResource(Res.drawable.ic_logo),
-        contentDescription = "",
-        tint = Color.Unspecified,
-        modifier = Modifier.height(40.dp)
     )
 }
 
@@ -178,7 +159,7 @@ private fun Pager(
                         ambientColor = Color(0xFF3C4F73),
                         spotColor = Color(0xFF3C4F73)
                     ),
-                backgroundColor = Color.White,
+                colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(40.dp)
             ) {
                 pageContent.invoke(pagerState, page)
@@ -224,21 +205,13 @@ private fun PageItem(
             contentScale = ContentScale.FillWidth
         )
         Column(modifier = Modifier.fillMaxSize().padding(all = 16.dp)) {
-            Text(
-                text = "Наставництво - I",
-                fontSize = 18.sp,
-                lineHeight = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF3C4E73)
+            CoreTextTitle(
+                text = "Наставництво - I"
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
+            CoreTextBody(
                 text = "Ця книга призначена для духовного зростання новонавернених через наставництво у групах спілкування з першого дня після покаяння до вступу в завіт із Богом через водне хрещення. " +
                         "Її можна також використовувати як курс із підготовки новонавернених до водного хрещення через семінарські заняття.",
-                fontSize = 14.sp,
-                lineHeight = 22.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color(0xFF717A88),
                 modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -275,10 +248,12 @@ private fun PagerIndicator(
                 .size(24.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
+            CoreTextBody(
                 text = "${iteration + 1}",
-                color = textColor,
-                fontSize = 12.sp
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = textColor,
+                    fontSize = 12.sp
+                )
             )
         }
     }
@@ -318,52 +293,23 @@ fun BookCardNotAccessButtons(
     onContentClicked: () -> Unit,
     onPurchaseClicked: () -> Unit,
 ) = Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        OutlinedButton(
-            modifier = Modifier.weight(1f).height(68.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = Color(0xFF3C4E73),
-                backgroundColor = Color.Transparent
-            ),
-            border = BorderStroke(width = 1.dp, color = Color(0xFF3C4E73)),
-            shape = RoundedCornerShape(40.dp),
-            onClick = {
-                onContentClicked()
-            },
-        ) {
-            Text(
-                "Зміст",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                imageVector = vectorResource(Res.drawable.ic_content),
-                contentDescription = "",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        Button(
-            modifier = Modifier.weight(1f).height(68.dp),
-            shape = RoundedCornerShape(40.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF3C4E73),
-                contentColor = Color.White
-            ),
-            onClick = {
-                onPurchaseClicked()
-            }
-        ) {
-            Text(
-                "Купити",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
-            )
-        }
-    }
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(16.dp)
+) {
+    CoreOutlinedButton(
+        modifier = Modifier.weight(1f).height(68.dp),
+        text = "Зміст",
+        iconAfter = Res.drawable.ic_content,
+        onClick = { onContentClicked() }
+    )
+
+    CorePrimaryButton(
+        modifier = Modifier.weight(1f).height(68.dp),
+        text = "Купити",
+        onClick = { onPurchaseClicked() }
+    )
+}
 
 @Composable
 fun BookCardInProgressButtons(
@@ -378,28 +324,11 @@ fun BookCardInProgressButtons(
         modifier = Modifier.size(52.dp)
     )
 
-    Button(
+    CorePrimaryButton(
         modifier = Modifier.weight(1f).height(68.dp),
-        shape = RoundedCornerShape(40.dp),
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF3C4E73)
-        ),
+        text = "Відкрити",
+        iconAfter = Res.drawable.ic_arrow_right,
         onClick = { onOpenClicked() },
-        content = {
-            Text(
-                text = "Відкрити",
-                style = MaterialTheme.typography.subtitle1.copy(
-                    color = Color.White,
-                    fontWeight = FontWeight.Normal
-                )
-            )
-            Spacer(modifier = Modifier.width(24.dp))
-            Icon(
-                imageVector = vectorResource(Res.drawable.ic_arrow_right),
-                contentDescription = null,
-                tint = Color.White
-            )
-        }
     )
 }
 
@@ -449,10 +378,12 @@ fun CircularProgressBar(
             )
         }
 
-        Text(
+        CoreTextBody(
             text = "${(percentage * 100).toInt()}%",
-            fontSize = 12.sp,
-            color = textColor
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = textColor,
+                fontSize = 12.sp
+            )
         )
     }
 }

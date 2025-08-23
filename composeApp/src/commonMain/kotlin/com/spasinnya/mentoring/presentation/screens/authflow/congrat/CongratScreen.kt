@@ -1,21 +1,13 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.congrat
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
-import org.jetbrains.compose.resources.vectorResource
+import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
+import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CongratScreen(
@@ -34,27 +29,27 @@ fun CongratScreen(
     SuccessState(
         modifier = Modifier.fillMaxSize().padding(horizontal = 48.dp),
         image = {
-            Text(
+            CoreText(
                 text = "\uD83C\uDF89",
-                style = MaterialTheme.typography.h1.copy(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 100.sp
                 ),
             )
         },
         message = {
-            Text(
+            CoreText(
                 text = "ВІТАЄМО!",
-                style = MaterialTheme.typography.subtitle1.copy(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = Color(0xFF3C4E73)
                 ),
             )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
+            CoreText(
                 text = "Ваш акаунт успішно створено",
-                style = MaterialTheme.typography.subtitle1.copy(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Normal,
                     fontSize = 18.sp,
                     color = Color(0xFF3C4E73)
@@ -62,30 +57,10 @@ fun CongratScreen(
             )
         },
         action = {
-            Button(
-                modifier = Modifier.fillMaxWidth().height(68.dp),
-                shape = RoundedCornerShape(40.dp),
-                elevation = null,
-                border = BorderStroke(width = 1.dp, color = Color(0xFF3C4E73)),
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent
-                ),
+            CorePrimaryButton(
+                text = "Відкрити посібник",
                 onClick = navigateTo,
-                content = {
-                    Text(
-                        text = "Відкрити посібник", color = Color(0xFF54595F),
-                        style = MaterialTheme.typography.subtitle1.copy(
-                            color = Color(0xFF54595F),
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-                    Spacer(modifier = Modifier.width(24.dp))
-                    Icon(
-                        imageVector = vectorResource(Res.drawable.ic_arrow_right),
-                        contentDescription = null,
-                        tint = Color(0xFF54595F)
-                    )
-                }
+                iconAfter = Res.drawable.ic_arrow_right
             )
         }
     )
@@ -108,4 +83,12 @@ fun SuccessState(
     message()
     Spacer(modifier = Modifier.height(40.dp))
     action()
+}
+
+@Preview
+@Composable
+fun CongratScreenPreview() {
+    BooksTheme {
+        CongratScreen(navigateTo = {})
+    }
 }

@@ -11,22 +11,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Badge
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,11 +36,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_back
 import books.composeapp.generated.resources.ic_check
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createWeeksViewModel
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun WeeksScreen(
@@ -63,42 +57,10 @@ fun WeeksScreen(
             .systemBarsPadding()
             .navigationBarsPadding()
     ) {
-        TopAppBar(
-            title = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Тиждень 1",
-                        style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Normal,
-                            color = Color(0xFFDFA672),
-                            fontSize = 14.sp
-                        )
-                    )
-                    Text(
-                        text = "«Особисте життя з Богом»",
-                        style = MaterialTheme.typography.body1.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF3C4E73),
-                            fontSize = 16.sp
-                        )
-                    )
-                }
-            },
-            navigationIcon = {
-                IconButton(
-                    modifier = Modifier.padding(start = 8.dp),
-                    onClick = navigateBack
-                ) {
-                    Icon(
-                        imageVector = vectorResource(Res.drawable.ic_back),
-                        contentDescription = "",
-                        tint = Color(0xFF3C4E73),
-                        modifier = Modifier.size(32.dp).padding(all = 2.dp)
-                    )
-                }
-            },
-            backgroundColor = Color(0xFFF5F7FC),
-            elevation = 0.dp
+        CoreTopAppBar(
+            title = "Тиждень 1",
+            subtitle = "«Особисте життя з Богом»",
+            onBackClick = navigateBack
         )
 
         val tabs = remember { listOf("1", "2", "3", "4", "5") }
@@ -113,7 +75,7 @@ fun WeeksScreen(
         TabRow(
             modifier = Modifier.fillMaxWidth().height(78.dp).padding(horizontal = 14.dp),
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = Color(0xFFF5F7FC),
+            containerColor = Color(0xFFF5F7FC),
             indicator = { tabPositions -> },
             divider = { },
             contentColor = Color(0xFF3C4E73),
@@ -139,21 +101,10 @@ fun WeeksScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 if (index == 0 || index == 1) {
-                                    Badge(
-                                        modifier = Modifier
-                                            .width(28.dp)
-                                            .height(16.dp)
-                                            .clip(RoundedCornerShape(16.dp))
-                                            .background(color = Color(0xFFDFA672)),
+                                    CoreBadge(
+                                        iconRes = Res.drawable.ic_check,
                                         backgroundColor = if (pagerState.currentPage == index) Color(0xFFDFA672) else Color.Transparent
-                                    ) {
-                                        Icon(
-                                            imageVector = vectorResource(Res.drawable.ic_check),
-                                            contentDescription = "",
-                                            tint = Color.White,
-                                            modifier = Modifier.size(12.dp)
-                                        )
-                                    }
+                                    )
                                 }
                                 Spacer(modifier = Modifier.weight(1f))
                                 Column(
@@ -161,18 +112,12 @@ fun WeeksScreen(
                                     verticalArrangement = Arrangement.Bottom,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    Text(
-                                        text = "Урок",
-                                        style = MaterialTheme.typography.body1.copy(
-                                            fontWeight = FontWeight.Normal,
-                                            color = Color(0xFF96A4BA),
-                                            fontSize = 12.sp,
-                                            lineHeight = 16.sp
-                                        )
+                                    CoreTextBody(
+                                        text = "Урок"
                                     )
-                                    Text(
+                                    CoreTextBody(
                                         text = "${index + 1}",
-                                        style = MaterialTheme.typography.body1.copy(
+                                        style = MaterialTheme.typography.bodySmall.copy(
                                             fontWeight = FontWeight.Bold,
                                             color = Color(0xFF3C4E73),
                                             fontSize = 20.sp,
@@ -201,9 +146,9 @@ fun WeeksScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-                Text(
+                CoreTextBody(
                     text = "Урок 1: «Особиста молитва»",
-                    style = MaterialTheme.typography.body1.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3C4E73),
                         fontSize = 20.sp
@@ -223,16 +168,16 @@ fun WeeksScreen(
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(
+                        CoreTextBody(
                             text = "\uD83D\uDCD6",
-                            style = MaterialTheme.typography.body1.copy(
+                            style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 32.sp
                             )
                         )
-                        Text(
+                        CoreTextBody(
                             text = "Давайте разом прочитаємо уривок із Біблії, який записано у 1 посланні до Коринтян 4:3-4",
-                            style = MaterialTheme.typography.body1.copy(
+                            style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFCF7D47),
                                 fontSize = 16.sp,
@@ -240,9 +185,9 @@ fun WeeksScreen(
                             )
                         )
                     }
-                    Text(
+                    CoreTextBody(
                         text = "\"Тож Мені найменше залежить, як про мене судите ви або який взагалі людський суд, бо я і сам себе не суджу. І хоч я ні в чому не відчуваю себе винним, але цим я не є виправданий. Адже Той, Хто мене судить, то Господь\"",
-                        style = MaterialTheme.typography.body1.copy(
+                        style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFFCF7D47),
                             fontSize = 18.sp,
@@ -251,9 +196,9 @@ fun WeeksScreen(
                     )
                 }
 
-                Text(
+                CoreTextBody(
                     text = "День у юдеїв починався о шостій годині ранку й закінчувався о шостій вечора. Набожний юдей молився тричі: о девʼятій годині ранку, о дванадцятій і о третій годині дня. Вони вважали, що молитва дієва в будь-якому місці, але в храмі вона має подвійну силу. Дуже цікаво, що Петро та Іван дотримувалися старих звичаїв, живучи під благодаттю.",
-                    style = MaterialTheme.typography.body1.copy(
+                    style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Normal,
                         color = Color(0xFF54595F),
                         fontSize = 18.sp,

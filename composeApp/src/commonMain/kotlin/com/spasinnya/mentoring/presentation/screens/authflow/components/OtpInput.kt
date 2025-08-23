@@ -15,8 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 
 @Composable
 fun OtpInput(
@@ -112,13 +112,13 @@ private fun CharView(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(
+        CoreTextSubtitle(
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically),
             text = char,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.subtitle1.copy(
+            style = MaterialTheme.typography.titleMedium.copy( // TODO refactor this to proper style system
                 color = Color(0xFF54595F),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal

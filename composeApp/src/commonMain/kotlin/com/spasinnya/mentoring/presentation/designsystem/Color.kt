@@ -1,14 +1,14 @@
 package com.spasinnya.mentoring.presentation.designsystem
 
-import androidx.compose.material.Colors
-import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-interface ColorPalette {
-    val materialColors: Colors
-}
+// Material Design color palette
 
-@Composable
-fun colorPalette(): ColorPalette = object : ColorPalette {
-    override val materialColors: Colors = lightColors()
-}
+val Primary = Color(0xFF6750A4)
+val OnPrimary = Color(0xFFFFFFFF)
+val Secondary = Color(0xFF625B71)
+val OnSecondary = Color(0xFFFFFFFF)
+val Background = Color(0xFFFFFBFE)
+val OnBackground = Color(0xFF1C1B1F)
+val Surface = Color(0xFFFFFBFE)
+val OnSurface = Color(0xFF1C1B1F)
