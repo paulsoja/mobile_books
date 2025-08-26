@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string name="app_name">Books</string>
+
+    <!--Commons-->
+    <string name="common_save">Зберегти</string>
+    <string name="common_confirm">Підтвердити</string>
+    <string name="common_try_again">Спробувати ще раз</string>
+    <string name="common_repeat">Повторити</string>
+
+    <!--Errors-->
+    <string name="error_no_connection">No connection</string>
+    <string name="error_check_connection">Please check your connection</string>
+    <string name="error_unexpected">Unexpected error</string>
+    <string name="error_try_again_later">Please try again later</string>
+    <string name="error_email_invalid">Email is invalid</string>
+    <string name="error_password_invalid">Password is invalid</string>
+
+    <!--Auth-->
+    <string name="auth_login">Увійти</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_already_have_account">Вже маєте акаунт?</string>
+    <string name="auth_register_with_google">Зареєструватись з Google</string>
+    <string name="auth_login_with_google">Увійти з Google</string>
+    <string name="auth_or">або</string>
+    <string name="auth_register">Зареєструватись</string>
+    <string name="auth_create_account">Давайте створимо ваш акаунт</string>
+    <string name="auth_register_hello">Вітаємо 👋</string>
+    <string name="auth_login_hello">Раді знову бачити 👋</string>
+    <string name="auth_no_account">Ще не маєте акаунта?</string>
+    <string name="auth_forgot_password">Не пам'ятаєте пароль?</string>
+    <string name="auth_here_account_login">Тут вхід в ваш акаунт</string>
+    <string name="auth_create_new_password">Створіть новий пароль 🔓</string>
+    <string name="auth_otp_send_again">Надіслати знову</string>
+    <string name="auth_otp_no_code">Не отримали код?</string>
+    <string name="auth_otp_code_sent">Код було відправлено на</string>
+    <string name="auth_otp_confirm_your_email">Підтвердіть ваш email 📨</string>
+    <string name="auth_recall_password">Я згадав пароль</string>
+    <string name="auth_reset_password">Скинути пароль</string>
+    <string name="auth_reset_password_process">Скидання паролю 🔓</string>
+    <string name="auth_reset_password_type_email">Вкажіть email вашого акаунту</string>
+
+</resources>

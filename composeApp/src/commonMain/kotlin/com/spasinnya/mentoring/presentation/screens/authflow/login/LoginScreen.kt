@@ -19,6 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.auth_forgot_password
+import books.composeapp.generated.resources.auth_here_account_login
+import books.composeapp.generated.resources.auth_login
+import books.composeapp.generated.resources.auth_login_hello
+import books.composeapp.generated.resources.auth_login_with_google
+import books.composeapp.generated.resources.auth_no_account
+import books.composeapp.generated.resources.auth_or
+import books.composeapp.generated.resources.auth_register
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
@@ -35,6 +43,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubt
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLoginViewModel
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LoginScreen(
@@ -53,12 +62,12 @@ fun LoginScreen(
     ) {
         CoreSpacerVerticalXLarge()
         CoreTextScreenTitle(
-            text = "Раді знову бачити \uD83D\uDC4B",
+            text = stringResource(Res.string.auth_login_hello),
             modifier = Modifier.fillMaxWidth(),
         )
         CoreSpacerVerticalMedium()
         CoreTextSubtitle(
-            text = "Тут вхід в ваш акаунт",
+            text = stringResource(Res.string.auth_here_account_login),
             modifier = Modifier.fillMaxWidth(),
         )
         CoreSpacerVerticalLarge()
@@ -97,23 +106,23 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.height(24.dp))
         CorePrimaryButton(
-            text = "Увійти",
+            text = stringResource(Res.string.auth_login),
             onClick = { navigateToHome.invoke() },
             iconAfter = Res.drawable.ic_arrow_right
         )
 
         CoreSpacerVerticalMedium()
 
-        CoreTextButton(text = "Не пам'ятаєте пароль?") {
+        CoreTextButton(text = stringResource(Res.string.auth_forgot_password)) {
             navigateToResetPassword.invoke()
         }
 
-        CoreHorizontalDividerWithText(text = "або")
+        CoreHorizontalDividerWithText(text = stringResource(Res.string.auth_or))
 
         CoreSpacerVerticalLarge()
 
         CorePrimaryButton(
-            text = "Увійти з Google",
+            text = stringResource(Res.string.auth_login_with_google),
             backgroundColor = Color.White,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
@@ -130,8 +139,8 @@ fun LoginScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CoreTextBody("Ще не маєте акаунта?")
-            CoreTextButton(text = "Зареєструватись", onClick = navigateToRegister)
+            CoreTextBody(stringResource(Res.string.auth_no_account))
+            CoreTextButton(text = stringResource(Res.string.auth_register), onClick = navigateToRegister)
         }
     }
 }

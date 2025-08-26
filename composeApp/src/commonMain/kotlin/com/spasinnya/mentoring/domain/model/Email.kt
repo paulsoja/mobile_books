@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.domain.model
 
+import androidx.compose.runtime.Composable
 import com.spasinnya.mentoring.domain.rules.RegexType
 import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.rules.isValid
@@ -15,7 +16,7 @@ value class Email(val value: String) {
             return if (isValid(email, RegexType.EMAIL))
                 Validated.Valid(Email(email))
             else
-                Validated.Invalid(listOf(Error.INVALID_FORMAT))
+                Validated.Invalid(listOf(Error.Invalid_format))
         }
     }
 
@@ -24,8 +25,9 @@ value class Email(val value: String) {
         data class Failed(val error: Error) : Status
     }
 
-    enum class Error {
-        INVALID_FORMAT,
-        EMPTY,
+    enum class Error(val message: @Composable () -> String) {
+        No_error({ "" }),
+        Invalid_format({ "invalid format" }),
+        Empty({ "empty email" }),
     }
 }

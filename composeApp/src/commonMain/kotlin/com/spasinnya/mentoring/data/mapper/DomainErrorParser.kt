@@ -2,6 +2,7 @@ package com.spasinnya.mentoring.data.mapper
 
 import com.spasinnya.mentoring.data.model.AppError
 import com.spasinnya.mentoring.data.model.ErrorEnvelope
+import io.github.aakira.napier.Napier
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.ClientRequestException
@@ -49,4 +50,4 @@ suspend fun mapToAppError(t: Throwable): AppError = when (t) {
     }
 
     else -> AppError.Unexpected(t)
-}
+}.also { Napier.d("mapToAppError: $it") }

@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.domain.model
 
+import androidx.compose.runtime.Composable
 import com.spasinnya.mentoring.domain.rules.RegexType
 import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.rules.isValid
@@ -13,17 +14,18 @@ value class Password(val value: String) {
 
         fun of(password: String): Validated<Error, Password> {
             return when {
-                password.isEmpty() -> Validated.Invalid(listOf(Error.EMPTY))
-                password.length < 8 -> Validated.Invalid(listOf(Error.TOO_SHORT))
+                password.isEmpty() -> Validated.Invalid(listOf(Error.Empty))
+                password.length < 8 -> Validated.Invalid(listOf(Error.Too_short))
                 isValid(password, RegexType.PASSWORD) -> Validated.Valid(Password(password))
-                else -> Validated.Invalid(listOf(Error.INVALID_FORMAT))
+                else -> Validated.Invalid(listOf(Error.Invalid_format))
             }
         }
     }
 
-    enum class Error {
-        TOO_SHORT,
-        INVALID_FORMAT,
-        EMPTY,
+    enum class Error(val message: @Composable () -> String) {
+        No_error({ "" }),
+        Too_short({ "" }),
+        Invalid_format({ "" }),
+        Empty({ "" }),
     }
 }
