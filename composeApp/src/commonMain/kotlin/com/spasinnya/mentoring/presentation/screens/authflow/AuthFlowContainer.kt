@@ -44,7 +44,7 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
     }
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),
-        contentColor = Color(0xFFF5F7FC),
+        containerColor = Color(0xFFF5F7FC),
         topBar = {
             Box(
                 modifier = Modifier.fillMaxWidth().padding(top = 16.dp),

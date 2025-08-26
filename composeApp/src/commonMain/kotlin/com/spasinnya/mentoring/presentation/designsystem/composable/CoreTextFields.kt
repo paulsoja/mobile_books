@@ -1,56 +1,58 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputDefaults
 
 @Composable
 fun CoreOutlinedTextField(
     modifier: Modifier = Modifier.fillMaxWidth(),
     value: String,
     onValueChange: (String) -> Unit,
-    singleLine: Boolean = true,
-    shape: Shape = RoundedCornerShape(12.dp),
-    placeholder: String? = null,
-    textStyle: TextStyle = MaterialTheme.typography.bodySmall,
-    label: String? = null
+    errorText: String = "",
+    inputDefaults: InputDefaults = InputCommonDefaults(),
 ) {
     OutlinedTextField(
+        supportingText = {
+            errorText.takeIf { it.isNotEmpty() }?.let {
+                CoreTextBody(text = it, style = MaterialTheme.typography.bodySmall.copy(color = Color(0xFFED1A3D)))
+            }
+        },
+        isError = errorText.isNotEmpty(),
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        singleLine = singleLine,
-        shape = shape,
+        singleLine = inputDefaults.singleLine,
+        shape = inputDefaults.shape,
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = inputDefaults.keyboardType),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.White,
-            unfocusedContainerColor = Color.White,
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
+            focusedTextColor = Color(0xFF54595F),
+            unfocusedTextColor = Color(0XFF54595F),
             unfocusedPlaceholderColor = Color(0xFFB6C3D8),
             focusedPlaceholderColor = Color(0xFFB6C3D8),
+            errorSupportingTextColor = Color(0xFFED1A3D),
+            errorIndicatorColor = Color(0xFFED1A3D),
+            focusedIndicatorColor = Color(0xFFB6C3D8),
+            unfocusedIndicatorColor = Color(0xFFB6C3D8),
+            disabledIndicatorColor = Color(0xFFB6C3D8),
         ),
         placeholder = {
-            placeholder?.let {
-                CoreTextBody(text = it)
+            inputDefaults.placeholder.takeIf { it.isNotEmpty() }?.let {
+                CoreTextBody(text = it, style = MaterialTheme.typography.bodySmall)
             }
-
         },
-        textStyle = textStyle,
-        label = {
-            label?.let {
-                CoreTextSubtitle(
-                    text = label,
-                    textAlign = TextAlign.Start,
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
-        }
+        trailingIcon = { inputDefaults.trailingIcon.invoke() },
+        textStyle = inputDefaults.textStyle.invoke(),
     )
 }

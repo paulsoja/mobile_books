@@ -17,6 +17,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryB
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createNewPasswordViewModel
 
 @Composable
@@ -36,17 +37,15 @@ fun NewPasswordScreen(
         CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = "",
-            singleLine = true,
             onValueChange = {  },
-            label = "Password"
+            inputDefaults = InputPasswordDefaults()
         )
         CoreSpacerVerticalLarge()
         CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = "",
-            singleLine = true,
             onValueChange = {  },
-            label = "Password"
+            inputDefaults = InputPasswordDefaults()
         )
         CoreSpacerVerticalLarge()
         CorePrimaryButton(

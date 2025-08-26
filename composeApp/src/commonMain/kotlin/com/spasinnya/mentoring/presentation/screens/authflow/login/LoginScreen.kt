@@ -3,16 +3,11 @@ package com.spasinnya.mentoring.presentation.screens.authflow.login
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
@@ -40,8 +32,9 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLoginViewModel
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun LoginScreen(
@@ -82,13 +75,8 @@ fun LoginScreen(
         CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = Color(0xFF54595F)
-            ),
             onValueChange = { email = it },
-            placeholder = "email@website.com",
-            label = "Email"
+            inputDefaults = InputEmailDefaults()
         )
         CoreSpacerVertical(height = 20.dp)
         // TODO uncomment after creating custom Text Field
@@ -104,12 +92,8 @@ fun LoginScreen(
         CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = password,
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                color = Color(0xFF54595F)
-            ),
             onValueChange = { password = it },
-            label = "Пароль"
+            inputDefaults = InputPasswordDefaults()
         )
         Spacer(modifier = Modifier.height(24.dp))
         CorePrimaryButton(
@@ -141,13 +125,12 @@ fun LoginScreen(
             iconTint = Color.Unspecified
         )
 
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth().padding(top = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CoreTextBody("Ще не маєте акаунта?")
-
             CoreTextButton(text = "Зареєструватись", onClick = navigateToRegister)
         }
     }
