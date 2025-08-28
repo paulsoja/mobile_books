@@ -1,6 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
-import com.spasinnya.mentoring.domain.usecase.LoginUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.LoginUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
 class LoginViewModel(

@@ -3,18 +3,19 @@
     <string name="app_name">Books</string>
 
     <!--Commons-->
+    <string name="common_ok">OK</string>
     <string name="common_save">Зберегти</string>
     <string name="common_confirm">Підтвердити</string>
     <string name="common_try_again">Спробувати ще раз</string>
     <string name="common_repeat">Повторити</string>
 
     <!--Errors-->
-    <string name="error_no_connection">No connection</string>
-    <string name="error_check_connection">Please check your connection</string>
+    <string name="error_no_connection">Немає інтернету</string>
+    <string name="error_check_connection">Перевірте інтернет-підключення та спробуйте ще раз</string>
     <string name="error_unexpected">Unexpected error</string>
-    <string name="error_try_again_later">Please try again later</string>
-    <string name="error_email_invalid">Email is invalid</string>
-    <string name="error_password_invalid">Password is invalid</string>
+    <string name="error_try_again_later">Спробуйте ще раз пізніше</string>
+    <string name="error_email_invalid">Невірний формат email</string>
+    <string name="error_password_invalid">Невірний формат пароля</string>
 
     <!--Auth-->
     <string name="auth_login">Увійти</string>

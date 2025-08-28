@@ -30,8 +30,8 @@ import books.composeapp.generated.resources.auth_register_hello
 import books.composeapp.generated.resources.auth_register_with_google
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
-import books.composeapp.generated.resources.ic_warning
 import com.spasinnya.mentoring.domain.model.UiErrorType
+import com.spasinnya.mentoring.presentation.base.CollectEffects
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreAlertDialog
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
@@ -53,26 +53,32 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun RegisterScreen(
     navigateToLogin: () -> Unit,
-    navigateToOtp: () -> Unit
+    navigateToOtp: (email: String) -> Unit
 ) {
 
     val viewModel: RegisterViewModel = viewModel(factory = createRegisterViewModel)
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    state.messageError?.let {
-        ShowAlertDialog(
-            errorType = it,
-            showDialog = state.messageError != null,
-            onAction = {
-                viewModel.dispatchEvent(
-                    RegisterContract.Event.ValidateCredentials(
-                        email = state.email.value,
-                        password = state.password.value
-                    )
-                )
-            }
-        )
+    viewModel.effect.CollectEffects { effect ->
+        when (effect) {
+            is RegisterContract.Effect.NavigateToOtp -> navigateToOtp.invoke(effect.email)
+        }
     }
+
+    ErrorState(
+        errorType = state.messageError,
+        onAction = {
+            viewModel.dispatchEvent(
+                RegisterContract.Event.ValidateCredentials(
+                    email = state.email.value,
+                    password = state.password.value
+                )
+            )
+        },
+        onDismiss = {
+            viewModel.dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.NoError))
+        }
+    )
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -120,7 +126,7 @@ fun RegisterScreen(
             value = state.password.value,
             onValueChange = { viewModel.dispatchEvent(RegisterContract.Event.PasswordChanged(it)) },
             inputDefaults = InputPasswordDefaults(),
-            errorText = state.emailError.message()
+            errorText = state.passwordError.message()
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -169,21 +175,20 @@ fun RegisterScreen(
 }
 
 @Composable
-fun ShowAlertDialog(
-    errorType: UiErrorType,
-    showDialog: Boolean,
-    onAction: () -> Unit
+fun ErrorState(
+    errorType: UiErrorType?,
+    onAction: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
     when {
-        showDialog -> {
+        errorType != null -> {
             CoreAlertDialog(
-                onDismissRequest = { onAction.invoke() },
+                onDismissRequest = { onDismiss.invoke() },
                 onConfirmation = {
-                    onAction.invoke()
+                    onDismiss.invoke()
                 },
-                dialogTitle = errorType.title(),
+                dialogTitle = errorType.title(),    
                 dialogText = errorType.message(),
-                icon = Res.drawable.ic_warning
             )
         }
     }

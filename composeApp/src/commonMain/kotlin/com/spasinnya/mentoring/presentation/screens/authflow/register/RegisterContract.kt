@@ -23,7 +23,7 @@ interface RegisterContract {
     }
 
     sealed class Effect {
-
+        data class NavigateToOtp(val email: String) : Effect()
     }
 
     sealed class ErrorType {

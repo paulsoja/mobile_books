@@ -1,9 +1,12 @@
 package com.spasinnya.mentoring.domain.model
 
 import androidx.compose.runtime.Composable
+import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.error_password_invalid
 import com.spasinnya.mentoring.domain.rules.RegexType
 import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.rules.isValid
+import org.jetbrains.compose.resources.stringResource
 import kotlin.jvm.JvmInline
 
 @JvmInline
@@ -24,8 +27,8 @@ value class Password(val value: String) {
 
     enum class Error(val message: @Composable () -> String) {
         No_error({ "" }),
-        Too_short({ "" }),
-        Invalid_format({ "" }),
-        Empty({ "" }),
+        Too_short({ stringResource(Res.string.error_password_invalid) }),
+        Invalid_format({ stringResource(Res.string.error_password_invalid) }),
+        Empty({ stringResource(Res.string.error_password_invalid) }),
     }
 }

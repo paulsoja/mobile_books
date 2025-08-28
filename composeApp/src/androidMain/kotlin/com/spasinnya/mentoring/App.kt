@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring
 
 import android.app.Application
+import com.spasinnya.mentoring.data.net.plugin.NetStatus
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 
@@ -10,5 +11,6 @@ class App : Application() {
         super.onCreate()
 
         Napier.base(DebugAntilog())
+        NetStatus.init(this)
     }
 }

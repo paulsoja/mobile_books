@@ -2,14 +2,14 @@ package com.spasinnya.mentoring.presentation.designsystem.composable
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
+import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.common_ok
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CoreAlertDialog(
@@ -17,7 +17,6 @@ fun CoreAlertDialog(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
-    icon: DrawableResource,
 ) {
     AlertDialog(
         shape = RoundedCornerShape(8.dp),
@@ -26,9 +25,6 @@ fun CoreAlertDialog(
             dismissOnBackPress = true,
             dismissOnClickOutside = false
         ),
-        icon = {
-            Icon(painter = painterResource(icon), contentDescription = "Example Icon")
-        },
         title = {
             CoreTextTitle(text = dialogTitle)
         },
@@ -44,16 +40,7 @@ fun CoreAlertDialog(
                     onConfirmation()
                 }
             ) {
-                CoreText("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                CoreText("Dismiss")
+                CoreText(text = stringResource(Res.string.common_ok))
             }
         }
     )

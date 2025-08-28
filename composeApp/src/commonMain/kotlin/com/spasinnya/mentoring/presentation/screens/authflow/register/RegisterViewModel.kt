@@ -6,7 +6,7 @@ import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.Password
 import com.spasinnya.mentoring.domain.model.UiErrorType
 import com.spasinnya.mentoring.domain.rules.Validated
-import com.spasinnya.mentoring.domain.usecase.RegisterUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.RegisterUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.loader
 import io.github.aakira.napier.Napier
@@ -38,7 +38,14 @@ class RegisterViewModel(
             is RegisterContract.Event.HandleError -> when (event.errorType) {
                 is RegisterContract.ErrorType.EmailError -> setState { copy(emailError = event.errorType.message) }
                 RegisterContract.ErrorType.NoConnection -> setState { copy(messageError = UiErrorType.NoConnection) }
-                RegisterContract.ErrorType.NoError -> setState { copy(messageError = null, showAlertDialog = false, emailError = Email.Error.No_error, passwordError = Password.Error.No_error) }
+                RegisterContract.ErrorType.NoError -> setState {
+                    copy(
+                        messageError = null,
+                        showAlertDialog = false,
+                        emailError = Email.Error.No_error,
+                        passwordError = Password.Error.No_error
+                    )
+                }
                 is RegisterContract.ErrorType.PasswordError -> setState { copy(passwordError = event.errorType.message) }
                 RegisterContract.ErrorType.UnexpectedError -> setState { copy(messageError = UiErrorType.Unexpected) }
             }
@@ -50,7 +57,9 @@ class RegisterViewModel(
         when (creds) {
             is Validated.Valid -> onValid.invoke(creds.value)
             is Validated.Invalid -> {
-                creds.errors.forEach {
+                creds.errors
+                    .also { Napier.d("validateCredentials: errors=$it") }
+                    .forEach {
                     when (it) {
                         is Credentials.CredentialsError.Email -> {
                             dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.EmailError(it.error)))
@@ -72,8 +81,8 @@ class RegisterViewModel(
                 Napier.d("register: catch=$it")
             }
             .collectLatest {
-                // success
                 Napier.d("register: success=$it")
+                sendEffect { RegisterContract.Effect.NavigateToOtp(credentials.email.value) }
             }
     }
 
