@@ -67,6 +67,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.navigation.compose)
             api(libs.napier)
+            implementation(libs.inspektor)
         }
     }
 }
