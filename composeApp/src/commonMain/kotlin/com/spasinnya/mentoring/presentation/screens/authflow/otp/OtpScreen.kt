@@ -16,6 +16,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.auth_otp_code_sent
+import books.composeapp.generated.resources.auth_otp_confirm_your_email
+import books.composeapp.generated.resources.auth_otp_no_code
+import books.composeapp.generated.resources.auth_otp_send_again
+import books.composeapp.generated.resources.common_confirm
 import books.composeapp.generated.resources.ic_arrow_right
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
@@ -24,6 +29,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButt
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createOtpViewModel
 import com.spasinnya.mentoring.presentation.screens.authflow.components.OtpInput
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OtpScreen(
@@ -38,16 +44,14 @@ fun OtpScreen(
     ) {
         CoreSpacerVertical(height = 60.dp)
         CoreTextScreenTitle(
-            text = "Підтвердіть ваш email \uD83D\uDCE8"
+            text = stringResource(Res.string.auth_otp_confirm_your_email)
         )
         Column(
             modifier = Modifier.fillMaxWidth().padding(top = 40.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            CoreTextBody(
-                text = "Код було відправлено на"
-            )
+            CoreTextBody(text = stringResource(Res.string.auth_otp_code_sent))
             CoreTextBody(
                 text = "email@website.com",
                 style = MaterialTheme.typography.bodySmall.copy(
@@ -65,7 +69,7 @@ fun OtpScreen(
         )
         CoreSpacerVertical(height = 32.dp)
         CorePrimaryButton(
-            text = "Підтвердити",
+            text = stringResource(Res.string.common_confirm),
             onClick = navigateTo,
             backgroundColor = Color(0xFF3C4E73),
             iconAfter = Res.drawable.ic_arrow_right,
@@ -77,10 +81,11 @@ fun OtpScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            CoreTextBody(
-                text = "Не отримали код?"
+            CoreTextBody(text = stringResource(Res.string.auth_otp_no_code))
+            CoreTextButton(
+                text = stringResource(Res.string.auth_otp_send_again),
+                onClick = {}
             )
-            CoreTextButton(text = "Надіслати знову", onClick = {})
         }
     }
 }

@@ -2,15 +2,11 @@ package com.spasinnya.mentoring.data.mapper
 
 import com.spasinnya.mentoring.data.model.AppError
 import com.spasinnya.mentoring.data.model.ErrorEnvelope
-import io.ktor.client.network.sockets.ConnectTimeoutException
-import io.ktor.client.network.sockets.SocketTimeoutException
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.HttpRequestTimeoutException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
+import com.spasinnya.mentoring.data.net.plugin.NoInternetException
+import io.github.aakira.napier.Napier
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
-import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -27,19 +23,12 @@ private suspend fun parseDomainError(r: HttpResponse): AppError.Domain? =
         )
     }.getOrNull()
 
-suspend fun mapToAppError(t: Throwable): AppError = when (t) {
-    is CancellationException -> throw t
+suspend fun mapToAppError(t: Throwable): AppError = when {
+    t is CancellationException -> throw t
 
-    // No network
-    is IOException,
-    is ConnectTimeoutException,
-    is SocketTimeoutException,
-    is HttpRequestTimeoutException -> AppError.NoConnection
+    t is NoInternetException -> AppError.NoConnection
 
-    // HTTP != 2xx
-    is ClientRequestException, // 4xx
-    is ServerResponseException, // 5xx
-    is RedirectResponseException -> {
+    t is ResponseException -> {
         val resp = t.response
         parseDomainError(resp) ?: AppError.Domain(
             code = resp.status.value,
@@ -49,4 +38,4 @@ suspend fun mapToAppError(t: Throwable): AppError = when (t) {
     }
 
     else -> AppError.Unexpected(t)
-}
+}.also { Napier.d("mapToAppError: $it") }

@@ -3,6 +3,7 @@ package com.spasinnya.mentoring.data.net
 import com.spasinnya.mentoring.data.mapper.mapToAppError
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
@@ -22,6 +23,7 @@ inline fun <reified T> HttpClient.requestFlow(
         url(path)
         this.method = method
         if (bodyObj != null) setBody(bodyObj)
+        expectSuccess = true
         builder()
     }
     emit(response.body<T>())

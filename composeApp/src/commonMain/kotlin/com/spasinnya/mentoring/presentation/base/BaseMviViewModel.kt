@@ -3,6 +3,7 @@ package com.spasinnya.mentoring.presentation.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.data.model.AppError
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +25,7 @@ abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
         )
 
     private val _effect = Channel<Effect>(Channel.BUFFERED)
-    protected val effect = _effect.receiveAsFlow()
+    val effect = _effect.receiveAsFlow()
 
     protected abstract fun createInitialState(): State
     protected abstract fun handleEvent(event: Event)
@@ -53,14 +54,14 @@ abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
     }
 
     protected open fun handleDomainError(statusCode: String) {
-
+        Napier.d("handleFailures: domainError=$statusCode")
     }
 
     protected open fun handleNetworkError() {
-
+        Napier.d("handleFailures: networkError")
     }
 
     protected open fun handleUnexpectedError(throwable: Throwable) {
-
+        Napier.d("handleFailures: unexpectedError=$throwable")
     }
 }

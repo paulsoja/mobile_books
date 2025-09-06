@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +24,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVe
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
+import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createResetPasswordViewModel
 
 @Composable
@@ -56,10 +56,8 @@ fun ResetPasswordScreen(
         CoreOutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
-            singleLine = true,
-            shape = RoundedCornerShape(12.dp),
             onValueChange = { email = it },
-            placeholder = "email@website.com"
+            inputDefaults = InputEmailDefaults()
         )
         CoreSpacerVerticalX2()
         CorePrimaryButton(
