@@ -8,6 +8,7 @@ data class Credentials(
     val email: Email,
     val password: Password
 ) {
+
     companion object {
         fun of(email: String, password: String): Validated<CredentialsError, Credentials> {
             val emailValidated = Email.of(email)

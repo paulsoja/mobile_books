@@ -4,11 +4,13 @@ fun isValid(value: String, regex: RegexType): Boolean = regex.regex().matches(va
 
 enum class RegexType(val regex: () -> Regex) {
     EMAIL(emailRegex),
-    PASSWORD(passwordRegex)
+    PASSWORD(passwordRegex),
+    OTP_CODE(otpCodeRegex)
 }
 
 private val emailRegex = { "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex() }
 private val passwordRegex = { "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$".toRegex() }
+private val otpCodeRegex = { "^\\d{4}\$".toRegex() }
 
 sealed class Validated<out E, out A> {
     data class Valid<A>(val value: A) : Validated<Nothing, A>()

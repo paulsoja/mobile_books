@@ -2,8 +2,6 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,21 +28,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_back
 import books.composeapp.generated.resources.ic_chevron_right
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.img_cover_01
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCardWithContent
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLessonsViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -57,7 +48,7 @@ fun LessonsScreen(
     navigateToWeek: (id: Int) -> Unit
 ) {
 
-    val viewModel: LessonsViewModel = viewModel(factory = createLessonsViewModel)
+    //val viewModel: LessonsViewModel = viewModel(factory = createLessonsViewModel)
 
     Scaffold(
         modifier = Modifier

@@ -1,9 +1,12 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
@@ -33,6 +37,7 @@ import books.composeapp.generated.resources.ic_google
 import com.spasinnya.mentoring.domain.model.UiErrorType
 import com.spasinnya.mentoring.presentation.base.CollectEffects
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreAlertDialog
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -47,7 +52,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScre
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createRegisterViewModel
+import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -56,12 +61,31 @@ fun RegisterScreen(
     navigateToOtp: (email: String) -> Unit
 ) {
 
-    val viewModel: RegisterViewModel = viewModel(factory = createRegisterViewModel)
+    val factory = viewModelFactory { graph, handle ->
+            RegisterViewModel(
+                registerUseCase = graph.useCases.registerUseCase,
+                savedState = handle
+            )
+        }
+
+    val viewModel: RegisterViewModel = viewModel(factory = factory)
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     viewModel.effect.CollectEffects { effect ->
         when (effect) {
             is RegisterContract.Effect.NavigateToOtp -> navigateToOtp.invoke(effect.email)
+        }
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0x66F5F7FC))
+                .zIndex(4f),
+            contentAlignment = Alignment.Center
+        ) {
+            CoreCircularProgressIndicator()
         }
     }
 

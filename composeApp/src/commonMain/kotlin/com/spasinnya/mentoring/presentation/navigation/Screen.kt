@@ -9,7 +9,7 @@ sealed class Screen {
         @Serializable
         data object RegisterScreen : AuthFlow()
         @Serializable
-        data object OtpScreen : AuthFlow()
+        data class OtpScreen(val email: String) : AuthFlow()
         @Serializable
         data object ResetPasswordScreen : AuthFlow()
         @Serializable
