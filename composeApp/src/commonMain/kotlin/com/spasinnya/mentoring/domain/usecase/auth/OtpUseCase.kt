@@ -1,12 +1,13 @@
 package com.spasinnya.mentoring.domain.usecase.auth
 
 import com.spasinnya.mentoring.data.mapper.toData
-import com.spasinnya.mentoring.domain.model.Credentials
-import com.spasinnya.mentoring.domain.model.OtpCode
+import com.spasinnya.mentoring.domain.model.OtpCredentials
+import com.spasinnya.mentoring.domain.model.Token
 import com.spasinnya.mentoring.domain.repository.OtpRepository
+import kotlinx.coroutines.flow.Flow
 
-typealias OtpUseCase = suspend (Credentials, OtpCode) -> Unit
+typealias ConfirmOtpCodeUseCase = suspend (OtpCredentials) -> Flow<Token>
 
-fun otpUseCase(repository: OtpRepository): OtpUseCase = { credentials, code ->
-    if (!repository(credentials.toData(), code)) throw IllegalArgumentException("OTP validation failed")
+fun confirmOtpCodeUseCase(repository: OtpRepository): ConfirmOtpCodeUseCase = { otpCreds ->
+    repository(otpCreds.toData())
 }

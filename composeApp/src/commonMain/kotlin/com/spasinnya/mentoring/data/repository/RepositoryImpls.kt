@@ -1,32 +1,47 @@
 package com.spasinnya.mentoring.data.repository
 
+import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.model.CredentialsApiRequest
-import com.spasinnya.mentoring.data.net.httpClient
+import com.spasinnya.mentoring.data.model.OtpCredentialsApiRequest
+import com.spasinnya.mentoring.data.model.TokenApiResponse
 import com.spasinnya.mentoring.data.net.postFlow
-import com.spasinnya.mentoring.domain.model.AuthToken
+import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
-import io.ktor.client.call.body
-import io.ktor.client.request.post
-import io.ktor.client.request.setBody
+import com.spasinnya.mentoring.presentation.base.alsoDo
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.map
 
-val loginRepo: LoginRepository = { creds ->
-    httpClient.post("/login") {
-        setBody(creds)
-    }.body<AuthToken>()
+fun loginRepository(
+    http: HttpClient,
+    tokenStore: TokenStore
+): LoginRepository = { creds ->
+    http.postFlow<CredentialsApiRequest, TokenApiResponse>(
+        path = "login",
+        body = creds
+    )
+        .map(TokenApiResponse::toDomain)
+        .alsoDo(tokenStore::save)
 }
 
-val registerRepo: RegisterRepository = { creds ->
-    httpClient.postFlow<CredentialsApiRequest, String>(
+fun registerRepo(
+    http: HttpClient,
+): RegisterRepository = { creds ->
+    http.postFlow<CredentialsApiRequest, String>(
         path = "register",
         body = creds
     )
 }
 
-val otpRepo: OtpRepository = { creds, code ->
-    val response = httpClient.post("/verify-otp") {
-        setBody(mapOf("email" to creds.email, "otp" to code.code))
-    }
-    response.status.value in 200..299
+fun otpRepo(
+    http: HttpClient,
+    tokenStore: TokenStore
+): OtpRepository = { creds ->
+    http.postFlow<OtpCredentialsApiRequest, TokenApiResponse>(
+        path = "verify-otp",
+        body = creds
+    )
+        .map(TokenApiResponse::toDomain)
+        .alsoDo(tokenStore::save)
 }

@@ -34,13 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createWeeksViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,7 +46,7 @@ fun WeeksScreen(
     navigateBack: () -> Unit,
 ) {
 
-    val viewModel: WeeksViewModel = viewModel(factory = createWeeksViewModel)
+    //val viewModel: WeeksViewModel = viewModel(factory = createWeeksViewModel)
 
     Column(
         modifier = Modifier

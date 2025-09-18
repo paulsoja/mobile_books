@@ -4,6 +4,8 @@ import kotlinx.serialization.Serializable
 
 sealed class ScreenContainer {
     @Serializable
+    data object SplashFlow : ScreenContainer()
+    @Serializable
     data object AuthFlow : ScreenContainer()
     @Serializable
     data object SettingsFlow : ScreenContainer()

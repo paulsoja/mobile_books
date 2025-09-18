@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -31,7 +29,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -49,26 +46,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_content
-import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerHorizontalWeight
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -77,7 +68,7 @@ fun HomeScreen(
     navigateToLessons: () -> Unit
 ) {
 
-    val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
+    //val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),

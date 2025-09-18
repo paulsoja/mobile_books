@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 
 fun<T> Flow<T>.loader(isLoading: (Boolean) -> Unit): Flow<T> = this
@@ -17,3 +18,7 @@ fun<T> Flow<T>.CollectEffects(effects: (T) -> Unit) =
             effects.invoke(effect)
         }
     }
+
+inline fun <T> Flow<T>.alsoDo(
+    crossinline action: suspend (T) -> Unit
+): Flow<T> = onEach { action(it) }

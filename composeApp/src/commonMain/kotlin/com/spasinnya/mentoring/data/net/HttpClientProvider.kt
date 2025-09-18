@@ -4,11 +4,15 @@ import com.gyanoba.inspektor.Inspektor
 import com.gyanoba.inspektor.UnstableInspektorAPI
 import com.spasinnya.mentoring.data.net.plugin.Connectivity
 import com.spasinnya.mentoring.data.net.plugin.NetStatus
+import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -24,7 +28,9 @@ import kotlinx.serialization.json.Json
 
 private const val API_HOST = "web-books-1.onrender.com"
 
-val httpClient: HttpClient = HttpClient(CIO) {
+fun createHttpClient(
+    tokenStore: TokenStore,
+): HttpClient = HttpClient(CIO) {
     connectivityPlugin()
     inspektorPlugin()
     contentNegotiationPlugin()
@@ -32,6 +38,8 @@ val httpClient: HttpClient = HttpClient(CIO) {
     httpTimeoutPlugin()
 
     expectSuccess = true
+
+    attachAuth(tokenStore)
 
     defaultRequest {
         url {
@@ -79,5 +87,24 @@ inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.httpTimeoutP
         requestTimeoutMillis = 15_000
         connectTimeoutMillis = 15_000
         socketTimeoutMillis = 15_000
+    }
+}
+
+fun HttpClientConfig<*>.attachAuth(tokenStore: TokenStore) {
+    install(Auth) {
+        bearer {
+            loadTokens {
+                tokenStore.read()?.let {
+                    BearerTokens(
+                        accessToken = it.accessToken,
+                        refreshToken = it.refreshToken
+                    )
+                }
+            }
+            refreshTokens {
+                val new = /* refresh flow/use-case */ tokenStore.read()
+                new?.let { BearerTokens(it.accessToken, it.refreshToken) }
+            }
+        }
     }
 }
