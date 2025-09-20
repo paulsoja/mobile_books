@@ -8,3 +8,4 @@ import kotlinx.coroutines.flow.Flow
 typealias LoginRepository = suspend (CredentialsApiRequest) -> Flow<Token>
 typealias RegisterRepository = (CredentialsApiRequest) -> Flow<String>
 typealias OtpRepository = suspend (OtpCredentialsApiRequest) -> Flow<Token>
+typealias LogoutRepository = suspend () -> Flow<Unit>

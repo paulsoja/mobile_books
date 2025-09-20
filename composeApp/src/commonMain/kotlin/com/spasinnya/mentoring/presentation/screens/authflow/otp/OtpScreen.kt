@@ -44,7 +44,6 @@ import org.jetbrains.compose.resources.stringResource
 fun OtpScreen(
     navigateTo: () -> Unit
 ) {
-
     val factory = remember {
         viewModelFactory { graph, handle ->
             OtpViewModel(

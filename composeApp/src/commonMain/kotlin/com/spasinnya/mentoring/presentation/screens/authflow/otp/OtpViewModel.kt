@@ -101,10 +101,11 @@ class OtpViewModel(
         dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.UnexpectedError))
     }
 
-    override fun handleDomainError(statusCode: String) {
-        super.handleDomainError(statusCode)
+    override fun handleDomainError(statusCode: String, code: Int) {
+        super.handleDomainError(statusCode, code)
         when (statusCode) {
             "Bad Request" -> dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.UnexpectedError))
+            "Invalid code" -> dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.OtpCodeError(OtpCode.Error.Invalid_format)))
         }
     }
 }

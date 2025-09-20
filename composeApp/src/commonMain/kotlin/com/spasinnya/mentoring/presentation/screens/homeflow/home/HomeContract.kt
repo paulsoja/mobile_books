@@ -14,11 +14,11 @@ interface HomeContract {
     }
 
     sealed class Event {
-
+        data object Logout : Event()
     }
 
     sealed class Effect {
-
+        data object NavigateToLogin : Effect()
     }
 
     sealed class ErrorType {

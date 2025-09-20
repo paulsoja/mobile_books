@@ -4,6 +4,7 @@ import com.spasinnya.mentoring.data.model.AppError
 import com.spasinnya.mentoring.data.model.ErrorEnvelope
 import com.spasinnya.mentoring.data.net.plugin.NoInternetException
 import io.github.aakira.napier.Napier
+import io.ktor.client.call.body
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
@@ -30,10 +31,11 @@ suspend fun mapToAppError(t: Throwable): AppError = when {
 
     t is ResponseException -> {
         val resp = t.response
+
         parseDomainError(resp) ?: AppError.Domain(
             code = resp.status.value,
             message_ = t.message,
-            statusCode = "HTTP_${resp.status.value}"
+            statusCode = resp.body<String?>().orEmpty()
         )
     }
 

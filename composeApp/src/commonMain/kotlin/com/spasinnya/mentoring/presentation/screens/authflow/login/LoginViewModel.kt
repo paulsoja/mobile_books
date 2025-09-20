@@ -40,6 +40,7 @@ class LoginViewModel(
                 }
                 is LoginContract.ErrorType.PasswordError -> setState { copy(passwordError = event.errorType.message) }
                 LoginContract.ErrorType.UnexpectedError -> setState { copy(messageError = UiErrorType.Unexpected) }
+                LoginContract.ErrorType.InvalidCredentials -> setState { copy(messageError = UiErrorType.InvalidCredentials) }
             }
             is LoginContract.Event.PasswordChanged -> setState { copy(password = Password(event.password)) }
             is LoginContract.Event.ValidateCredentials -> {
@@ -97,10 +98,11 @@ class LoginViewModel(
         dispatchEvent(LoginContract.Event.HandleError(LoginContract.ErrorType.UnexpectedError))
     }
 
-    override fun handleDomainError(statusCode: String) {
-        super.handleDomainError(statusCode)
+    override fun handleDomainError(statusCode: String, code: Int) {
+        super.handleDomainError(statusCode, code)
         when (statusCode) {
             "Bad Request" -> dispatchEvent(LoginContract.Event.HandleError(LoginContract.ErrorType.UnexpectedError))
+            "Invalid credentials" -> dispatchEvent(LoginContract.Event.HandleError(LoginContract.ErrorType.InvalidCredentials))
         }
     }
 }
