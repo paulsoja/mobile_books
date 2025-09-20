@@ -8,13 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.spasinnya.mentoring.presentation.navigation.Screen
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeScreen
 import com.spasinnya.mentoring.presentation.screens.homeflow.lessons.LessonsScreen
 import com.spasinnya.mentoring.presentation.screens.homeflow.weeks.WeeksScreen
-import com.spasinnya.mentoring.presentation.navigation.Screen
 
 @Composable
-fun HomeFlowContainer() {
+fun HomeFlowContainer(onLogout: () -> Unit) {
 
     val navController = rememberNavController()
 
@@ -52,6 +52,9 @@ fun HomeFlowContainer() {
                 navigateToSettings = {  },
                 navigateToLessons = {
                     navController.navigate(Screen.HomeFlow.LessonsScreen)
+                },
+                navigateToLogin = {
+                    onLogout.invoke()
                 }
             )
         }

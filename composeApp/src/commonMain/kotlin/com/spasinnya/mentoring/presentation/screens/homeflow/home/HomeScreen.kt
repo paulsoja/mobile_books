@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,26 +50,43 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.base.CollectEffects
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
+import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HomeScreen(
     navigateToSettings: () -> Unit,
-    navigateToLessons: () -> Unit
+    navigateToLessons: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
+    val factory = remember {
+        viewModelFactory { graph, handle ->
+            HomeViewModel(
+                logoutUseCase = graph.useCases.logoutUseCase,
+                savedStateHandle = handle
+            )
+        }
+    }
+    val viewModel: HomeViewModel = viewModel(factory = factory)
 
-    //val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
+    viewModel.effect.CollectEffects { effect ->
+        when (effect) {
+            HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),
@@ -86,7 +104,7 @@ fun HomeScreen(
             ) {
                 CoreTextScreenTitle(
                     text = "Оберіть Наставництво \uD83D\uDCDA",
-                    modifier = Modifier.padding(horizontal = 24.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp).clickable { viewModel.logout() },
                 )
                 Pager(
                     pageContent = { pagerState: PagerState, page: Int ->

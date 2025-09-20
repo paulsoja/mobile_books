@@ -52,7 +52,12 @@ fun AppContent() {
             )
         }
         composable<ScreenContainer.HomeFlow> {
-            HomeFlowContainer()
+            HomeFlowContainer {
+                navController.navigate(ScreenContainer.AuthFlow) {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
         }
         composable<ScreenContainer.SettingsFlow> { backStackEntry ->
 

@@ -3,10 +3,12 @@ package com.spasinnya.mentoring.data.repository
 import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.model.CredentialsApiRequest
 import com.spasinnya.mentoring.data.model.OtpCredentialsApiRequest
+import com.spasinnya.mentoring.data.model.TokenApiRequest
 import com.spasinnya.mentoring.data.model.TokenApiResponse
 import com.spasinnya.mentoring.data.net.postFlow
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.LoginRepository
+import com.spasinnya.mentoring.domain.repository.LogoutRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
 import com.spasinnya.mentoring.presentation.base.alsoDo
@@ -44,4 +46,18 @@ fun otpRepo(
     )
         .map(TokenApiResponse::toDomain)
         .alsoDo(tokenStore::save)
+}
+
+fun logoutRepo(
+    http: HttpClient,
+    tokenStore: TokenStore
+): LogoutRepository = {
+    val token = tokenStore.read() ?: throw Exception("Can't logout, no token")
+
+    http.postFlow<TokenApiRequest, Unit>(
+        path = "logout",
+        body = TokenApiRequest(token.refreshToken)
+    ).alsoDo {
+        tokenStore.clear()
+    }
 }
