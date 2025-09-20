@@ -94,7 +94,7 @@ fun WeeksScreen(
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                         text = {
                             Column(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
                                 verticalArrangement = Arrangement.Bottom,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {

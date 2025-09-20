@@ -75,6 +75,7 @@ fun LessonsScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
+                    .padding(it)
                     .padding(horizontal = 24.dp)
                     .padding(bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -109,8 +110,9 @@ fun LessonItem(
     onClick: () -> Unit
 ) {
     CoreCardWithContent(
-        onClick = onClick,
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        contentPadding = 0.dp,
+        onClick = onClick,
     ) {
         Row(
             modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 16.dp),
