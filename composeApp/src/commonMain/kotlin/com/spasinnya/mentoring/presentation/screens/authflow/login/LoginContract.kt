@@ -30,6 +30,7 @@ interface LoginContract {
         data object NoError : ErrorType()
         data object NoConnection : ErrorType()
         data object UnexpectedError : ErrorType()
+        data object InvalidCredentials : ErrorType()
         data class EmailError(val message: Email.Error) : ErrorType()
         data class PasswordError(val message: Password.Error) : ErrorType()
     }

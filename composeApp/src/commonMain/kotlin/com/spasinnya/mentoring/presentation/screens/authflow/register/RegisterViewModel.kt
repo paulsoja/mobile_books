@@ -50,6 +50,7 @@ class RegisterViewModel(
                 }
                 is RegisterContract.ErrorType.PasswordError -> setState { copy(passwordError = event.errorType.message) }
                 RegisterContract.ErrorType.UnexpectedError -> setState { copy(messageError = UiErrorType.Unexpected) }
+                RegisterContract.ErrorType.UserAlreadyExists -> setState { copy(messageError = UiErrorType.UserAlreadyExists) }
             }
         }
     }
@@ -98,10 +99,11 @@ class RegisterViewModel(
         dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UnexpectedError))
     }
 
-    override fun handleDomainError(statusCode: String) {
-        super.handleDomainError(statusCode)
+    override fun handleDomainError(statusCode: String, code: Int) {
+        super.handleDomainError(statusCode, code)
         when (statusCode) {
             "Bad Request" -> dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UnexpectedError))
+            "User already exists" -> dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UserAlreadyExists))
         }
     }
 }

@@ -2,7 +2,8 @@ package com.spasinnya.mentoring.domain.model
 
 import androidx.compose.runtime.Composable
 import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.error_email_invalid
+import books.composeapp.generated.resources.error_otp_invalid
+import books.composeapp.generated.resources.error_otp_not_filled
 import com.spasinnya.mentoring.domain.rules.RegexType
 import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.rules.isValid
@@ -26,7 +27,7 @@ value class OtpCode(val value: String) {
 
     enum class Error(val message: @Composable () -> String) {
         No_error({ "" }),
-        Invalid_format({ stringResource(Res.string.error_email_invalid) }),
-        Not_filled({ stringResource(Res.string.error_email_invalid) }),
+        Invalid_format({ stringResource(Res.string.error_otp_invalid) }),
+        Not_filled({ stringResource(Res.string.error_otp_not_filled) }),
     }
 }
