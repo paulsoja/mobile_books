@@ -1,22 +1,25 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.auth_forgot_password
@@ -29,6 +32,8 @@ import books.composeapp.generated.resources.auth_or
 import books.composeapp.generated.resources.auth_register
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_google
+import com.spasinnya.mentoring.presentation.base.CollectEffects
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -42,7 +47,8 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScre
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createLoginViewModel
+import com.spasinnya.mentoring.presentation.di.viewModelFactory
+import com.spasinnya.mentoring.presentation.screens.authflow.register.ErrorState
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -52,9 +58,50 @@ fun LoginScreen(
     navigateToHome: () -> Unit
 ) {
 
-    val viewModel: LoginViewModel = viewModel(factory = createLoginViewModel)
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val factory = remember {
+        viewModelFactory { graph, handle ->
+            LoginViewModel(
+                loginUseCase = graph.useCases.loginUseCase,
+                savedState = handle
+            )
+        }
+    }
+
+    val viewModel: LoginViewModel = viewModel(factory = factory)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    viewModel.effect.CollectEffects { effect ->
+        when (effect) {
+            is LoginContract.Effect.NavigateToMain -> navigateToHome.invoke()
+        }
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0x66F5F7FC))
+                .zIndex(4f),
+            contentAlignment = Alignment.Center
+        ) {
+            CoreCircularProgressIndicator()
+        }
+    }
+
+    ErrorState(
+        errorType = state.messageError,
+        onAction = {
+            viewModel.dispatchEvent(
+                LoginContract.Event.ValidateCredentials(
+                    email = state.email.value,
+                    password = state.password.value
+                )
+            )
+        },
+        onDismiss = {
+            viewModel.dispatchEvent(LoginContract.Event.HandleError(LoginContract.ErrorType.NoError))
+        }
+    )
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
@@ -82,10 +129,10 @@ fun LoginScreen(
 //        )
 //        CoreSpacerVerticalMedium()
         CoreOutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = email,
-            onValueChange = { email = it },
-            inputDefaults = InputEmailDefaults()
+            value = state.email.value,
+            onValueChange = { viewModel.dispatchEvent(LoginContract.Event.EmailChanged(it)) },
+            inputDefaults = InputEmailDefaults(),
+            errorText = state.emailError.message()
         )
         CoreSpacerVertical(height = 20.dp)
         // TODO uncomment after creating custom Text Field
@@ -99,16 +146,25 @@ fun LoginScreen(
 //        )
 //        CoreSpacerVerticalMedium()
         CoreOutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = password,
-            onValueChange = { password = it },
-            inputDefaults = InputPasswordDefaults()
+            value = state.password.value,
+            onValueChange = { viewModel.dispatchEvent(LoginContract.Event.PasswordChanged(it)) },
+            inputDefaults = InputPasswordDefaults(),
+            errorText = state.passwordError.message()
         )
         Spacer(modifier = Modifier.height(24.dp))
         CorePrimaryButton(
             text = stringResource(Res.string.auth_login),
-            onClick = { navigateToHome.invoke() },
-            iconAfter = Res.drawable.ic_arrow_right
+            backgroundColor = Color(0xFF3C4E73),
+            iconAfter = Res.drawable.ic_arrow_right,
+            iconTint = Color.White,
+            onClick = {
+                viewModel.dispatchEvent(
+                    LoginContract.Event.ValidateCredentials(
+                        email = state.email.value,
+                        password = state.password.value
+                    )
+                )
+            },
         )
 
         CoreSpacerVerticalMedium()

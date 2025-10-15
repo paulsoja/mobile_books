@@ -22,14 +22,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_logo
+import com.spasinnya.mentoring.presentation.navigation.Screen
+import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.newpassword.NewPasswordScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.otp.OtpScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.register.RegisterScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.resetpassword.ResetPasswordScreen
-import com.spasinnya.mentoring.presentation.navigation.Screen
-import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import kotlinx.coroutines.flow.filter
 import org.jetbrains.compose.resources.vectorResource
 
@@ -93,8 +93,8 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
                         navigateToLogin = {
                             navController.navigate(Screen.AuthFlow.LoginScreen)
                         },
-                        navigateToOtp = {
-                            navController.navigate(Screen.AuthFlow.OtpScreen)
+                        navigateToOtp = { email ->
+                            navController.navigate(Screen.AuthFlow.OtpScreen(email))
                         }
                     )
                 }
@@ -111,7 +111,7 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
                         }
                     )
                 }
-                composable<Screen.AuthFlow.OtpScreen> {
+                composable<Screen.AuthFlow.OtpScreen> { backStackEntry ->
                     OtpScreen(
                         navigateTo = {
                             navController.navigate(Screen.AuthFlow.CongratScreen)

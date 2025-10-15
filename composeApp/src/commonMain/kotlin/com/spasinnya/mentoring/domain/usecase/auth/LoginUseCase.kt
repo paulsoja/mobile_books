@@ -1,12 +1,13 @@
 package com.spasinnya.mentoring.domain.usecase.auth
 
 import com.spasinnya.mentoring.data.mapper.toData
-import com.spasinnya.mentoring.domain.model.AuthToken
 import com.spasinnya.mentoring.domain.model.Credentials
+import com.spasinnya.mentoring.domain.model.Token
 import com.spasinnya.mentoring.domain.repository.LoginRepository
+import kotlinx.coroutines.flow.Flow
 
-typealias LoginUseCase = suspend (Credentials) -> AuthToken
+typealias LoginUseCase = suspend (Credentials) -> Flow<Token>
 
 fun loginUseCase(repository: LoginRepository): LoginUseCase = { credentials ->
-    repository(credentials.toData()) ?: throw IllegalArgumentException("Invalid login credentials")
+    repository(credentials.toData())
 }

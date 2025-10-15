@@ -47,13 +47,18 @@ abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
     protected fun handleFailures(t: Throwable) {
         when (t) {
             is AppError.NoConnection -> handleNetworkError()
-            is AppError.Domain -> handleDomainError(t.statusCode)
+            is AppError.Domain -> {
+                Napier.d("handleFailures: message=${t.message}")
+                Napier.d("handleFailures: statusCode=${t.statusCode}")
+                Napier.d("handleFailures: code=${t.code}")
+                handleDomainError(t.statusCode, t.code)
+            }
             is AppError.Unexpected -> handleUnexpectedError(t)
             else -> handleUnexpectedError(t)
         }
     }
 
-    protected open fun handleDomainError(statusCode: String) {
+    protected open fun handleDomainError(statusCode: String, code: Int) {
         Napier.d("handleFailures: domainError=$statusCode")
     }
 

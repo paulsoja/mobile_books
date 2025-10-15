@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
@@ -18,14 +17,13 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVe
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputPasswordDefaults
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createNewPasswordViewModel
 
 @Composable
 fun NewPasswordScreen(
     navigateToSuccess: () -> Unit,
 ) {
 
-    val viewModel: NewPasswordViewModel = viewModel(factory = createNewPasswordViewModel)
+    //val viewModel: NewPasswordViewModel = viewModel(factory = createNewPasswordViewModel)
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),

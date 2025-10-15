@@ -18,12 +18,13 @@ interface HomeContract {
     }
 
     sealed class Event {
+        data object Logout : Event()
         data class ToggleSettingsDialog(val show: Boolean) : Event()
         data class OnLanguageChosen(val language: Language) : Event()
     }
 
     sealed class Effect {
-
+        data object NavigateToLogin : Effect()
     }
 
     sealed class ErrorType {

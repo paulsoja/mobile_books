@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_repeat
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
@@ -25,7 +24,6 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButt
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createResetPasswordViewModel
 
 @Composable
 fun ResetPasswordScreen(
@@ -33,7 +31,7 @@ fun ResetPasswordScreen(
     navigateToOtp: () -> Unit
 ) {
 
-    val viewModel: ResetPasswordViewModel = viewModel(factory = createResetPasswordViewModel)
+    //val viewModel: ResetPasswordViewModel = viewModel(factory = createResetPasswordViewModel)
     var email by remember { mutableStateOf("") }
 
     Column(

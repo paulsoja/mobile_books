@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.model.Credentials
 import com.spasinnya.mentoring.domain.model.Email
@@ -17,7 +18,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    private val savedState: SavedStateHandle
 ) : BaseMviViewModel<RegisterContract.State, RegisterContract.Event, RegisterContract.Effect>() {
 
     override fun createInitialState(): RegisterContract.State = RegisterContract.State()
@@ -48,6 +50,7 @@ class RegisterViewModel(
                 }
                 is RegisterContract.ErrorType.PasswordError -> setState { copy(passwordError = event.errorType.message) }
                 RegisterContract.ErrorType.UnexpectedError -> setState { copy(messageError = UiErrorType.Unexpected) }
+                RegisterContract.ErrorType.UserAlreadyExists -> setState { copy(messageError = UiErrorType.UserAlreadyExists) }
             }
         }
     }
@@ -96,10 +99,11 @@ class RegisterViewModel(
         dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UnexpectedError))
     }
 
-    override fun handleDomainError(statusCode: String) {
-        super.handleDomainError(statusCode)
+    override fun handleDomainError(statusCode: String, code: Int) {
+        super.handleDomainError(statusCode, code)
         when (statusCode) {
             "Bad Request" -> dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UnexpectedError))
+            "User already exists" -> dispatchEvent(RegisterContract.Event.HandleError(RegisterContract.ErrorType.UserAlreadyExists))
         }
     }
 }

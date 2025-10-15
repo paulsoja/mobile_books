@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -31,7 +30,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -49,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,17 +55,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_content
-import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
+import com.spasinnya.mentoring.presentation.base.CollectEffects
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerHorizontalWeight
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
+import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
 import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
 import org.jetbrains.compose.resources.painterResource
@@ -82,9 +78,25 @@ fun HomeScreen(
     navigateToSpasinnyaBooks: () -> Unit,
     navigateToSpasinnyaChurch: () -> Unit,
     onLogout: () -> Unit,
+    navigateToSettings: () -> Unit,
+    navigateToLessons: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
+    val factory = remember {
+        viewModelFactory { graph, handle ->
+            HomeViewModel(
+                logoutUseCase = graph.useCases.logoutUseCase,
+                savedStateHandle = handle
+            )
+        }
+    }
+    val viewModel: HomeViewModel = viewModel(factory = factory)
 
-    val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
+    viewModel.effect.CollectEffects { effect ->
+        when (effect) {
+            HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
+        }
+    }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -104,7 +116,7 @@ fun HomeScreen(
             ) {
                 CoreTextScreenTitle(
                     text = "Оберіть Наставництво \uD83D\uDCDA",
-                    modifier = Modifier.padding(horizontal = 24.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp).clickable { viewModel.logout() },
                 )
                 Pager(
                     pageContent = { pagerState: PagerState, page: Int ->

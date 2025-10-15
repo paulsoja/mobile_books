@@ -59,6 +59,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.kotlinx.serialization.core)
             implementation(libs.kotlinx.serialization.json)
@@ -69,6 +70,9 @@ kotlin {
             implementation(libs.navigation.compose)
             api(libs.napier)
             implementation(libs.inspektor)
+            implementation(libs.datastore.core)
+            implementation(libs.datastore.preferences)
+            implementation(libs.okio)
         }
     }
 }

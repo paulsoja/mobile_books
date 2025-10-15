@@ -1,6 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -17,7 +17,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,31 +29,45 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 
 @Composable
 fun OtpInput(
+    value: String,
+    errorMessage: String = "",
     onFocusChanged: (FocusState) -> Unit = {},
     onFieldChanged: (String) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val focusRequester = remember { FocusRequester() }
+    var valueRaw by remember(value) { mutableStateOf(value) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     BasicTextField(
         modifier = Modifier
             .fillMaxWidth()
             .height(72.dp)
             .focusRequester(focusRequester)
-            .onFocusChanged {
-                onFocusChanged.invoke(it)
-            },
-        value = "",
-        onValueChange = { if (it.length <= 4) onFieldChanged(it) },
+            .onFocusChanged(onFocusChanged),
+        value = valueRaw,
+        onValueChange = {
+            if (it.length <= 4) {
+                valueRaw = it
+                onFieldChanged(it)
+            }
+            if (it.length == 4) {
+                keyboardController?.hide()
+            }
+        },
         interactionSource = interactionSource,
         enabled = true,
         readOnly = false,
@@ -74,8 +91,8 @@ fun OtpInput(
                         ) {
                             CharView(
                                 index = index,
-                                text = "",
-                                isError = false,
+                                text = valueRaw,
+                                isError = errorMessage.isNotEmpty(),
                             )
                         }
                         Spacer(Modifier.width(8.dp))
@@ -84,6 +101,17 @@ fun OtpInput(
             }
         }
     )
+    CoreSpacerVertical(12.dp)
+    AnimatedVisibility(errorMessage.isNotEmpty()) {
+        CoreText(
+            modifier = Modifier.fillMaxWidth(),
+            text = errorMessage,
+            style = MaterialTheme.typography.bodySmall.copy(
+                color = Color(0xFFED1A3D),
+                fontWeight = FontWeight.Normal,
+            ),
+        )
+    }
 }
 
 @Composable
@@ -103,12 +131,12 @@ private fun CharView(
             .fillMaxHeight()
             .fillMaxWidth()
             .clip(shape = RoundedCornerShape(12.dp))
-            .border(width = 1.dp, color = Color(0xFF828EA0), shape = RoundedCornerShape(12.dp))
-            .background(color = Color.Transparent)
-            .then(
-                if (isError) Modifier.border(border = BorderStroke(1.dp, Color(0xFFED1A3D)))
-                else Modifier
-            ),
+            .border(
+                width = 1.dp,
+                color = if (isError) Color(0xFFED1A3D) else Color(0xFF828EA0),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .background(color = Color.Transparent),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -120,8 +148,8 @@ private fun CharView(
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium.copy( // TODO refactor this to proper style system
                 color = Color(0xFF54595F),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
+                fontSize = 36.sp,
+                fontWeight = FontWeight.Bold
             ),
         )
     }

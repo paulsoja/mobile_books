@@ -3,9 +3,12 @@ package com.spasinnya.mentoring.domain.model
 import androidx.compose.runtime.Composable
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.error_check_connection
+import books.composeapp.generated.resources.error_invalid_credentials
 import books.composeapp.generated.resources.error_no_connection
 import books.composeapp.generated.resources.error_try_again_later
 import books.composeapp.generated.resources.error_unexpected
+import books.composeapp.generated.resources.error_user_already_exists
+import books.composeapp.generated.resources.error_validation
 import org.jetbrains.compose.resources.stringResource
 
 enum class UiErrorType(
@@ -19,5 +22,13 @@ enum class UiErrorType(
     Unexpected(
         title = { stringResource(Res.string.error_unexpected) },
         message = { stringResource(Res.string.error_try_again_later) },
+    ),
+    InvalidCredentials(
+        title = { stringResource(Res.string.error_validation) },
+        message = { stringResource(Res.string.error_invalid_credentials) },
+    ),
+    UserAlreadyExists(
+        title = { stringResource(Res.string.error_validation) },
+        message = { stringResource(Res.string.error_user_already_exists) },
     ),
 }
