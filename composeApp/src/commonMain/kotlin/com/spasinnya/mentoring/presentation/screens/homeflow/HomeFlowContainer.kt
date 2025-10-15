@@ -57,11 +57,7 @@ fun HomeFlowContainer(onLogout: () -> Unit) {
                 navigateToAuthors = {  },
                 navigateToSpasinnyaBooks = {  },
                 navigateToSpasinnyaChurch = {  },
-                onLogout = {  }
-                },
-                navigateToLogin = {
-                    onLogout.invoke()
-                }
+                navigateToLogin = onLogout
             )
         }
         composable<Screen.HomeFlow.WeeksScreen> {

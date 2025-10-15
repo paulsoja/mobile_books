@@ -65,20 +65,16 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScre
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.di.viewModelFactory
-import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
 import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HomeScreen(
-    navigateToLessons: () -> Unit,
     navigateToProfile: () -> Unit,
     navigateToPromoCodes: () -> Unit,
     navigateToAuthors: () -> Unit,
     navigateToSpasinnyaBooks: () -> Unit,
     navigateToSpasinnyaChurch: () -> Unit,
-    onLogout: () -> Unit,
-    navigateToSettings: () -> Unit,
     navigateToLessons: () -> Unit,
     navigateToLogin: () -> Unit,
 ) {
@@ -155,7 +151,7 @@ fun HomeScreen(
                     onLanguageChosen = { viewModel.dispatchEvent(HomeContract.Event.OnLanguageChosen(it)) },
                     onProfileClick = navigateToProfile,
                     onPromoCodesClick = navigateToPromoCodes,
-                    onLogoutClick = onLogout,
+                    onLogoutClick = navigateToLogin,
                     onAuthorsClick = navigateToAuthors,
                     onSpasinnyaBooksClick = navigateToSpasinnyaBooks,
                     onSpasinnyaChurchClick = navigateToSpasinnyaChurch,
