@@ -53,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
@@ -69,15 +70,23 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScre
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.di.viewmodelfactory.createHomeViewModel
+import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun HomeScreen(
-    navigateToSettings: () -> Unit,
-    navigateToLessons: () -> Unit
+    navigateToLessons: () -> Unit,
+    navigateToProfile: () -> Unit,
+    navigateToPromoCodes: () -> Unit,
+    navigateToAuthors: () -> Unit,
+    navigateToSpasinnyaBooks: () -> Unit,
+    navigateToSpasinnyaChurch: () -> Unit,
+    onLogout: () -> Unit,
 ) {
 
     val viewModel: HomeViewModel = viewModel(factory = createHomeViewModel)
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),
@@ -85,7 +94,7 @@ fun HomeScreen(
         topBar = {
             CoreTopBar(
                 actionIcon = Res.drawable.ic_settings,
-                onActionClicked = navigateToSettings
+                onActionClicked = { viewModel.dispatchEvent(HomeContract.Event.ToggleSettingsDialog(true)) }
             )
         },
         content = { padding ->
@@ -125,6 +134,20 @@ fun HomeScreen(
                             )
                         }
                     }
+                )
+            }
+
+            if (state.showSettingsDialog) {
+                SettingsModalBottomSheet(
+                    onClose = { viewModel.dispatchEvent(HomeContract.Event.ToggleSettingsDialog(false)) },
+                    onLanguageChosen = { viewModel.dispatchEvent(HomeContract.Event.OnLanguageChosen(it)) },
+                    onProfileClick = navigateToProfile,
+                    onPromoCodesClick = navigateToPromoCodes,
+                    onLogoutClick = onLogout,
+                    onAuthorsClick = navigateToAuthors,
+                    onSpasinnyaBooksClick = navigateToSpasinnyaBooks,
+                    onSpasinnyaChurchClick = navigateToSpasinnyaChurch,
+                    selectedLanguage = state.selectedLanguage
                 )
             }
         }

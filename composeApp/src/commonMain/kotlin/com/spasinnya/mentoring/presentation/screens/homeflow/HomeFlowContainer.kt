@@ -49,10 +49,15 @@ fun HomeFlowContainer() {
     ) {
         composable<Screen.HomeFlow.HomeScreen> {
             HomeScreen(
-                navigateToSettings = {  },
                 navigateToLessons = {
                     navController.navigate(Screen.HomeFlow.LessonsScreen)
-                }
+                },
+                navigateToProfile = {  },
+                navigateToPromoCodes = {  },
+                navigateToAuthors = {  },
+                navigateToSpasinnyaBooks = {  },
+                navigateToSpasinnyaChurch = {  },
+                onLogout = {  }
             )
         }
         composable<Screen.HomeFlow.WeeksScreen> {

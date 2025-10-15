@@ -2,14 +2,18 @@
 
 package com.spasinnya.mentoring.presentation.designsystem.composable
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -22,7 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_back
+import books.composeapp.generated.resources.ic_close
 import books.composeapp.generated.resources.ic_logo
+import com.spasinnya.mentoring.presentation.designsystem.UiDimensions
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -107,4 +113,25 @@ fun CoreTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = Color(0xFFF5F7FC)),
         //elevation = 0.dp
     )
+}
+
+@Composable
+fun CoreModalTopBar(
+    modifier: Modifier = Modifier,
+    title: String = "",
+    onCloseClick: () -> Unit
+) {
+    Row(
+        modifier = modifier.fillMaxWidth().height(UiDimensions.modalTopBarHeight),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = title,
+            color = Color(0xFF3C4E73),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Spacer(Modifier.width(4.dp))
+        CoreIconButton(size = 32.dp, iconRes = Res.drawable.ic_close, tint = Color(0xFFB6C3D8), onClick = onCloseClick)
+    }
 }

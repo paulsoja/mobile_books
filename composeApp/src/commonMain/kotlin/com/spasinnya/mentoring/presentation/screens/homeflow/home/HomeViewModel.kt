@@ -8,8 +8,8 @@ class HomeViewModel() : BaseMviViewModel<HomeContract.State, HomeContract.Event,
 
     override fun handleEvent(event: HomeContract.Event) {
         when (event) {
-
-            else -> Unit
+            is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
+            is HomeContract.Event.OnLanguageChosen -> setState { copy(selectedLanguage = event.language) }
         }
     }
 }
