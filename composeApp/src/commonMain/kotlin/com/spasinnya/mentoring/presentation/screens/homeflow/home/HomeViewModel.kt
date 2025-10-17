@@ -19,13 +19,15 @@ class HomeViewModel(
 
     override fun handleEvent(event: HomeContract.Event) {
         when (event) {
-            HomeContract.Event.Logout -> sendEffect { HomeContract.Effect.NavigateToLogin }
+            is HomeContract.Event.Logout -> sendEffect { HomeContract.Effect.NavigateToLogin }
+            is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
+            is HomeContract.Event.OnLanguageChosen -> setState { copy(selectedLanguage = event.language) }
         }
     }
 
     fun logout() = viewModelScope.launch {
         logoutUseCase.invoke()
-            .catch {  }
+            .catch { }
             .onCompletion {
                 resetAppGraph()
                 dispatchEvent(HomeContract.Event.Logout)

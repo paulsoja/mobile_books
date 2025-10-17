@@ -20,6 +20,13 @@ fun CoreHorizontalDivider(
 }
 
 @Composable
+fun CoreHorizontalDividerLight(
+    modifier: Modifier = Modifier
+) {
+    HorizontalDivider(modifier = modifier, thickness = 1.dp, color = Color(0xFFF5F7FC))
+}
+
+@Composable
 fun CoreHorizontalDividerWithText(
     text: String
 ) {
