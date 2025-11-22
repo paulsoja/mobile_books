@@ -1,24 +1,21 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.weeks
 
+import com.spasinnya.mentoring.domain.model.Week
+
 interface WeeksContract {
     data class State(
-        val status: Status = Status.Init,
         val isLoading: Boolean = false,
+        val weeks: List<Week> = emptyList(),
     )
 
-    sealed class Status {
-        data object Init : Status()
-        data object Loading : Status()
-        data object Success : Status()
-        data class Error(val type: ErrorType) : Status()
-    }
-
     sealed class Event {
-
+        data class LoadedWeeks(val weeks: List<Week>): Event()
+        data class ShowLoading(val show: Boolean): Event()
     }
 
     sealed class Effect {
-
+        data object CheckPermissions: Effect()
+        data class NavigateToScenes(val geofenceId: Int): Effect()
     }
 
     sealed class ErrorType {
