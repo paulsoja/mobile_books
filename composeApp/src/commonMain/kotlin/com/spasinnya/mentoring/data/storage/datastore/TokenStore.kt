@@ -74,7 +74,7 @@ internal fun tokenStoreFromPath(filePath: Path): TokenStore {
 }
 
 @OptIn(ExperimentalTime::class)
-private fun Instant.toIsoString(): String = toString() // Instant в K2 форматит ISO-8601
+private fun Instant.toIsoString(): String = toString()
 
 @OptIn(ExperimentalTime::class)
 private fun String.parseInstantOrNull(): Instant? =

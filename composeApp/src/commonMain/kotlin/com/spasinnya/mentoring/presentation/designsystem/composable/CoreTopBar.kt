@@ -79,8 +79,8 @@ fun CoreTopAppBar(
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Normal,
-                            color = Color(0xFF3C4E73),
-                            fontSize = 16.sp
+                            color = Color(0xFFDFA672),
+                            fontSize = 14.sp
                         )
                     )
                 }

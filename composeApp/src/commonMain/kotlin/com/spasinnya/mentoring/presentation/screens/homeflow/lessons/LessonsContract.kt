@@ -4,7 +4,6 @@ interface LessonsContract {
     data class State(
         val status: Status = Status.Init,
         val isLoading: Boolean = false,
-        val lessons: List<String> = emptyList(),
     )
 
     sealed class Status {
@@ -19,8 +18,7 @@ interface LessonsContract {
     }
 
     sealed class Effect {
-        data object CheckPermissions: Effect()
-        data class NavigateToScenes(val geofenceId: Int): Effect()
+
     }
 
     sealed class ErrorType {

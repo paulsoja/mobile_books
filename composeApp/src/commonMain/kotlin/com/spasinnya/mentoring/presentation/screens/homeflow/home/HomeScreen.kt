@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -32,11 +33,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,14 +52,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.ic_settings
 import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.domain.model.ShortBook
 import com.spasinnya.mentoring.presentation.base.CollectEffects
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
@@ -66,6 +70,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitl
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -75,30 +80,43 @@ fun HomeScreen(
     navigateToAuthors: () -> Unit,
     navigateToSpasinnyaBooks: () -> Unit,
     navigateToSpasinnyaChurch: () -> Unit,
-    navigateToLessons: () -> Unit,
+    navigateToWeeks: (bookId: Int, bookNumber: String) -> Unit,
     navigateToLogin: () -> Unit,
 ) {
     val factory = remember {
         viewModelFactory { graph, handle ->
             HomeViewModel(
                 logoutUseCase = graph.useCases.logoutUseCase,
+                getBooksUseCase = graph.useCases.booksUseCase,
+                purchaseBookUseCase = graph.useCases.purchaseBookUseCase,
                 savedStateHandle = handle
             )
         }
     }
     val viewModel: HomeViewModel = viewModel(factory = factory)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     viewModel.effect.CollectEffects { effect ->
         when (effect) {
             HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
+            is HomeContract.Effect.ShowSnackbar -> scope.launch {
+                snackbarHostState.showSnackbar(effect.message)
+            }
         }
     }
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),
         containerColor = Color(0xFFF5F7FC),
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        },
         topBar = {
             CoreTopBar(
                 actionIcon = Res.drawable.ic_settings,
@@ -106,43 +124,63 @@ fun HomeScreen(
             )
         },
         content = { padding ->
-            Column(
-                modifier = Modifier.fillMaxSize().padding(top = padding.calculateTopPadding()).padding(top = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp)
-            ) {
-                CoreTextScreenTitle(
-                    text = "Оберіть Наставництво \uD83D\uDCDA",
-                    modifier = Modifier.padding(horizontal = 24.dp).clickable { viewModel.logout() },
-                )
-                Pager(
-                    pageContent = { pagerState: PagerState, page: Int ->
-                        PagerCard(
-                            pagerState = pagerState,
-                            page = page,
-                            onOpenClicked = navigateToLessons
-                        )
-                    },
-                    indicatorContent = { pageCount, currentPage ->
-                        Row(
-                            Modifier
-                                .wrapContentHeight()
-                                .fillMaxWidth()
-                                .background(color = Color.Transparent)
-                                .align(Alignment.CenterHorizontally)
-                                .padding(bottom = 24.dp),
-                            horizontalArrangement = Arrangement.spacedBy(
-                                12.dp,
-                                Alignment.CenterHorizontally
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0x66F5F7FC))
+                        .zIndex(4f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CoreCircularProgressIndicator()
+                }
+            } else {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(top = padding.calculateTopPadding()).padding(top = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    CoreTextScreenTitle(
+                        text = "Оберіть Наставництво \uD83D\uDCDA",
+                        modifier = Modifier.padding(horizontal = 24.dp).clickable { viewModel.logout() },
+                    )
+                    Pager(
+                        list = state.books,
+                        pageContent = { pagerState: PagerState, item: ShortBook ->
+                            PagerCard(
+                                item = item,
+                                isLoading = state.isPurchaseLoading,
+                                onPurchaseClicked = {
+                                    viewModel.dispatchEvent(
+                                        HomeContract.Event.PurchaseBook(item.id)
+                                    )
+                                },
+                                onOpenClicked = {
+                                    navigateToWeeks.invoke(item.id, item.number)
+                                }
                             )
-                        ) {
-                            PagerIndicator(
-                                modifier = Modifier,
-                                pageCount = pageCount,
-                                currentPage = currentPage
-                            )
+                        },
+                        indicatorContent = { pageCount, currentPage ->
+                            Row(
+                                Modifier
+                                    .wrapContentHeight()
+                                    .fillMaxWidth()
+                                    .background(color = Color.Transparent)
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(bottom = 24.dp),
+                                horizontalArrangement = Arrangement.spacedBy(
+                                    12.dp,
+                                    Alignment.CenterHorizontally
+                                )
+                            ) {
+                                PagerIndicator(
+                                    modifier = Modifier,
+                                    pageCount = pageCount,
+                                    currentPage = currentPage
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
 
             if (state.showSettingsDialog) {
@@ -164,19 +202,23 @@ fun HomeScreen(
 
 @Composable
 private fun Pager(
-    pageContent: @Composable (pagerState: PagerState, page: Int) -> Unit,
+    list: List<ShortBook>,
+    pageContent: @Composable (pagerState: PagerState, item: ShortBook) -> Unit,
     indicatorContent: @Composable (pageCount: Int, currentPage: Int) -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        val pagerState = rememberPagerState(pageCount = { 4 })
+        val pagerState = rememberPagerState(pageCount = { list.size })
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 24.dp),
-            pageSpacing = 8.dp
+            pageSpacing = 8.dp,
+            key = {
+                it
+            }
         ) { page ->
             Card(
                 modifier = Modifier
@@ -193,7 +235,7 @@ private fun Pager(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(40.dp)
             ) {
-                pageContent.invoke(pagerState, page)
+                pageContent.invoke(pagerState, list[page])
             }
         }
         indicatorContent.invoke(
@@ -205,8 +247,9 @@ private fun Pager(
 
 @Composable
 private fun PagerCard(
-    pagerState: PagerState,
-    page: Int,
+    item: ShortBook,
+    isLoading: Boolean,
+    onPurchaseClicked: (bookId: Int) -> Unit,
     onOpenClicked: () -> Unit
 ) {
     Box(
@@ -215,8 +258,10 @@ private fun PagerCard(
             .fillMaxWidth()
     ) {
         PageItem(
+            item = item,
+            isLoading = isLoading,
             onContentClicked = {},
-            onPurchaseClicked = {},
+            onPurchaseClicked = onPurchaseClicked,
             onOpenClicked = onOpenClicked
         )
     }
@@ -224,8 +269,10 @@ private fun PagerCard(
 
 @Composable
 private fun PageItem(
+    item: ShortBook,
+    isLoading: Boolean,
     onContentClicked: () -> Unit,
-    onPurchaseClicked: () -> Unit,
+    onPurchaseClicked: (bookId: Int) -> Unit,
     onOpenClicked: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -237,16 +284,17 @@ private fun PageItem(
         )
         Column(modifier = Modifier.fillMaxSize().padding(all = 16.dp)) {
             CoreTextTitle(
-                text = "Наставництво - I"
+                text = item.title
             )
             Spacer(modifier = Modifier.height(12.dp))
             CoreTextBody(
-                text = "Ця книга призначена для духовного зростання новонавернених через наставництво у групах спілкування з першого дня після покаяння до вступу в завіт із Богом через водне хрещення. " +
-                        "Її можна також використовувати як курс із підготовки новонавернених до водного хрещення через семінарські заняття.",
+                text = item.subtitle,
                 modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())
             )
             Spacer(modifier = Modifier.height(12.dp))
             BookCardBottomBar(
+                item = item,
+                isLoading = isLoading,
                 onContentClicked = onContentClicked,
                 onPurchaseClicked = onPurchaseClicked,
                 onOpenClicked = onOpenClicked
@@ -292,75 +340,45 @@ private fun PagerIndicator(
 
 @Composable
 fun BookCardBottomBar(
+    item: ShortBook,
+    isLoading: Boolean,
     onContentClicked: () -> Unit,
-    onPurchaseClicked: () -> Unit,
+    onPurchaseClicked: (bookId: Int) -> Unit,
     onOpenClicked: () -> Unit,
 ) = Row(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth().animateContentSize(),
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.spacedBy(16.dp)
 ) {
-    var hasAccess by remember { mutableStateOf(false) }
-
-    if (hasAccess) {
-        BookCardInProgressButtons(
-            onOpenClicked = {
-                onOpenClicked.invoke()
-            }
-        )
+    Box(modifier = Modifier.padding(start = 8.dp)) {
+        if (item.isPurchased) {
+            CircularProgressBar(
+                percentage = 0.42f,
+                modifier = Modifier.size(52.dp)
+            )
+        } else {
+            CoreOutlinedButton(
+                modifier = Modifier.fillMaxWidth(.5f).height(68.dp),
+                text = "Зміст",
+                iconAfter = Res.drawable.ic_content,
+                onClick = { onContentClicked() }
+            )
+        }
+    }
+    if (isLoading) {
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            CoreCircularProgressIndicator()
+        }
     } else {
-        BookCardNotAccessButtons(
-            onContentClicked = onContentClicked,
-            onPurchaseClicked = {
-                hasAccess = true
-                onPurchaseClicked.invoke()
-            }
+        CorePrimaryButton(
+            modifier = Modifier.weight(1f).height(68.dp),
+            text = if (item.isPurchased) "Відкрити" else "Купити",
+            onClick = { if (item.isPurchased) onOpenClicked() else onPurchaseClicked(item.id) }
         )
     }
-}
-
-@Composable
-fun BookCardNotAccessButtons(
-    onContentClicked: () -> Unit,
-    onPurchaseClicked: () -> Unit,
-) = Row(
-    modifier = Modifier.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(16.dp)
-) {
-    CoreOutlinedButton(
-        modifier = Modifier.weight(1f).height(68.dp),
-        text = "Зміст",
-        iconAfter = Res.drawable.ic_content,
-        onClick = { onContentClicked() }
-    )
-
-    CorePrimaryButton(
-        modifier = Modifier.weight(1f).height(68.dp),
-        text = "Купити",
-        onClick = { onPurchaseClicked() }
-    )
-}
-
-@Composable
-fun BookCardInProgressButtons(
-    onOpenClicked: () -> Unit
-) = Row(
-    modifier = Modifier.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(16.dp)
-) {
-    CircularProgressBar(
-        percentage = 0.42f,
-        modifier = Modifier.size(52.dp)
-    )
-
-    CorePrimaryButton(
-        modifier = Modifier.weight(1f).height(68.dp),
-        text = "Відкрити",
-        iconAfter = Res.drawable.ic_arrow_right,
-        onClick = { onOpenClicked() },
-    )
 }
 
 @Composable
@@ -372,7 +390,7 @@ fun CircularProgressBar(
     progressColor: Color = Color(0xFFD2A676),
     textColor: Color = Color.Black
 ) {
-    val sweepAngle = percentage * 360f
+    val sweepAngle = remember(percentage) { percentage * 360f }
 
     Box(
         contentAlignment = Alignment.Center,
