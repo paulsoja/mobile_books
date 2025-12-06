@@ -56,7 +56,7 @@ fun WeeksScreen(
     bookId: Int,
     navigateBack: () -> Unit,
     onActionClicked: () -> Unit,
-    navigateToLessons: (bookId: Int, weekId: Int) -> Unit
+    navigateToLessons: (weekId: Int) -> Unit
 ) {
 
     val factory = remember {
@@ -124,7 +124,7 @@ fun WeeksScreen(
                         false -> state.weeks.forEach { week ->
                             WeekItem(
                                 week = week,
-                                onClick = { weekId -> navigateToLessons.invoke(bookId, weekId) }
+                                onClick = { weekId -> navigateToLessons.invoke(weekId) }
                             )
                         }
                     }
