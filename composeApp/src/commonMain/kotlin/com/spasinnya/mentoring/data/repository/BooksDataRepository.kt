@@ -1,12 +1,14 @@
 package com.spasinnya.mentoring.data.repository
 
 import com.spasinnya.mentoring.data.mapper.toDomain
+import com.spasinnya.mentoring.data.model.LessonResponse
 import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
 import com.spasinnya.mentoring.data.model.ShortBookApiResponse
 import com.spasinnya.mentoring.data.model.WeekResponse
 import com.spasinnya.mentoring.data.net.getFlow
 import com.spasinnya.mentoring.data.net.postFlow
 import com.spasinnya.mentoring.domain.repository.BooksRepository
+import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
 import io.ktor.client.HttpClient
@@ -38,4 +40,13 @@ fun weeksRepository(
         path = "weeks/$bookId",
     )
         .map { it.map(WeekResponse::toDomain) }
+}
+
+fun lessonsRepository(
+    http: HttpClient,
+): LessonsRepository = { weekId ->
+    http.getFlow<List<LessonResponse>>(
+        path = "lessons/$weekId",
+    )
+        .map { it.map(LessonResponse::toDomain) }
 }

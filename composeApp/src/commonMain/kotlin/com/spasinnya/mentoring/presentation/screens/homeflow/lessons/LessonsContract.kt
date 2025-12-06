@@ -1,20 +1,16 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
+import com.spasinnya.mentoring.domain.model.Lesson
+
 interface LessonsContract {
     data class State(
-        val status: Status = Status.Init,
+        val lessons: List<Lesson> = emptyList(),
         val isLoading: Boolean = false,
     )
 
-    sealed class Status {
-        data object Init : Status()
-        data object Loading : Status()
-        data object Success : Status()
-        data class Error(val type: ErrorType) : Status()
-    }
-
     sealed class Event {
-
+        data class LoadedLessons(val lessons: List<Lesson>): Event()
+        data class ShowLoading(val show: Boolean): Event()
     }
 
     sealed class Effect {

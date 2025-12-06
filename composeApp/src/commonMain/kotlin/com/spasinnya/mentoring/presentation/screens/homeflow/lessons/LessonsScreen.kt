@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,19 +35,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
+import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import kotlinx.coroutines.launch
 
 @Composable
 fun LessonsScreen(
-    bookId: Int,
     weekId: Int,
     navigateBack: () -> Unit,
 ) {
+    val factory = remember {
+        viewModelFactory { graph, handle ->
+            LessonsViewModel(
+                weekId = weekId,
+                lessonsUseCase = graph.useCases.lessonsUseCase,
+                savedStateHandle = handle
+            )
+        }
+    }
+    val viewModel: LessonsViewModel = viewModel(factory = factory)
+    val state: LessonsContract.State by viewModel.state.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -60,12 +75,11 @@ fun LessonsScreen(
             onBackClick = navigateBack
         )
 
-        val tabs = remember { listOf("1", "2", "3", "4", "5") }
         val scope = rememberCoroutineScope()
 
         val pagerState = rememberPagerState(
             initialPage = 0,
-            pageCount = { tabs.size }
+            pageCount = { state.lessons.size }
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -77,7 +91,7 @@ fun LessonsScreen(
             divider = { },
             contentColor = Color(0xFF3C4E73),
             tabs = {
-                tabs.forEachIndexed { index, title ->
+                state.lessons.forEachIndexed { index, lesson ->
                     Tab(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -150,7 +164,7 @@ fun LessonsScreen(
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
                 CoreTextBody(
-                    text = "Урок 1: «Особиста молитва»",
+                    text = state.lessons[page].title,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3C4E73),
@@ -189,7 +203,7 @@ fun LessonsScreen(
                         )
                     }
                     CoreTextBody(
-                        text = "\"Тож Мені найменше залежить, як про мене судите ви або який взагалі людський суд, бо я і сам себе не суджу. І хоч я ні в чому не відчуваю себе винним, але цим я не є виправданий. Адже Той, Хто мене судить, то Господь\"",
+                        text = state.lessons[page].quote.orEmpty(),
                         style = MaterialTheme.typography.bodySmall.copy(
                             fontWeight = FontWeight.Medium,
                             color = Color(0xFFCF7D47),
@@ -199,15 +213,17 @@ fun LessonsScreen(
                     )
                 }
 
-                CoreTextBody(
-                    text = "День у юдеїв починався о шостій годині ранку й закінчувався о шостій вечора. Набожний юдей молився тричі: о девʼятій годині ранку, о дванадцятій і о третій годині дня. Вони вважали, що молитва дієва в будь-якому місці, але в храмі вона має подвійну силу. Дуже цікаво, що Петро та Іван дотримувалися старих звичаїв, живучи під благодаттю.",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF54595F),
-                        fontSize = 18.sp,
-                        lineHeight = 28.sp
+                state.lessons[page].content.forEach { content ->
+                    CoreTextBody(
+                        text = content.data,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Normal,
+                            color = Color(0xFF54595F),
+                            fontSize = 18.sp,
+                            lineHeight = 28.sp
+                        )
                     )
-                )
+                }
             }
         }
     }

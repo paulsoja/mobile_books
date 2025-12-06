@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.presentation.di
 
 import com.spasinnya.mentoring.domain.repository.BooksRepository
+import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.LogoutRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
@@ -16,4 +17,5 @@ interface RepoModule {
     val booksRepository: BooksRepository
     val purchaseBookRepository: PurchaseBookRepository
     val weeksRepository: WeeksRepository
+    val lessonsRepository: LessonsRepository
 }
