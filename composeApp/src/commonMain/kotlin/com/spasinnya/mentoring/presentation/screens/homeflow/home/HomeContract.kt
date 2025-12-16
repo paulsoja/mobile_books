@@ -15,6 +15,7 @@ interface HomeContract {
 
     sealed class Event {
         data object Logout : Event()
+        data object OnProfileClick : Event()
         data class LoadedBooks(val books: List<ShortBook>) : Event()
         data class ShowLoading(val isLoading: Boolean) : Event()
         data class PurchaseLoading(val isLoading: Boolean) : Event()
@@ -26,6 +27,7 @@ interface HomeContract {
 
     sealed class Effect {
         data object NavigateToLogin : Effect()
+        data object NavigateToProfile : Effect()
         data class ShowSnackbar(val message: String) : Effect()
     }
 

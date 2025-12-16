@@ -41,6 +41,7 @@ class HomeViewModel(
             }
 
             is HomeContract.Event.PurchaseLoading -> setState { copy(isPurchaseLoading = event.isLoading) }
+            is HomeContract.Event.OnProfileClick -> sendEffect { HomeContract.Effect.NavigateToProfile }
         }
     }
 
