@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -16,13 +17,15 @@ fun CoreText(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
-    style: TextStyle = MaterialTheme.typography.bodySmall
+    style: TextStyle = MaterialTheme.typography.bodySmall,
+    textDecoration: TextDecoration = TextDecoration.None,
 ) {
     Text(
         modifier = modifier,
         text = text,
         textAlign = textAlign,
-        style = style
+        style = style,
+        textDecoration = textDecoration,
     )
 }
 
@@ -34,13 +37,15 @@ fun CoreTextSubtitle(
     style: TextStyle = MaterialTheme.typography.titleLarge.copy(
         fontSize = 18.sp,
         color = Color(0xFF828EA0)
-    )
+    ),
+    textDecoration: TextDecoration = TextDecoration.None,
 ) {
     CoreText(
         modifier = modifier,
         text = text,
         textAlign = textAlign,
-        style = style
+        style = style,
+        textDecoration = textDecoration
     )
 }
 
@@ -49,6 +54,7 @@ fun CoreTextBody(
     text: String,
     modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Start,
+    textDecoration: TextDecoration = TextDecoration.None,
     style: TextStyle = MaterialTheme.typography.bodyMedium.copy(
         color = Color(0xFF828EA0),
         fontWeight = FontWeight.Normal
@@ -58,7 +64,8 @@ fun CoreTextBody(
         modifier = modifier,
         text = text,
         textAlign = textAlign,
-        style = style
+        style = style,
+        textDecoration = textDecoration,
     )
 }
 

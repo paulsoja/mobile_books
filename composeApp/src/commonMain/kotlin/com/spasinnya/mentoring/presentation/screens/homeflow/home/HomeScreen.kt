@@ -36,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,6 +71,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitl
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.di.viewModelFactory
 import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 
@@ -104,9 +106,11 @@ fun HomeScreen(
             is HomeContract.Effect.ShowSnackbar -> scope.launch {
                 snackbarHostState.showSnackbar(effect.message)
             }
+            is HomeContract.Effect.NavigateToProfile -> {
+                navigateToProfile.invoke()
+            }
         }
     }
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),
@@ -187,7 +191,10 @@ fun HomeScreen(
                 SettingsModalBottomSheet(
                     onClose = { viewModel.dispatchEvent(HomeContract.Event.ToggleSettingsDialog(false)) },
                     onLanguageChosen = { viewModel.dispatchEvent(HomeContract.Event.OnLanguageChosen(it)) },
-                    onProfileClick = navigateToProfile,
+                    onProfileClick = {
+                        viewModel.dispatchEvent(HomeContract.Event.ToggleSettingsDialog(false))
+                        viewModel.dispatchEvent(HomeContract.Event.OnProfileClick)
+                    },
                     onPromoCodesClick = navigateToPromoCodes,
                     onLogoutClick = navigateToLogin,
                     onAuthorsClick = navigateToAuthors,
