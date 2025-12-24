@@ -6,106 +6,79 @@ import androidx.navigation.toRoute
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.OtpCode
 import com.spasinnya.mentoring.domain.model.OtpCredentials
-import com.spasinnya.mentoring.domain.model.UiErrorType
-import com.spasinnya.mentoring.domain.rules.Validated
 import com.spasinnya.mentoring.domain.usecase.auth.ConfirmOtpCodeUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
-import com.spasinnya.mentoring.presentation.base.loader
+import com.spasinnya.mentoring.presentation.base.Validated
+import com.spasinnya.mentoring.presentation.base.withLoading
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import com.spasinnya.mentoring.presentation.navigation.Screen
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class OtpViewModel(
     private val otpCodeUseCase: ConfirmOtpCodeUseCase,
     private val savedStateHandle: SavedStateHandle,
-) : BaseMviViewModel<OtpContract.State, OtpContract.Event, OtpContract.Effect>() {
-
-    override fun createInitialState(): OtpContract.State = OtpContract.State()
-
-    init {
-        val args = savedStateHandle.toRoute<Screen.AuthFlow.OtpScreen>()
-        setState { copy(email = Email(args.email)) }
-    }
+) : BaseMviViewModel<OtpContract.State, OtpContract.Event, OtpContract.Effect>(
+    initialState = OtpContract.State(
+        email = run {
+            val rawEmail = savedStateHandle.toRoute<Screen.AuthFlow.OtpScreen>().email
+            when (val validated = Email.of(rawEmail)) {
+                is Validated.Valid -> validated.value
+                is Validated.Invalid -> error("OtpViewModel got invalid email: $validated")
+            }
+        }
+    )
+) {
 
     override fun handleEvent(event: OtpContract.Event) {
         when (event) {
-            is OtpContract.Event.CodeChanged -> setState { copy(code = OtpCode(event.code)) }
-            is OtpContract.Event.HandleError -> when (event.errorType) {
-                OtpContract.ErrorType.NoConnection -> setState { copy(messageError = UiErrorType.NoConnection) }
-                OtpContract.ErrorType.NoError -> setState {
-                    copy(
-                        messageError = null,
-                        showAlertDialog = false,
-                    )
-                }
-                is OtpContract.ErrorType.OtpCodeError -> setState { copy(otpError = event.errorType.message) }
-                OtpContract.ErrorType.UnexpectedError -> setState { copy(messageError = UiErrorType.Unexpected) }
-                is OtpContract.ErrorType.EmailError -> Unit
-            }
-            is OtpContract.Event.ValidateOtpCredentials -> {
-                dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.NoError))
-                validateCredentials(
-                    email = event.email,
-                    code = event.code,
-                    onValid = ::confirmOtp
-                )
-            }
+            is OtpContract.Event.OtpChanged -> otpChanged(event.otp)
+            is OtpContract.Event.ConfirmClicked -> validateCredentials(
+                email = event.email,
+                code = event.otp,
+                onValid = ::confirmOtp
+            )
+
+            OtpContract.Event.DismissDialog -> hideDialog()
         }
     }
 
-    private fun validateCredentials(email: String, code: String, onValid: (OtpCredentials) -> Unit) {
-        val creds = OtpCredentials.of(email, code)
-        when (creds) {
-            is Validated.Valid -> onValid.invoke(creds.value)
+    private fun validateCredentials(email: Email.Valid, code: OtpCode, onValid: (OtpCredentials) -> Unit) {
+        when (val result = code.validate()) {
+            is Validated.Valid -> {
+                val validOtp = result.value
+                val creds = OtpCredentials(email = email, otp = validOtp)
+                onValid(creds)
+            }
             is Validated.Invalid -> {
-                creds.errors
-                    .also { Napier.d("validateCredentials: errors=$it") }
-                    .forEach {
-                        when (it) {
-                            is OtpCredentials.OtpCredentialsError.Email -> {
-                                dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.EmailError(it.error)))
-                            }
-                            is OtpCredentials.OtpCredentialsError.Code -> {
-                                dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.OtpCodeError(it.error)))
-                            }
-                        }
-                    }
+                val firstError = result.errors.firstOrNull() ?: OtpCode.Error.NotFilled
+                setState { copy(otpError = firstError) }
             }
         }
     }
 
     private fun confirmOtp(otpCredentials: OtpCredentials) = viewModelScope.launch(Dispatchers.IO) {
         otpCodeUseCase.invoke(otpCredentials)
-            .loader(isLoading = { setState { copy(isLoading = it) } })
-            .catch {
-                handleFailures(it)
-                Napier.d("otp: catch=$it")
+            .withLoading { setState { copy(isLoading = it) } }
+            .collectLatest { result ->
+                when (result) {
+                    is Validated.Invalid -> handleDomainErrors(
+                        errors = result.errors,
+                        reduce = { errorType ->
+                            copy(
+                                isLoading = false,
+                                dialog = DialogState.Shown(errorType)
+                            )
+                        }
+                    )
+                    is Validated.Valid -> sendEffect { OtpContract.Effect.NavigateToCongratScreen }
+                }
             }
-            .collectLatest {
-                Napier.d("otp: success=$it")
-                sendEffect { OtpContract.Effect.NavigateToCongratScreen }
-            }
     }
 
-    override fun handleNetworkError() {
-        super.handleNetworkError()
-        dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.NoConnection))
-    }
+    private fun hideDialog() = setState { copy(dialog = DialogState.Hidden) }
 
-    override fun handleUnexpectedError(throwable: Throwable) {
-        super.handleUnexpectedError(throwable)
-        dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.UnexpectedError))
-    }
-
-    override fun handleDomainError(statusCode: String, code: Int) {
-        super.handleDomainError(statusCode, code)
-        when (statusCode) {
-            "Bad Request" -> dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.UnexpectedError))
-            "Invalid code" -> dispatchEvent(OtpContract.Event.HandleError(OtpContract.ErrorType.OtpCodeError(OtpCode.Error.Invalid_format)))
-        }
-    }
+    private fun otpChanged(otp: OtpCode) = setState { copy(otp = otp, otpError = OtpCode.Error.NoError) }
 }

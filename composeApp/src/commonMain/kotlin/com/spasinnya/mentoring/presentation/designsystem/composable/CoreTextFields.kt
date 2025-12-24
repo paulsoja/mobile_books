@@ -67,12 +67,15 @@ fun CoreOutlinedTextField(
             unfocusedIndicatorColor = Color(0xFFB6C3D8),
             disabledIndicatorColor = Color(0xFFB6C3D8),
         ),
+        visualTransformation = inputDefaults.visualTransformation(),
         placeholder = {
             inputDefaults.placeholder.takeIf { it.isNotEmpty() }?.let {
                 CoreTextBody(text = it, style = MaterialTheme.typography.bodySmall)
             }
         },
-        trailingIcon = { inputDefaults.trailingIcon.invoke() },
+        trailingIcon = {
+            inputDefaults.trailingIcon.invoke()
+                       },
         textStyle = inputDefaults.textStyle.invoke(),
     )
 }

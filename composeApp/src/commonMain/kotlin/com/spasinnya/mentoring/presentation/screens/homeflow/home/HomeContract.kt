@@ -1,8 +1,7 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
-import com.spasinnya.mentoring.domain.model.ShortBook
-
 import com.spasinnya.mentoring.domain.enums.Language
+import com.spasinnya.mentoring.domain.model.ShortBook
 
 interface HomeContract {
     data class State(
@@ -29,9 +28,5 @@ interface HomeContract {
         data object NavigateToLogin : Effect()
         data object NavigateToProfile : Effect()
         data class ShowSnackbar(val message: String) : Effect()
-    }
-
-    sealed class ErrorType {
-        data object NoConnection : ErrorType()
     }
 }

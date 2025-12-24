@@ -10,7 +10,7 @@ import com.spasinnya.mentoring.domain.model.Token
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import okio.Path
 import kotlin.time.ExperimentalTime
@@ -58,7 +58,7 @@ internal fun tokenStoreFromPath(filePath: Path): TokenStore {
                 }
                 .distinctUntilChanged()
 
-        override suspend fun read(): Token? = flow().first()
+        override suspend fun read(): Token? = flow().firstOrNull()
 
         override suspend fun save(token: Token) {
             ds.edit { p ->

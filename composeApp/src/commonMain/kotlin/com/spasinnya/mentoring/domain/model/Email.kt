@@ -1,37 +1,42 @@
 package com.spasinnya.mentoring.domain.model
 
-import androidx.compose.runtime.Composable
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.error_email_invalid
-import com.spasinnya.mentoring.domain.rules.RegexType
-import com.spasinnya.mentoring.domain.rules.Validated
-import com.spasinnya.mentoring.domain.rules.isValid
-import org.jetbrains.compose.resources.stringResource
+import com.spasinnya.mentoring.presentation.base.Validated
+import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class Email(val value: String) {
+value class Email private constructor(val value: String) {
 
     companion object {
-        val init: Email = Email("")
+        val init = Email("")
+        fun raw(value: String): Email = Email(value)
+        fun of(value: String): Validated<Error, Valid> = raw(value).validate()
+    }
 
-        fun of(email: String): Validated<Error, Email> {
-            return when {
-                email.isEmpty() -> Validated.Invalid(listOf(Error.Empty))
-                isValid(email, RegexType.EMAIL) -> Validated.Valid(Email(email))
-                else -> Validated.Invalid(listOf(Error.Invalid_format))
-            }
+    fun validate(): Validated<Error, Valid> {
+        val text = value.trim()
+
+        return when {
+            text.isEmpty() -> Validated.Invalid(listOf(Error.Empty))
+            text.length > 254 -> Validated.Invalid(listOf(Error.TooLong))
+            !isValidEmail(text) -> Validated.Invalid(listOf(Error.InvalidFormat))
+            else -> Validated.Valid(Valid(text))
         }
     }
 
-    sealed interface Status {
-        data class Valid(val email: String) : Status
-        data class Failed(val error: Error) : Status
-    }
+    @JvmInline
+    @Serializable
+    value class Valid internal constructor(val value: String)
 
-    enum class Error(val message: @Composable () -> String) {
-        No_error({ "" }),
-        Invalid_format({ stringResource(Res.string.error_email_invalid) }),
-        Empty({ stringResource(Res.string.error_email_invalid) }),
+    enum class Error {
+        NoError,
+        Empty,
+        TooLong,
+        InvalidFormat,
     }
+}
+
+private fun isValidEmail(email: String): Boolean {
+    val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+    return emailRegex.matches(email)
 }

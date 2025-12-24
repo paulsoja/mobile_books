@@ -1,8 +1,8 @@
 package com.spasinnya.mentoring.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,7 +23,7 @@ fun AppContent() {
     }
 
     val viewModel: SessionViewModel = viewModel(factory = factory)
-    val session by viewModel.state.collectAsState()
+    val session by viewModel.state.collectAsStateWithLifecycle()
 
     val startDestination = when (session) {
         SessionState.Loading -> ScreenContainer.SplashFlow

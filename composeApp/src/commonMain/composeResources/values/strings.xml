@@ -8,6 +8,7 @@
     <string name="common_confirm">Підтвердити</string>
     <string name="common_try_again">Спробувати ще раз</string>
     <string name="common_repeat">Повторити</string>
+    <string name="common_cancel">Скасувати</string>
 
     <!--Errors-->
     <string name="error_no_connection">Немає інтернету</string>

@@ -11,9 +11,10 @@ import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.LogoutRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
-import com.spasinnya.mentoring.presentation.base.alsoDo
+import com.spasinnya.mentoring.presentation.base.alsoValidDo
+import com.spasinnya.mentoring.presentation.base.mapValid
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.flow.map
 
 fun loginRepository(
     http: HttpClient,
@@ -23,8 +24,8 @@ fun loginRepository(
         path = "login",
         body = creds
     )
-        .map(TokenApiResponse::toDomain)
-        .alsoDo(tokenStore::save)
+        .mapValid(TokenApiResponse::toDomain)
+        .alsoValidDo(tokenStore::save)
 }
 
 fun registerRepo(
@@ -34,6 +35,7 @@ fun registerRepo(
         path = "register",
         body = creds
     )
+        .mapValid { it }
 }
 
 fun otpRepo(
@@ -44,8 +46,8 @@ fun otpRepo(
         path = "verify-otp",
         body = creds
     )
-        .map(TokenApiResponse::toDomain)
-        .alsoDo(tokenStore::save)
+        .mapValid(TokenApiResponse::toDomain)
+        .alsoValidDo(tokenStore::save)
 }
 
 fun logoutRepo(
@@ -54,10 +56,12 @@ fun logoutRepo(
 ): LogoutRepository = {
     val token = tokenStore.read() ?: throw Exception("Can't logout, no token")
 
+    Napier.d { "SessionViewModel: 2=$tokenStore" }
+
     http.postFlow<TokenApiRequest, Unit>(
         path = "logout",
         body = TokenApiRequest(token.refreshToken)
-    ).alsoDo {
-        tokenStore.clear()
-    }
+    )
+        .mapValid { it }
+        .alsoValidDo { tokenStore.clear() }
 }

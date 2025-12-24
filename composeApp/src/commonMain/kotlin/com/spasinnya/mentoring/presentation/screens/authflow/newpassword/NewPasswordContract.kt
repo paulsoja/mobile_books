@@ -1,17 +1,13 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.newpassword
 
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
+import com.spasinnya.mentoring.presentation.model.UiErrorType
+
 interface NewPasswordContract {
     data class State(
-        val status: Status = Status.Init,
         val isLoading: Boolean = false,
+        val dialog: DialogState<UiErrorType> = DialogState.Hidden,
     )
-
-    sealed class Status {
-        data object Init : Status()
-        data object Loading : Status()
-        data object Success : Status()
-        data class Error(val type: ErrorType) : Status()
-    }
 
     sealed class Event {
 
@@ -19,9 +15,5 @@ interface NewPasswordContract {
 
     sealed class Effect {
 
-    }
-
-    sealed class ErrorType {
-        data object NoConnection : ErrorType()
     }
 }

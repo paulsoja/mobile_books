@@ -20,7 +20,7 @@ class SessionViewModel(
             .map { token -> if (token == null) SessionState.Guest else SessionState.Authed }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                started = SharingStarted.Eagerly,
                 initialValue = SessionState.Loading
             )
 }

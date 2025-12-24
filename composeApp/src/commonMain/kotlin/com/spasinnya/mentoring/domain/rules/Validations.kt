@@ -1,5 +1,7 @@
 package com.spasinnya.mentoring.domain.rules
 
+import com.spasinnya.mentoring.presentation.base.Validated
+
 fun isValid(value: String, regex: RegexType): Boolean = regex.regex().matches(value)
 
 enum class RegexType(val regex: () -> Regex) {
@@ -12,10 +14,10 @@ private val emailRegex = { "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex() }
 private val passwordRegex = { "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$".toRegex() }
 private val otpCodeRegex = { "^\\d{4}\$".toRegex() }
 
-sealed class Validated<out E, out A> {
+/*sealed class Validated<out E, out A> {
     data class Valid<A>(val value: A) : Validated<Nothing, A>()
     data class Invalid<E>(val errors: List<E>) : Validated<E, Nothing>()
-}
+}*/
 
 inline fun <E, A, B, C> Validated<E, A>.zip(
     other: Validated<E, B>,

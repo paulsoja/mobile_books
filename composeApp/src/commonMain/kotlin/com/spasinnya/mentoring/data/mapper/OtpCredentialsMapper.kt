@@ -5,5 +5,5 @@ import com.spasinnya.mentoring.domain.model.OtpCredentials
 
 fun OtpCredentials.toData() = OtpCredentialsApiRequest(
     email = email.value,
-    code = code.value
+    code = otp.value
 )

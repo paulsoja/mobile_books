@@ -9,16 +9,10 @@ interface WeeksContract {
     )
 
     sealed class Event {
-        data class LoadedWeeks(val weeks: List<Week>): Event()
-        data class ShowLoading(val show: Boolean): Event()
+
     }
 
     sealed class Effect {
-        data object CheckPermissions: Effect()
-        data class NavigateToScenes(val geofenceId: Int): Effect()
-    }
 
-    sealed class ErrorType {
-        data object NoConnection : ErrorType()
     }
 }

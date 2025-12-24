@@ -2,32 +2,28 @@ package com.spasinnya.mentoring.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.spasinnya.mentoring.data.model.AppError
-import io.github.aakira.napier.Napier
+import com.spasinnya.mentoring.domain.mapper.toUiErrorType
+import com.spasinnya.mentoring.domain.rules.DomainError
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
+abstract class BaseMviViewModel<State, Event, Effect>(
+    initialState: State
+) : ViewModel() {
 
-    private val _state = MutableStateFlow(createInitialState())
+    protected val _state = MutableStateFlow(initialState)
     val state: StateFlow<State> = _state.asStateFlow()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = createInitialState()
-        )
 
     private val _effect = Channel<Effect>(Channel.BUFFERED)
-    val effect = _effect.receiveAsFlow()
+    val effect: Flow<Effect> = _effect.receiveAsFlow()
 
-    protected abstract fun createInitialState(): State
     protected abstract fun handleEvent(event: Event)
 
     fun dispatchEvent(event: Event) {
@@ -44,29 +40,11 @@ abstract class BaseMviViewModel<State, Event, Effect> : ViewModel() {
         }
     }
 
-    protected fun handleFailures(t: Throwable) {
-        when (t) {
-            is AppError.NoConnection -> handleNetworkError()
-            is AppError.Domain -> {
-                Napier.d("handleFailures: message=${t.message}")
-                Napier.d("handleFailures: statusCode=${t.statusCode}")
-                Napier.d("handleFailures: code=${t.code}")
-                handleDomainError(t.statusCode, t.code)
-            }
-            is AppError.Unexpected -> handleUnexpectedError(t)
-            else -> handleUnexpectedError(t)
-        }
-    }
-
-    protected open fun handleDomainError(statusCode: String, code: Int) {
-        Napier.d("handleFailures: domainError=$statusCode")
-    }
-
-    protected open fun handleNetworkError() {
-        Napier.d("handleFailures: networkError")
-    }
-
-    protected open fun handleUnexpectedError(throwable: Throwable) {
-        Napier.d("handleFailures: unexpectedError=$throwable")
+    protected fun <S, Ev, Ef> BaseMviViewModel<S, Ev, Ef>.handleDomainErrors(
+        errors: List<DomainError>,
+        reduce: S.(UiErrorType) -> S
+    ) {
+        val error = (errors.firstOrNull() ?: DomainError.Unknown).toUiErrorType()
+        setState { reduce(error) }
     }
 }
