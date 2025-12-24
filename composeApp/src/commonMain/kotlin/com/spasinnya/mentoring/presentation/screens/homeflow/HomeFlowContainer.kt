@@ -11,8 +11,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.spasinnya.mentoring.presentation.navigation.Screen
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeScreen
-import com.spasinnya.mentoring.presentation.screens.homeflow.weeks.WeeksScreen
 import com.spasinnya.mentoring.presentation.screens.homeflow.lessons.LessonsScreen
+import com.spasinnya.mentoring.presentation.screens.homeflow.profile.ProfileScreen
+import com.spasinnya.mentoring.presentation.screens.homeflow.weeks.WeeksScreen
 
 @Composable
 fun HomeFlowContainer(onLogout: () -> Unit) {
@@ -53,12 +54,20 @@ fun HomeFlowContainer(onLogout: () -> Unit) {
                 navigateToWeeks = { bookId, bookNumber ->
                     navController.navigate(Screen.HomeFlow.WeeksScreen(bookId, bookNumber))
                 },
-                navigateToProfile = {  },
+                navigateToProfile = { navController.navigate(Screen.HomeFlow.ProfileScreen) },
                 navigateToPromoCodes = {  },
                 navigateToAuthors = {  },
                 navigateToSpasinnyaBooks = {  },
                 navigateToSpasinnyaChurch = {  },
                 navigateToLogin = onLogout
+            )
+        }
+        composable<Screen.HomeFlow.ProfileScreen> {
+            ProfileScreen(
+                navigateBack = { navController.navigateUp() },
+                navigateToChangePassword = {
+                    // TODO: ChangePasswordScreen
+                }
             )
         }
         composable<Screen.HomeFlow.WeeksScreen> {

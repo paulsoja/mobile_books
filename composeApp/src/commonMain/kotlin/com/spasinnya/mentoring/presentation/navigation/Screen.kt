@@ -25,5 +25,7 @@ sealed class Screen {
         data class WeeksScreen(val bookId: Int, val bookNumber: String) : HomeFlow()
         @Serializable
         data class LessonsScreen(val weekId: Int) : HomeFlow()
+        @Serializable
+        data object ProfileScreen : HomeFlow()
     }
 }
