@@ -1,4 +1,4 @@
-package com.spasinnya.mentoring.presentation.screens.authflow.components
+package com.spasinnya.mentoring.presentation.designsystem.composable.inputs
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -17,16 +17,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -35,37 +30,42 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.error_otp_invalid
+import books.composeapp.generated.resources.error_otp_not_filled
+import com.spasinnya.mentoring.domain.model.OtpCode
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
+import org.jetbrains.compose.resources.stringResource
+
+private const val OTP_LENGTH = 4
 
 @Composable
 fun OtpInput(
-    value: String,
-    errorMessage: String = "",
+    otp: OtpCode,
+    error: OtpCode.Error = OtpCode.Error.NoError,
+    onOtpChange: (OtpCode) -> Unit,
     onFocusChanged: (FocusState) -> Unit = {},
-    onFieldChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val focusRequester = remember { FocusRequester() }
-    var valueRaw by remember(value) { mutableStateOf(value) }
-
     val keyboardController = LocalSoftwareKeyboardController.current
+    val errorMessage = error.toMessage()
 
     BasicTextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
-            .focusRequester(focusRequester)
             .onFocusChanged(onFocusChanged),
-        value = valueRaw,
-        onValueChange = {
-            if (it.length <= 4) {
-                valueRaw = it
-                onFieldChanged(it)
-            }
-            if (it.length == 4) {
-                keyboardController?.hide()
+        value = otp.value,
+        onValueChange = { newValue ->
+            if (newValue.length <= OTP_LENGTH) {
+                onOtpChange(OtpCode.raw(newValue))
+
+                if (newValue.length == OTP_LENGTH) {
+                    keyboardController?.hide()
+                }
             }
         },
         interactionSource = interactionSource,
@@ -81,7 +81,7 @@ fun OtpInput(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    repeat(4) { index ->
+                    repeat(OTP_LENGTH) { index ->
                         Row(
                             modifier = Modifier
                                 .height(72.dp)
@@ -91,7 +91,7 @@ fun OtpInput(
                         ) {
                             CharView(
                                 index = index,
-                                text = valueRaw,
+                                text = otp.value,
                                 isError = errorMessage.isNotEmpty(),
                             )
                         }
@@ -101,7 +101,9 @@ fun OtpInput(
             }
         }
     )
+
     CoreSpacerVertical(12.dp)
+
     AnimatedVisibility(errorMessage.isNotEmpty()) {
         CoreText(
             modifier = Modifier.fillMaxWidth(),
@@ -146,7 +148,7 @@ private fun CharView(
                 .align(Alignment.CenterVertically),
             text = char,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleMedium.copy( // TODO refactor this to proper style system
+            style = MaterialTheme.typography.titleMedium.copy(
                 color = Color(0xFF54595F),
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
@@ -154,3 +156,11 @@ private fun CharView(
         )
     }
 }
+
+@Composable
+fun OtpCode.Error.toMessage(): String =
+    when (this) {
+        OtpCode.Error.NoError -> ""
+        OtpCode.Error.InvalidFormat -> stringResource(Res.string.error_otp_invalid)
+        OtpCode.Error.NotFilled -> stringResource(Res.string.error_otp_not_filled)
+    }

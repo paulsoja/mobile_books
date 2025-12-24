@@ -11,17 +11,17 @@ import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
+import com.spasinnya.mentoring.presentation.base.mapValid
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.flow.map
 import kotlin.collections.map
 
 fun booksRepository(
     http: HttpClient,
 ): BooksRepository = {
-    http.getFlow< List<ShortBookApiResponse>>(
+    http.getFlow<List<ShortBookApiResponse>>(
         path = "books",
     )
-        .map { it.map(ShortBookApiResponse::toDomain) }
+        .mapValid { it.map(ShortBookApiResponse::toDomain) }
 }
 
 fun purchaseBookRepository(
@@ -30,7 +30,7 @@ fun purchaseBookRepository(
     http.postFlow<Unit, PurchaseStatusApiResponse>(
         path = "books/$bookId/purchase",
     )
-        .map(PurchaseStatusApiResponse::toDomain)
+        .mapValid(PurchaseStatusApiResponse::toDomain)
 }
 
 fun weeksRepository(
@@ -39,7 +39,7 @@ fun weeksRepository(
     http.getFlow<List<WeekResponse>>(
         path = "weeks/$bookId",
     )
-        .map { it.map(WeekResponse::toDomain) }
+        .mapValid { it.map(WeekResponse::toDomain) }
 }
 
 fun lessonsRepository(
@@ -48,5 +48,5 @@ fun lessonsRepository(
     http.getFlow<List<LessonResponse>>(
         path = "lessons/$weekId",
     )
-        .map { it.map(LessonResponse::toDomain) }
+        .mapValid { it.map(LessonResponse::toDomain) }
 }

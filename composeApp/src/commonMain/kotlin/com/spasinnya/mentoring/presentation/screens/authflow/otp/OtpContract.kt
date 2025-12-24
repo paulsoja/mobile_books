@@ -2,33 +2,25 @@ package com.spasinnya.mentoring.presentation.screens.authflow.otp
 
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.OtpCode
-import com.spasinnya.mentoring.domain.model.UiErrorType
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 
 interface OtpContract {
     data class State(
-        val code: OtpCode = OtpCode.init,
-        val email: Email = Email.init,
+        val email: Email.Valid,
+        val otp: OtpCode = OtpCode.init,
+        val otpError: OtpCode.Error = OtpCode.Error.NoError,
         val isLoading: Boolean = false,
-        val showAlertDialog: Boolean = false,
-        val messageError: UiErrorType? = null,
-        val otpError: OtpCode.Error = OtpCode.Error.No_error
+        val dialog: DialogState<UiErrorType> = DialogState.Hidden,
     )
 
     sealed class Event {
-        data class CodeChanged(val code: String) : Event()
-        data class ValidateOtpCredentials(val email: String, val code: String) : Event()
-        data class HandleError(val errorType: ErrorType) : Event()
+        data class OtpChanged(val otp: OtpCode) : Event()
+        data class ConfirmClicked(val email: Email.Valid, val otp: OtpCode) : Event()
+        data object DismissDialog : Event()
     }
 
     sealed class Effect {
         data object NavigateToCongratScreen : Effect()
-    }
-
-    sealed class ErrorType {
-        data object NoError : ErrorType()
-        data object NoConnection : ErrorType()
-        data object UnexpectedError : ErrorType()
-        data class EmailError(val message: Email.Error) : ErrorType()
-        data class OtpCodeError(val message: OtpCode.Error) : ErrorType()
     }
 }

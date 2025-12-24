@@ -9,15 +9,10 @@ interface LessonsContract {
     )
 
     sealed class Event {
-        data class LoadedLessons(val lessons: List<Lesson>): Event()
-        data class ShowLoading(val show: Boolean): Event()
+
     }
 
     sealed class Effect {
 
-    }
-
-    sealed class ErrorType {
-        data object NoConnection : ErrorType()
     }
 }
