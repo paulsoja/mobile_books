@@ -7,8 +7,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -20,7 +18,6 @@ import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
 import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -38,19 +35,9 @@ fun HomeScreen(
 
     val (viewModel, state) = setupHomeScreenModel(
         navigateToLogin = navigateToLogin,
+        navigateToProfile = navigateToProfile,
         showSnackbar = { message -> scope.launch { snackbarHostState.showSnackbar(message) } }
     )
-    viewModel.effect.CollectEffects { effect ->
-        when (effect) {
-            HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
-            is HomeContract.Effect.ShowSnackbar -> scope.launch {
-                snackbarHostState.showSnackbar(effect.message)
-            }
-            is HomeContract.Effect.NavigateToProfile -> {
-                navigateToProfile.invoke()
-            }
-        }
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding(),
@@ -100,6 +87,7 @@ fun HomeScreen(
 @Composable
 fun setupHomeScreenModel(
     navigateToLogin: () -> Unit,
+    navigateToProfile: () -> Unit,
     showSnackbar: (String) -> Unit,
 ): Pair<HomeViewModel, HomeContract.State> =
     rememberScreenModel<HomeViewModel, HomeContract.State, HomeContract.Effect>(
@@ -117,6 +105,7 @@ fun setupHomeScreenModel(
             when (effect) {
                 HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
                 is HomeContract.Effect.ShowSnackbar -> showSnackbar.invoke(effect.message)
+                HomeContract.Effect.NavigateToProfile -> navigateToProfile.invoke()
             }
         }
     )
