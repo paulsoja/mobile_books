@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.inputs
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import books.composeapp.generated.resources.Res
@@ -24,7 +25,7 @@ fun PasswordInput(
     )
 
     CoreOutlinedTextField(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         value = password.value,
         onValueChange = { newText ->
             onValueChange(Password.raw(newText))

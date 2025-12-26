@@ -8,6 +8,8 @@ sealed class ScreenContainer {
     @Serializable
     data object AuthFlow : ScreenContainer()
     @Serializable
+    data object CongratsFlow : ScreenContainer()
+    @Serializable
     data object SettingsFlow : ScreenContainer()
     @Serializable
     data object HomeFlow : ScreenContainer()

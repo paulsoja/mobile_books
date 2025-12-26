@@ -43,6 +43,7 @@ fun setupOtpScreenModel(
     rememberScreenModel<OtpViewModel, OtpContract.State, OtpContract.Effect>(
         create = { graph, handle ->
             OtpViewModel(
+                requestOtpUseCase = graph.useCases.requestOtpUseCase,
                 otpCodeUseCase = graph.useCases.otpUseCase,
                 savedStateHandle = handle
             )

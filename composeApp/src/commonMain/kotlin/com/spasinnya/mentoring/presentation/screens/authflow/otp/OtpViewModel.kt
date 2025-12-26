@@ -7,6 +7,7 @@ import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.OtpCode
 import com.spasinnya.mentoring.domain.model.OtpCredentials
 import com.spasinnya.mentoring.domain.usecase.auth.ConfirmOtpCodeUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class OtpViewModel(
+    private val requestOtpUseCase: RequestOtpCodeUseCase,
     private val otpCodeUseCase: ConfirmOtpCodeUseCase,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseMviViewModel<OtpContract.State, OtpContract.Event, OtpContract.Effect>(
@@ -42,7 +44,23 @@ class OtpViewModel(
             )
 
             OtpContract.Event.DismissDialog -> hideDialog()
+            is OtpContract.Event.RequestOtp -> requestOtp(event.email)
         }
+    }
+
+    init {
+        dispatchEvent(OtpContract.Event.RequestOtp(state.value.email))
+    }
+
+    private fun requestOtp(email: Email.Valid) = viewModelScope.launch(Dispatchers.IO) {
+        requestOtpUseCase.invoke(email)
+            .withLoading {  }
+            .collectLatest { result ->
+                when (result) {
+                    is Validated.Invalid -> Unit // handle error
+                    is Validated.Valid -> Unit //TODO start timer
+                }
+            }
     }
 
     private fun validateCredentials(email: Email.Valid, code: OtpCode, onValid: (OtpCredentials) -> Unit) {

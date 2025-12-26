@@ -3,10 +3,9 @@ package com.spasinnya.mentoring.presentation.di
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 
 data class AppGraph(
-    val tokenStore: TokenStore,
+    val dataSourceModule: DataSourceModule,
     val http: io.ktor.client.HttpClient,
     val repos: RepoModule,
     val useCases: UseCaseModule
