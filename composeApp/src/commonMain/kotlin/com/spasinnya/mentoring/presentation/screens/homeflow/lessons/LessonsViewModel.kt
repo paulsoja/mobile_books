@@ -42,7 +42,7 @@ class LessonsViewModel(
                         }
                     )
 
-                    is Validated.Valid -> setState { copy(lessons = lessons) }
+                    is Validated.Valid -> setState { copy(lessons = result.value) }
                 }
             }
     }

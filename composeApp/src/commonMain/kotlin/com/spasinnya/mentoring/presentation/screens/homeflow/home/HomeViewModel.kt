@@ -94,7 +94,6 @@ class HomeViewModel(
         logoutUseCase.invoke()
             .onCompletion {
                 resetAppGraph()
-                //sendEffect { NavigateToLogin }
             }
             .collect()
     }

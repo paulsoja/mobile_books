@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import co.touchlab.stately.freeze
 import com.spasinnya.mentoring.data.net.createHttpClient
-import com.spasinnya.mentoring.data.storage.datastore.provideTokenStore
 import io.ktor.client.HttpClient
 import kotlin.concurrent.AtomicReference
 
@@ -18,12 +17,12 @@ private object GraphHolder {
 actual fun provideAppGraph(appContext: Any): AppGraph {
     GraphHolder.ref.value?.let { return it }
 
-    val tokenStore = provideTokenStore(Unit)
-    val http: HttpClient = createHttpClient(tokenStore)
-    val repos = provideRepoModule(http, tokenStore)
+    val dataSource = provideDataSourceModule(Unit)
+    val http: HttpClient = createHttpClient(dataSource.tokenStore)
+    val repos = provideRepoModule(http, dataSource)
     val useCases = provideUseCaseModule(repos)
 
-    val graph = AppGraph(tokenStore, http, repos, useCases)
+    val graph = AppGraph(dataSource, http, repos, useCases)
     GraphHolder.ref.value = graph.freeze()
     return graph
 }

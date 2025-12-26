@@ -1,13 +1,11 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,13 +22,10 @@ import books.composeapp.generated.resources.auth_or
 import books.composeapp.generated.resources.auth_password
 import books.composeapp.generated.resources.auth_register
 import books.composeapp.generated.resources.auth_register_hello
-import books.composeapp.generated.resources.auth_register_with_google
 import books.composeapp.generated.resources.ic_arrow_right
-import books.composeapp.generated.resources.ic_google
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalSmall
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalXLarge
@@ -118,7 +113,7 @@ fun RegisterContent(
 
         CoreHorizontalDividerWithText(stringResource(Res.string.auth_or))
 
-        CoreSpacerVerticalLarge()
+        /*CoreSpacerVerticalLarge()
 
         CorePrimaryButton(
             text = stringResource(Res.string.auth_register_with_google),
@@ -131,7 +126,7 @@ fun RegisterContent(
             onClick = {  },
             iconBefore = Res.drawable.ic_google,
             iconTint = Color.Unspecified
-        )
+        )*/
 
         Column(
             modifier = Modifier.fillMaxWidth().padding(top = 24.dp),

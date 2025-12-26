@@ -1,34 +1,34 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.auth_email
 import books.composeapp.generated.resources.auth_forgot_password
 import books.composeapp.generated.resources.auth_here_account_login
 import books.composeapp.generated.resources.auth_login
 import books.composeapp.generated.resources.auth_login_hello
-import books.composeapp.generated.resources.auth_login_with_google
 import books.composeapp.generated.resources.auth_no_account
 import books.composeapp.generated.resources.auth_or
+import books.composeapp.generated.resources.auth_password
 import books.composeapp.generated.resources.auth_register
 import books.composeapp.generated.resources.ic_arrow_right
-import books.composeapp.generated.resources.ic_google
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalSmall
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalXLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
@@ -59,14 +59,32 @@ fun LoginContent(
         text = stringResource(Res.string.auth_here_account_login),
         modifier = Modifier.fillMaxWidth(),
     )
-    CoreSpacerVerticalLarge()
+    CoreSpacerVertical(height = 20.dp)
+    CoreTextSubtitle(
+        text = stringResource(Res.string.auth_email),
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Start,
+        style = MaterialTheme.typography.titleSmall.copy(
+            color = Color(0xFF3C4E73)
+        ),
+    )
+    CoreSpacerVerticalSmall()
     EmailInput(
         email = state.email,
         emailError = state.emailError,
         defaults = InputEmailDefaults(),
         onValueChange = { onEvent.invoke(LoginContract.Event.EmailChanged(it)) }
     )
-    CoreSpacerVertical(height = 20.dp)
+    CoreSpacerVerticalMedium()
+    CoreTextSubtitle(
+        text = stringResource(Res.string.auth_password),
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Start,
+        style = MaterialTheme.typography.titleSmall.copy(
+            color = Color(0xFF3C4E73)
+        ),
+    )
+    CoreSpacerVerticalSmall()
     PasswordInput(
         password = state.password,
         passwordError = state.passwordError,
@@ -98,7 +116,7 @@ fun LoginContent(
 
     CoreHorizontalDividerWithText(text = stringResource(Res.string.auth_or))
 
-    CoreSpacerVerticalLarge()
+    /*CoreSpacerVerticalLarge()
 
     CorePrimaryButton(
         text = stringResource(Res.string.auth_login_with_google),
@@ -111,7 +129,7 @@ fun LoginContent(
         onClick = { },
         iconBefore = Res.drawable.ic_google,
         iconTint = Color.Unspecified
-    )
+    )*/
 
     Column(
         modifier = Modifier.fillMaxWidth().padding(top = 24.dp),

@@ -24,7 +24,6 @@ import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_logo
 import com.spasinnya.mentoring.presentation.navigation.Screen
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
-import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.newpassword.NewPasswordScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.otp.OtpScreen
@@ -34,13 +33,16 @@ import kotlinx.coroutines.flow.filter
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
-fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
+fun AuthFlowContainer(
+    onLoginSuccess: () -> Unit,
+    onRegisterSuccess: () -> Unit,
+) {
 
     val navController = rememberNavController()
     LaunchedEffect(navController) {
         snapshotFlow { navController.currentBackStackEntry?.destination?.route }
             .filter { it == ScreenContainer.HomeFlow.toString() }
-            .collect { onAuthSuccess() }
+            .collect { onLoginSuccess() }
     }
     Scaffold(
         modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),
@@ -107,14 +109,14 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
                             navController.navigate(Screen.AuthFlow.ResetPasswordScreen)
                         },
                         navigateToHome = {
-                            onAuthSuccess()
+                            onLoginSuccess()
                         }
                     )
                 }
                 composable<Screen.AuthFlow.OtpScreen> { backStackEntry ->
                     OtpScreen(
                         navigateTo = {
-                            navController.navigate(Screen.AuthFlow.CongratScreen)
+                            onRegisterSuccess()
                         }
                     )
                 }
@@ -130,12 +132,7 @@ fun AuthFlowContainer(onAuthSuccess: () -> Unit) {
                 }
                 composable<Screen.AuthFlow.NewPasswordScreen> {
                     NewPasswordScreen(
-                        navigateToSuccess = onAuthSuccess
-                    )
-                }
-                composable<Screen.AuthFlow.CongratScreen> {
-                    CongratScreen(
-                        navigateTo = onAuthSuccess
+                        navigateToSuccess = onLoginSuccess
                     )
                 }
             }

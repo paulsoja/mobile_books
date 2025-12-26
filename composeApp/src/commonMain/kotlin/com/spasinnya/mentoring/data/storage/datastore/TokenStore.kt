@@ -25,9 +25,9 @@ interface TokenStore {
 
 private object Keys {
     val ACCESS = stringPreferencesKey("access")
-    val ACCESS_AT = stringPreferencesKey("access_expires_at")   // ISO-строка
+    val ACCESS_AT = stringPreferencesKey("access_expires_at")
     val REFRESH = stringPreferencesKey("refresh")
-    val REFRESH_AT = stringPreferencesKey("refresh_expires_at") // ISO-строка
+    val REFRESH_AT = stringPreferencesKey("refresh_expires_at")
 }
 
 @OptIn(ExperimentalTime::class)

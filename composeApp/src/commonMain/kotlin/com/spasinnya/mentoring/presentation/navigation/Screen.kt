@@ -14,8 +14,6 @@ sealed class Screen {
         data object ResetPasswordScreen : AuthFlow()
         @Serializable
         data object NewPasswordScreen : AuthFlow()
-        @Serializable
-        data object CongratScreen : AuthFlow()
     }
 
     sealed class HomeFlow : Screen() {

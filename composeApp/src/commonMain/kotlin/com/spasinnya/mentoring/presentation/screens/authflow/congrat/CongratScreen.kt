@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_arrow_right
+import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
@@ -26,6 +27,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun CongratScreen(
     navigateTo: () -> Unit
 ) {
+    val (viewModel, state) = setupCongratsScreenModel(
+        navigateTo = navigateTo
+    )
+
     SuccessState(
         modifier = Modifier.fillMaxSize().padding(horizontal = 48.dp),
         image = {
@@ -59,7 +64,7 @@ fun CongratScreen(
         action = {
             CorePrimaryButton(
                 text = "Відкрити посібник",
-                onClick = navigateTo,
+                onClick = { viewModel.dispatchEvent(CongratContract.Event.ButtonClicked) },
                 iconAfter = Res.drawable.ic_arrow_right
             )
         }
@@ -92,3 +97,22 @@ fun CongratScreenPreview() {
         CongratScreen(navigateTo = {})
     }
 }
+
+@Composable
+fun setupCongratsScreenModel(
+    navigateTo: () -> Unit
+): Pair<CongratViewModel, CongratContract.State> =
+    rememberScreenModel<CongratViewModel, CongratContract.State, CongratContract.Effect>(
+        create = { graph, _ ->
+            CongratViewModel(
+                changeCongratsShownStatusUseCase = graph.useCases.changeCongratsShownStatusUseCase,
+            )
+        },
+        getState = { it.state },
+        getEffect = { it.effect },
+        onEffect = { effect ->
+            when (effect) {
+                CongratContract.Effect.NavigateToMain -> navigateTo.invoke()
+            }
+        }
+    )

@@ -9,7 +9,6 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.spasinnya.mentoring.data.net.createHttpClient
-import com.spasinnya.mentoring.data.storage.datastore.provideTokenStore
 import io.ktor.client.HttpClient
 import java.util.concurrent.atomic.AtomicReference
 
@@ -25,12 +24,12 @@ actual fun provideAppGraph(appContext: Any): AppGraph {
 
         val ctx = (appContext as Context).applicationContext
 
-        val tokenStore = provideTokenStore(ctx)
-        val http: HttpClient = createHttpClient(tokenStore)
-        val repos = provideRepoModule(http, tokenStore)
+        val dataSource = provideDataSourceModule(ctx)
+        val http: HttpClient = createHttpClient(dataSource.tokenStore)
+        val repos = provideRepoModule(http, dataSource)
         val useCases = provideUseCaseModule(repos)
 
-        val graph = AppGraph(tokenStore, http, repos, useCases)
+        val graph = AppGraph(dataSource, http, repos, useCases)
         GraphHolder.ref.set(graph)
         return graph
     }

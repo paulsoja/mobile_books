@@ -15,6 +15,7 @@ interface OtpContract {
     )
 
     sealed class Event {
+        data class RequestOtp(val email: Email.Valid) : Event()
         data class OtpChanged(val otp: OtpCode) : Event()
         data class ConfirmClicked(val email: Email.Valid, val otp: OtpCode) : Event()
         data object DismissDialog : Event()
