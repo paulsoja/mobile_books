@@ -11,6 +11,8 @@ import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetLessonsUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 
 interface UseCaseModule {
     val loginUseCase: LoginUseCase
@@ -24,4 +26,6 @@ interface UseCaseModule {
     val purchaseBookUseCase: PurchaseBookUseCase
     val weeksUseCase: GetWeeksUseCase
     val lessonsUseCase: GetLessonsUseCase
+    val getAppLocaleUseCase: GetAppLocaleUseCase
+    val setAppLocaleUseCase: SetAppLocaleUseCase
 }

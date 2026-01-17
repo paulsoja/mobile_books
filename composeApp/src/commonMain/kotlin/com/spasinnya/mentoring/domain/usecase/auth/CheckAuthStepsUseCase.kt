@@ -10,6 +10,8 @@ import com.spasinnya.mentoring.presentation.base.fold
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.zip
 
 typealias AuthStepsUseCase = suspend () -> Flow<DomainResult<AuthSteps>>
 
@@ -17,11 +19,10 @@ fun checkAuthStepsUseCase(
     tokenRepository: TokenRepository,
     congratsShownRepository: CongratsShownRepository
 ): AuthStepsUseCase = {
-    combine(tokenRepository.invoke(), congratsShownRepository.invoke()) { token, shown ->
-
+    tokenRepository.invoke().zip(congratsShownRepository.invoke()) { token, shown ->
+        Napier.d { "checkAuthStepsUseCase: $token, $shown" }
         shown.fold(
             onValid = {
-                Napier.d { "checkAuthSteps: 3=${it.value}" }
                 when {
                     it.value && token is Validated.Valid -> Validated.Valid(AuthSteps.Home)
                     it.value.not() && token is Validated.Valid -> Validated.Valid(AuthSteps.Congrats)
@@ -29,7 +30,6 @@ fun checkAuthStepsUseCase(
                 }
             },
             onInvalid = {
-                Napier.d { "checkAuthSteps: 4=${it.errors}" }
                 Validated.Invalid(listOf(DomainError.Unknown))
             }
         )

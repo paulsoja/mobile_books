@@ -22,6 +22,10 @@ import com.spasinnya.mentoring.domain.usecase.books.getBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.lessonsUseCase
 import com.spasinnya.mentoring.domain.usecase.books.purchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.weeksUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.appLocaleUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.changeAppLocaleUseCase
 
 fun provideUseCaseModule(repos: RepoModule): UseCaseModule =
     object : UseCaseModule {
@@ -57,5 +61,11 @@ fun provideUseCaseModule(repos: RepoModule): UseCaseModule =
         }
         override val lessonsUseCase: GetLessonsUseCase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             lessonsUseCase(repos.lessonsRepository)
+        }
+        override val getAppLocaleUseCase: GetAppLocaleUseCase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            appLocaleUseCase(repos.localeRepository)
+        }
+        override val setAppLocaleUseCase: SetAppLocaleUseCase by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            changeAppLocaleUseCase(repos.setLocaleRepository)
         }
     }

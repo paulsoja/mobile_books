@@ -9,6 +9,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -19,36 +20,54 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.header
+import io.ktor.client.request.request
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 
 private const val API_HOST = "web-books-1.onrender.com"
 
 fun createHttpClient(
     tokenStore: TokenStore,
-): HttpClient = HttpClient(CIO) {
-    connectivityPlugin()
-    inspektorPlugin()
-    contentNegotiationPlugin()
-    loggingPlugin()
-    httpTimeoutPlugin()
+    readLanguageTag: suspend () -> String?,
+    defaultLang: String,
+): HttpClient {
+    val client = HttpClient(CIO) {
+        connectivityPlugin()
+        inspektorPlugin()
+        contentNegotiationPlugin()
+        loggingPlugin()
+        httpTimeoutPlugin()
 
-    expectSuccess = true
+        expectSuccess = true
 
-    attachAuth(tokenStore)
+        attachAuth(tokenStore)
 
-    defaultRequest {
-        url {
-            protocol = URLProtocol.HTTPS
-            host = API_HOST
+        defaultRequest {
+            url {
+                protocol = URLProtocol.HTTPS
+                host = API_HOST
+            }
+            header("Accept", "application/json")
+            contentType(ContentType.Application.Json)
         }
-        header("Accept", "application/json")
-        contentType(ContentType.Application.Json)
     }
+
+    client.plugin(HttpSend).intercept { request ->
+        val tag = readLanguageTag()?.trim()?.ifBlank { null } ?: defaultLang
+
+        request.headers.remove(HttpHeaders.AcceptLanguage)
+        request.headers.append(HttpHeaders.AcceptLanguage, tag)
+        execute(request)
+    }
+
+    return client
 }
 
 inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.connectivityPlugin() {

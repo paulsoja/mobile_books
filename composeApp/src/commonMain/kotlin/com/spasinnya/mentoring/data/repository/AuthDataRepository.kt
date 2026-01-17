@@ -8,6 +8,7 @@ import com.spasinnya.mentoring.data.model.TokenApiRequest
 import com.spasinnya.mentoring.data.model.TokenApiResponse
 import com.spasinnya.mentoring.data.net.postFlow
 import com.spasinnya.mentoring.data.storage.datastore.AppStore
+import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.LogoutRepository
@@ -21,7 +22,8 @@ import io.ktor.client.HttpClient
 
 fun loginRepository(
     http: HttpClient,
-    tokenStore: TokenStore
+    tokenStore: TokenStore,
+    appStore: AppStore
 ): LoginRepository = { creds ->
     http.postFlow<CredentialsApiRequest, TokenApiResponse>(
         path = "login",
@@ -29,6 +31,7 @@ fun loginRepository(
     )
         .mapValid(TokenApiResponse::toDomain)
         .alsoValidDo(tokenStore::save)
+        .alsoValidDo { appStore.save(true) }
 }
 
 fun registerRepo(
@@ -65,7 +68,8 @@ fun otpRepo(
 fun logoutRepo(
     http: HttpClient,
     tokenStore: TokenStore,
-    appStore: AppStore
+    appStore: AppStore,
+    localeStore: LocaleStore
 ): LogoutRepository = {
     val token = tokenStore.read() ?: throw Exception("Can't logout, no token")
 
@@ -78,4 +82,5 @@ fun logoutRepo(
         .mapValid { it }
         .alsoValidDo { tokenStore.clear() }
         .alsoValidDo { appStore.clear() }
+        .alsoValidDo { localeStore.clear() }
 }

@@ -47,6 +47,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.common_buy
+import books.composeapp.generated.resources.common_open
+import books.composeapp.generated.resources.home_choose_book
 import books.composeapp.generated.resources.ic_content
 import books.composeapp.generated.resources.img_cover_01
 import com.spasinnya.mentoring.domain.model.ShortBook
@@ -57,6 +60,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeContent(
@@ -70,7 +74,7 @@ fun HomeContent(
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         CoreTextScreenTitle(
-            text = "Оберіть Наставництво \uD83D\uDCDA",
+            text = stringResource(Res.string.home_choose_book),
             modifier = Modifier.padding(horizontal = 24.dp),
         )
         Pager(
@@ -288,7 +292,7 @@ fun BookCardBottomBar(
     } else {
         CorePrimaryButton(
             modifier = Modifier.weight(1f).height(68.dp),
-            text = if (item.isPurchased) "Відкрити" else "Купити",
+            text = if (item.isPurchased) stringResource(Res.string.common_open) else stringResource(Res.string.common_buy),
             onClick = { if (item.isPurchased) onOpenClicked() else onPurchaseClicked(item.id) }
         )
     }

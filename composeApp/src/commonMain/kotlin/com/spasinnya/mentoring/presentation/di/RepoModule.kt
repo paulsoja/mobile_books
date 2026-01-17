@@ -4,12 +4,14 @@ import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.ChangeCongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.LessonsRepository
+import com.spasinnya.mentoring.domain.repository.LocaleRepository
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.LogoutRepository
 import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
 import com.spasinnya.mentoring.domain.repository.RequestOtpRepository
+import com.spasinnya.mentoring.domain.repository.SetLocaleRepository
 import com.spasinnya.mentoring.domain.repository.TokenRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
 
@@ -22,6 +24,8 @@ interface RepoModule {
     val congratsShownRepository: CongratsShownRepository
     val changeCongratsShownRepository: ChangeCongratsShownRepository
     val tokenRepository: TokenRepository
+    val localeRepository: LocaleRepository
+    val setLocaleRepository: SetLocaleRepository
     val booksRepository: BooksRepository
     val purchaseBookRepository: PurchaseBookRepository
     val weeksRepository: WeeksRepository
