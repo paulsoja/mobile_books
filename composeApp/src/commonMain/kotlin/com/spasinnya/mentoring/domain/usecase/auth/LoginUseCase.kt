@@ -3,14 +3,9 @@ package com.spasinnya.mentoring.domain.usecase.auth
 import com.spasinnya.mentoring.data.mapper.toData
 import com.spasinnya.mentoring.domain.model.Credentials
 import com.spasinnya.mentoring.domain.model.Token
-import com.spasinnya.mentoring.domain.repository.ChangeCongratsShownRepository
-import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.rules.DomainResult
-import com.spasinnya.mentoring.presentation.base.alsoValidDo
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapMerge
 
 typealias LoginUseCase = suspend (Credentials) -> Flow<DomainResult<Token>>
 

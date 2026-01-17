@@ -7,10 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import com.spasinnya.mentoring.domain.enums.Language
 import java.util.Locale
-import androidx.compose.ui.platform.LocalResources
 
 actual object LocalAppLocale {
 
