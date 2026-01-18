@@ -22,6 +22,7 @@ napier                              = "2.7.1"
 inspektor                           = "0.3.9"
 datastore                           = "1.2.0"
 okio                                = "3.16.4"
+kotlinx-datetime = "0.7.1-0.6.x-compat"
 
 [libraries]
 kotlin-test                         = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -55,6 +56,7 @@ inspektor                           = { module = "com.gyanoba.inspektor:inspekto
 datastore-core                      = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences               = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 okio                                = { module = "com.squareup.okio:okio", version.ref = "okio" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]
 androidApplication                  = { id = "com.android.application", version.ref = "agp" }

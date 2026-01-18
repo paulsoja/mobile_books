@@ -9,6 +9,6 @@ actual fun provideTokenStore(appContext: Any): TokenStore {
     val documents = (NSSearchPathForDirectoriesInDomains(
         NSDocumentDirectory, NSUserDomainMask, true
     ).first() as String).toPath()
-    val file = (documents / "datastore" / "tokens.preferences")
+    val file = (documents / "datastore" / "tokens.preferences_pb")
     return tokenStoreFromPath(file)
 }

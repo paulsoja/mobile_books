@@ -9,6 +9,6 @@ actual fun provideAppStore(appContext: Any): AppStore {
     val documents = (NSSearchPathForDirectoriesInDomains(
         NSDocumentDirectory, NSUserDomainMask, true
     ).first() as String).toPath()
-    val file = (documents / "datastore" / "app.preferences")
+    val file = (documents / "datastore" / "app.preferences_pb")
     return appStoreFromPath(file)
 }

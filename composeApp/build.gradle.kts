@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.datastore.core)
             implementation(libs.datastore.preferences)
             implementation(libs.okio)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

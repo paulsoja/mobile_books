@@ -8,7 +8,7 @@ import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngineConfig
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
@@ -31,12 +31,14 @@ import kotlinx.serialization.json.Json
 
 private const val API_HOST = "web-books-1.onrender.com"
 
+expect fun platformEngine(): HttpClientEngineFactory<*>
+
 fun createHttpClient(
     tokenStore: TokenStore,
     readLanguageTag: suspend () -> String?,
     defaultLang: String,
 ): HttpClient {
-    val client = HttpClient(CIO) {
+    val client = HttpClient(platformEngine()) {
         connectivityPlugin()
         inspektorPlugin()
         contentNegotiationPlugin()

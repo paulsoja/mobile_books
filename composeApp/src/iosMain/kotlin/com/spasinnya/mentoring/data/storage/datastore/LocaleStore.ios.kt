@@ -9,6 +9,6 @@ actual fun provideLocaleStore(appContext: Any): LocaleStore {
     val documents = (NSSearchPathForDirectoriesInDomains(
         NSDocumentDirectory, NSUserDomainMask, true
     ).first() as String).toPath()
-    val file = (documents / "datastore" / "locale.preferences")
+    val file = (documents / "datastore" / "locale.preferences_pb")
     return localeStoreFromPath(file)
 }
