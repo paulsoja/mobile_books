@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Books</string>
+
+    <!--Commons-->
+    <string name="common_ok">OK</string>
+    <string name="common_save">Speichern</string>
+    <string name="common_confirm">Bestätigen</string>
+    <string name="common_try_again">Erneut versuchen</string>
+    <string name="common_repeat">Wiederholen</string>
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_open">Öffnen</string>
+    <string name="common_buy">Kaufen</string>
+
+    <!--Errors-->
+    <string name="error_no_connection">Keine Internetverbindung</string>
+    <string name="error_check_connection">Überprüfen Sie die Internetverbindung und versuchen Sie es erneut</string>
+    <string name="error_unexpected">Unerwarteter Fehler</string>
+    <string name="error_try_again_later">Bitte versuchen Sie es später erneut</string>
+    <string name="error_email_invalid">Ungültiges E-Mail-Format</string>
+    <string name="error_otp_invalid">Ungültiger Code</string>
+    <string name="error_otp_not_filled">Code eingeben</string>
+    <string name="error_password_invalid">Ungültiges Passwortformat</string>
+    <string name="error_invalid_credentials">Ungültige E-Mail oder Passwort</string>
+    <string name="error_validation">Validierungsfehler</string>
+    <string name="error_user_already_exists">Ein Benutzer mit dieser E-Mail existiert bereits</string>
+
+    <!--Auth-->
+    <string name="auth_login">Anmelden</string>
+    <string name="auth_logout">Abmelden</string>
+    <string name="auth_email">E-Mail</string>
+    <string name="auth_password">Passwort</string>
+    <string name="auth_already_have_account">Haben Sie bereits ein Konto?</string>
+    <string name="auth_register_with_google">Mit Google registrieren</string>
+    <string name="auth_login_with_google">Mit Google anmelden</string>
+    <string name="auth_or">oder</string>
+    <string name="auth_register">Registrieren</string>
+    <string name="auth_create_account">Lassen Sie uns Ihr Konto erstellen</string>
+    <string name="auth_register_hello">Willkommen 👋</string>
+    <string name="auth_login_hello">Schön, Sie wiederzusehen 👋</string>
+    <string name="auth_no_account">Noch kein Konto?</string>
+    <string name="auth_forgot_password">Passwort vergessen?</string>
+    <string name="auth_here_account_login">Hier melden Sie sich bei Ihrem Konto an</string>
+    <string name="auth_create_new_password">Neues Passwort erstellen 🔓</string>
+    <string name="auth_otp_send_again">Erneut senden</string>
+    <string name="auth_otp_no_code">Keinen Code erhalten?</string>
+    <string name="auth_otp_code_sent">Der Code wurde gesendet an</string>
+    <string name="auth_otp_confirm_your_email">Bestätigen Sie Ihre E-Mail 📨</string>
+    <string name="auth_recall_password">Ich erinnere mich an mein Passwort</string>
+    <string name="auth_reset_password">Passwort zurücksetzen</string>
+    <string name="auth_reset_password_process">Passwort zurücksetzen 🔓</string>
+    <string name="auth_reset_password_type_email">Geben Sie die E-Mail Ihres Kontos ein</string>
+
+    <!--Home-->
+    <string name="home_choose_book">Mentoring auswählen 📚</string>
+    <string name="home_settings_my_profile">Mein Profil</string>
+    <string name="home_settings_promocodes">Promocodes</string>
+    <string name="home_settings_app_language">App-Sprache:</string>
+    <string name="home_settings_autors">Autoren der Anleitungen</string>
+    <string name="home_settings_salvation_church">Kirche "Rettung"</string>
+</resources>

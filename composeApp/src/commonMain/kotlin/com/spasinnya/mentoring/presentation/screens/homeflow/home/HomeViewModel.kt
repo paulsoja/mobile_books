@@ -2,15 +2,18 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.spasinnya.mentoring.domain.enums.Language
 import com.spasinnya.mentoring.domain.model.ShortBook
 import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
+import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
 import com.spasinnya.mentoring.presentation.di.resetAppGraph
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeContract.Effect.ShowSnackbar
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collect
@@ -22,6 +25,7 @@ class HomeViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val getBooksUseCase: GetBooksUseCase,
     private val purchaseBookUseCase: PurchaseBookUseCase,
+    private val setAppLocaleUseCase: SetAppLocaleUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : BaseMviViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>(initialState = HomeContract.State()) {
 
@@ -29,7 +33,7 @@ class HomeViewModel(
         when (event) {
             is HomeContract.Event.Logout -> logout()
             is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
-            is HomeContract.Event.OnLanguageChosen -> setState { copy(selectedLanguage = event.language) }
+            is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
             is HomeContract.Event.LoadedBooks -> setState { copy(books = event.books) }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
             is HomeContract.Event.PurchaseBook -> purchaseBook(event.bookId)
@@ -57,7 +61,7 @@ class HomeViewModel(
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,
-                                // TODO: add error fiels and handle it here
+                                // TODO: add error fields and handle it here
                             )
                         }
                     )
@@ -84,6 +88,11 @@ class HomeViewModel(
                     is Validated.Valid -> dispatchEvent(HomeContract.Event.SetPurchasedBook(bookId))
                 }
             }
+    }
+
+    private fun setNewLanguage(language: Language) = viewModelScope.launch(Dispatchers.IO) {
+        Napier.d("setNewLanguage: 1=$language")
+        setAppLocaleUseCase(language).collect()
     }
 
     private fun List<ShortBook>.setPurchasedBook(bookId: Int): List<ShortBook> {

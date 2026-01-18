@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -36,6 +37,7 @@ internal fun appStoreFromPath(filePath: Path): AppStore {
     return object : AppStore {
         override fun flow(): Flow<Boolean> =
             ds.data
+                .debounce(1000)
                 .catch { emit(emptyPreferences()) }
                 .map { p -> p[AppStoreKeys.CONGRATS_SHOWN] ?: false }
                 .distinctUntilChanged()

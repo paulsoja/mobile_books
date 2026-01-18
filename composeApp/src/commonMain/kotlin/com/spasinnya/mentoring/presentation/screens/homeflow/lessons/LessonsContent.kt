@@ -3,6 +3,7 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,15 +19,17 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -71,76 +74,92 @@ fun LessonsContent(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-        TabRow(
-            modifier = Modifier.fillMaxWidth().height(78.dp).padding(horizontal = 8.dp),
-            selectedTabIndex = pagerState.currentPage,
-            containerColor = Color(0xFFF5F7FC),
-            indicator = { tabPositions -> },
-            divider = { },
-            contentColor = Color(0xFF3C4E73),
-            tabs = {
-                state.lessons.forEachIndexed { index, lesson ->
-                    Tab(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 2.dp)
-                            .padding(top = 8.dp)
-                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                            .tabBackground(
-                                color = if (pagerState.currentPage == index) Color.White else Color(0xFFE7F2F8),
-                                topPadding = 24.dp,
-                                radius = 16.dp
-                            ),
-                        selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
-                        text = {
-                            Column(
-                                modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)),
-                                verticalArrangement = Arrangement.Bottom,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                if (index == 0 || index == 1) {
-                                    CoreBadge(
-                                        iconRes = Res.drawable.ic_check,
-                                        backgroundColor = if (pagerState.currentPage == index) Color(0xFFDFA672) else Color.Transparent
-                                    )
-                                }
-                                Spacer(modifier = Modifier.weight(1f))
-                                Column(
-                                    modifier = Modifier,
-                                    verticalArrangement = Arrangement.Bottom,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    CoreTextBody(
-                                        text = "Урок",
-                                        style = MaterialTheme.typography.bodySmall.copy(
-                                            fontWeight = FontWeight.Normal,
-                                            color = if (pagerState.currentPage == index) Color(0xFFDFA672) else Color(0xFF96A4BA),
-                                            fontSize = 12.sp,
-                                            lineHeight = 18.sp
+
+        CompositionLocalProvider(LocalRippleConfiguration provides null) {
+            PrimaryTabRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(78.dp)
+                    .padding(horizontal = 8.dp),
+                selectedTabIndex = pagerState.currentPage,
+                containerColor = Color(0xFFF5F7FC),
+                indicator = {},
+                divider = {},
+                contentColor = Color(0xFF3C4E73),
+                tabs = {
+                    val badgeSize = 22.dp
+                    val badgeOverlap = badgeSize / 2
+
+                    state.lessons.forEachIndexed { index, _ ->
+                        val isSelected = pagerState.currentPage == index
+                        val isCompleted = (index == 0 || index == 1)
+
+                        Tab(
+                            modifier = Modifier
+                                .padding(horizontal = 2.dp)
+                                .padding(top = 8.dp)
+                                .tabBackground(
+                                    color = if (isSelected) Color.White else Color(0xFFE7F2F8),
+                                    topPadding = badgeOverlap,
+                                    radius = 16.dp
+                                ),
+                            selected = isSelected,
+                            onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                            text = {
+                                Box(modifier = Modifier.fillMaxSize()) {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                                            .padding(bottom = 8.dp),
+                                        verticalArrangement = Arrangement.Bottom,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        CoreTextBody(
+                                            text = "Урок",
+                                            style = MaterialTheme.typography.bodySmall.copy(
+                                                fontWeight = FontWeight.Normal,
+                                                color = if (isSelected) Color(0xFFDFA672) else Color(0xFF96A4BA),
+                                                fontSize = 12.sp,
+                                                lineHeight = 18.sp
+                                            )
                                         )
-                                    )
-                                    CoreTextBody(
-                                        text = "${index + 1}",
-                                        style = MaterialTheme.typography.bodySmall.copy(
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color(0xFF3C4E73),
-                                            fontSize = 20.sp,
-                                            lineHeight = 16.sp
+                                        CoreTextBody(
+                                            text = "${index + 1}",
+                                            style = MaterialTheme.typography.bodySmall.copy(
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color(0xFF3C4E73),
+                                                fontSize = 20.sp,
+                                                lineHeight = 16.sp
+                                            )
                                         )
-                                    )
+                                    }
+
+                                    if (isCompleted) {
+                                        Box(
+                                            modifier = Modifier
+                                                .align(Alignment.TopCenter)
+                                                .padding(top = 2.dp)
+                                        ) {
+                                            CoreBadge(
+                                                iconRes = Res.drawable.ic_check,
+                                                backgroundColor = if (isSelected) Color(0xFFDFA672) else Color(0xFFDFA672)
+                                            )
+                                        }
+                                    }
                                 }
-                                Spacer(modifier = Modifier.height(8.dp))
                             }
-                        }
-                    )
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.weight(1f).background(color = Color.White),
+            modifier = Modifier
+                .weight(1f)
+                .background(color = Color.White),
             contentPadding = PaddingValues(horizontal = 0.dp),
             pageSpacing = 8.dp
         ) { page ->
@@ -212,6 +231,7 @@ fun LessonsContent(
                                 lineHeight = 28.sp
                             )
                         )
+
                         LessonContentType.image -> Image(
                             painter = painterResource(resource = Res.drawable.img_cover_01),
                             contentDescription = null,
@@ -229,36 +249,36 @@ fun Modifier.tabBackground(
     color: Color,
     topPadding: Dp,
     radius: Dp
-) = this.then(
-    Modifier.drawBehind {
-        val topPaddingPx = topPadding.toPx()
-        val radiusPx = radius.toPx()
-        val width = size.width
-        val height = size.height - topPaddingPx
-        val left = 0f
-        val top = topPaddingPx
-        val right = width
-        val bottom = top + height
+) = this.drawWithCache {
+    val topPaddingPx = topPadding.toPx()
+    val radiusPx = radius.toPx()
 
-        val path = Path().apply {
-            moveTo(left, top + radiusPx)
-            arcTo(
-                rect = Rect(left, top, left + 2 * radiusPx, top + 2 * radiusPx),
-                startAngleDegrees = 180f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
-            lineTo(right - radiusPx, top)
-            arcTo(
-                rect = Rect(right - 2 * radiusPx, top, right, top + 2 * radiusPx),
-                startAngleDegrees = 270f,
-                sweepAngleDegrees = 90f,
-                forceMoveTo = false
-            )
-            lineTo(right, bottom)
-            lineTo(left, bottom)
-            close()
-        }
+    val left = 0f
+    val top = topPaddingPx
+    val right = size.width
+    val bottom = size.height
+
+    val path = Path().apply {
+        moveTo(left, top + radiusPx)
+        arcTo(
+            rect = Rect(left, top, left + 2 * radiusPx, top + 2 * radiusPx),
+            startAngleDegrees = 180f,
+            sweepAngleDegrees = 90f,
+            forceMoveTo = false
+        )
+        lineTo(right - radiusPx, top)
+        arcTo(
+            rect = Rect(right - 2 * radiusPx, top, right, top + 2 * radiusPx),
+            startAngleDegrees = 270f,
+            sweepAngleDegrees = 90f,
+            forceMoveTo = false
+        )
+        lineTo(right, bottom)
+        lineTo(left, bottom)
+        close()
+    }
+
+    onDrawBehind {
         drawPath(path, color)
     }
-)
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Books</string>
+
+    <!--Commons-->
+    <string name="common_ok">OK</string>
+    <string name="common_save">Сохранить</string>
+    <string name="common_confirm">Подтвердить</string>
+    <string name="common_try_again">Попробовать ещё раз</string>
+    <string name="common_repeat">Повторить</string>
+    <string name="common_cancel">Отменить</string>
+    <string name="common_open">Открыть</string>
+    <string name="common_buy">Купить</string>
+
+    <!--Errors-->
+    <string name="error_no_connection">Нет интернета</string>
+    <string name="error_check_connection">Проверьте интернет-соединение и попробуйте ещё раз</string>
+    <string name="error_unexpected">Неожиданная ошибка</string>
+    <string name="error_try_again_later">Попробуйте ещё раз позже</string>
+    <string name="error_email_invalid">Неверный формат email</string>
+    <string name="error_otp_invalid">Неверный код</string>
+    <string name="error_otp_not_filled">Введите код</string>
+    <string name="error_password_invalid">Неверный формат пароля</string>
+    <string name="error_invalid_credentials">Неверный email или пароль</string>
+    <string name="error_validation">Ошибка валидации</string>
+    <string name="error_user_already_exists">Пользователь с таким email уже существует</string>
+
+    <!--Auth-->
+    <string name="auth_login">Войти</string>
+    <string name="auth_logout">Выйти</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Пароль</string>
+    <string name="auth_already_have_account">Уже есть аккаунт?</string>
+    <string name="auth_register_with_google">Зарегистрироваться через Google</string>
+    <string name="auth_login_with_google">Войти через Google</string>
+    <string name="auth_or">или</string>
+    <string name="auth_register">Зарегистрироваться</string>
+    <string name="auth_create_account">Давайте создадим ваш аккаунт</string>
+    <string name="auth_register_hello">Добро пожаловать 👋</string>
+    <string name="auth_login_hello">Рады снова видеть 👋</string>
+    <string name="auth_no_account">Ещё нет аккаунта?</string>
+    <string name="auth_forgot_password">Не помните пароль?</string>
+    <string name="auth_here_account_login">Здесь вход в ваш аккаунт</string>
+    <string name="auth_create_new_password">Создайте новый пароль 🔓</string>
+    <string name="auth_otp_send_again">Отправить ещё раз</string>
+    <string name="auth_otp_no_code">Не получили код?</string>
+    <string name="auth_otp_code_sent">Код был отправлен на</string>
+    <string name="auth_otp_confirm_your_email">Подтвердите ваш email 📨</string>
+    <string name="auth_recall_password">Я вспомнил пароль</string>
+    <string name="auth_reset_password">Сбросить пароль</string>
+    <string name="auth_reset_password_process">Сброс пароля 🔓</string>
+    <string name="auth_reset_password_type_email">Укажите email вашего аккаунта</string>
+
+    <!--Home-->
+    <string name="home_choose_book">Выберите Наставничество 📚</string>
+    <string name="home_settings_my_profile">Мой профиль</string>
+    <string name="home_settings_promocodes">Промокоды</string>
+    <string name="home_settings_app_language">Язык приложения:</string>
+    <string name="home_settings_autors">Авторы пособий</string>
+    <string name="home_settings_salvation_church">Церковь "Спасение"</string>
+</resources>

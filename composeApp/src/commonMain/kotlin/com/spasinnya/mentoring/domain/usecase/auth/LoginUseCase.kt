@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.Flow
 
 typealias LoginUseCase = suspend (Credentials) -> Flow<DomainResult<Token>>
 
-fun loginUseCase(repository: LoginRepository): LoginUseCase = { credentials ->
+fun loginUseCase(
+    repository: LoginRepository,
+): LoginUseCase = { credentials ->
     repository(credentials.toData())
 }

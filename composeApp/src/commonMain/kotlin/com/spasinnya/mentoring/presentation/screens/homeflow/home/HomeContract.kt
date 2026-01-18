@@ -9,7 +9,6 @@ interface HomeContract {
         val isLoading: Boolean = false,
         val isPurchaseLoading: Boolean = false,
         val showSettingsDialog: Boolean = false,
-        val selectedLanguage: Language = Language.UA
     )
 
     sealed class Event {

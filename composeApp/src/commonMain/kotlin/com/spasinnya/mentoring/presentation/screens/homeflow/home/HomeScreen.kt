@@ -17,7 +17,7 @@ import books.composeapp.generated.resources.ic_settings
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
-import com.spasinnya.mentoring.presentation.modals.SettingsModalBottomSheet
+import com.spasinnya.mentoring.presentation.screens.homeflow.settings.SettingsModalBottomSheet
 import kotlinx.coroutines.launch
 
 @Composable
@@ -77,7 +77,6 @@ fun HomeScreen(
                     onAuthorsClick = navigateToAuthors,
                     onSpasinnyaBooksClick = navigateToSpasinnyaBooks,
                     onSpasinnyaChurchClick = navigateToSpasinnyaChurch,
-                    selectedLanguage = state.selectedLanguage
                 )
             }
         }
@@ -96,6 +95,7 @@ fun setupHomeScreenModel(
                 logoutUseCase = graph.useCases.logoutUseCase,
                 getBooksUseCase = graph.useCases.booksUseCase,
                 purchaseBookUseCase = graph.useCases.purchaseBookUseCase,
+                setAppLocaleUseCase = graph.useCases.setAppLocaleUseCase,
                 savedStateHandle = handle
             )
         },

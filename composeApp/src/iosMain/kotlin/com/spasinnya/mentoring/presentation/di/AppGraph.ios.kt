@@ -18,7 +18,11 @@ actual fun provideAppGraph(appContext: Any): AppGraph {
     GraphHolder.ref.value?.let { return it }
 
     val dataSource = provideDataSourceModule(Unit)
-    val http: HttpClient = createHttpClient(dataSource.tokenStore)
+    val http: HttpClient = createHttpClient(
+        tokenStore = dataSource.tokenStore,
+        readLanguageTag = { dataSource.localeStore.read() },
+        defaultLang = "en"
+    )
     val repos = provideRepoModule(http, dataSource)
     val useCases = provideUseCaseModule(repos)
 

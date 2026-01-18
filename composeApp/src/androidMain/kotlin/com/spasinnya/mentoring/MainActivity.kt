@@ -7,10 +7,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowCompat
-import com.spasinnya.mentoring.presentation.AppContent
+import com.spasinnya.mentoring.presentation.app.AppContent
 import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
