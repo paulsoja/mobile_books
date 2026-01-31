@@ -48,18 +48,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.common_buy
+import books.composeapp.generated.resources.common_content
+import books.composeapp.generated.resources.common_mentorship
 import books.composeapp.generated.resources.common_open
 import books.composeapp.generated.resources.home_choose_book
+import books.composeapp.generated.resources.ic_arrow_right
 import books.composeapp.generated.resources.ic_content
-import books.composeapp.generated.resources.img_cover_01
 import com.spasinnya.mentoring.domain.model.ShortBook
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
-import org.jetbrains.compose.resources.painterResource
+import com.spasinnya.mentoring.presentation.designsystem.coverPainter
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -79,7 +82,7 @@ fun HomeContent(
         )
         Pager(
             list = state.books,
-            pageContent = { pagerState: PagerState, item: ShortBook ->
+            pageContent = { _: PagerState, item: ShortBook ->
                 PagerCard(
                     item = item,
                     isLoading = state.isPurchaseLoading,
@@ -194,15 +197,16 @@ private fun PageItem(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(Res.drawable.img_cover_01),
+            painter = coverPainter(bookNumber = item.number),
             contentDescription = "",
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(3f / 2f),
             contentScale = ContentScale.FillWidth
         )
         Column(modifier = Modifier.fillMaxSize().padding(all = 16.dp)) {
-            CoreTextTitle(
-                text = item.title
-            )
+            CoreTextTitle(text = stringResource(Res.string.common_mentorship) + " - ${item.number}")
+            CoreTextSubtitle(text = item.title)
             Spacer(modifier = Modifier.height(12.dp))
             CoreTextBody(
                 text = item.subtitle,
@@ -276,7 +280,7 @@ fun BookCardBottomBar(
         } else {
             CoreOutlinedButton(
                 modifier = Modifier.fillMaxWidth(.5f).height(68.dp),
-                text = "Зміст",
+                text = stringResource(Res.string.common_content),
                 iconAfter = Res.drawable.ic_content,
                 onClick = { onContentClicked() }
             )
@@ -293,7 +297,8 @@ fun BookCardBottomBar(
         CorePrimaryButton(
             modifier = Modifier.weight(1f).height(68.dp),
             text = if (item.isPurchased) stringResource(Res.string.common_open) else stringResource(Res.string.common_buy),
-            onClick = { if (item.isPurchased) onOpenClicked() else onPurchaseClicked(item.id) }
+            onClick = { if (item.isPurchased) onOpenClicked() else onPurchaseClicked(item.id) },
+            iconAfter = if (item.isPurchased) Res.drawable.ic_arrow_right else null
         )
     }
 }

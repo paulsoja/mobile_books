@@ -30,17 +30,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.common_week
 import books.composeapp.generated.resources.ic_chevron_right
-import books.composeapp.generated.resources.img_cover_01
 import com.spasinnya.mentoring.domain.model.Week
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCardWithContent
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
-import org.jetbrains.compose.resources.painterResource
+import com.spasinnya.mentoring.presentation.designsystem.coverPainter
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun WeeksContent(
+    bookNumber: String,
     state: WeeksContract.State,
     paddingValues: PaddingValues,
     navigateToLessons: (weekId: Int) -> Unit
@@ -57,7 +59,7 @@ fun WeeksContent(
         Spacer(modifier = Modifier.height(16.dp))
         Image(
             modifier = Modifier.fillMaxWidth().height(100.dp).clip(shape = RoundedCornerShape(16.dp)),
-            painter = painterResource(Res.drawable.img_cover_01),
+            painter = coverPainter(bookNumber = bookNumber),
             contentDescription = "",
             contentScale = ContentScale.FillWidth
         )
@@ -107,7 +109,11 @@ fun WeekItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 CoreTextBody(
-                    text = "Тиждень ${week.number}"
+                    text = stringResource(Res.string.common_week) + " ${week.number}",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = Color(0xFFDFA672),
+                        fontWeight = FontWeight.Normal
+                    )
                 )
                 CoreTextBody(
                     text = week.title,

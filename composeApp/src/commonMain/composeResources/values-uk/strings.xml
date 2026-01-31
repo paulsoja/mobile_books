@@ -11,6 +11,9 @@
     <string name="common_cancel">Скасувати</string>
     <string name="common_open">Відкрити</string>
     <string name="common_buy">Купити</string>
+    <string name="common_mentorship">Наставництво</string>
+    <string name="common_content">Зміст</string>
+    <string name="common_week">Тиждень</string>
 
     <!--Errors-->
     <string name="error_no_connection">Немає інтернету</string>

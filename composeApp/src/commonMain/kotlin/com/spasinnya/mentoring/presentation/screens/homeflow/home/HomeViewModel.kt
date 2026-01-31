@@ -11,7 +11,9 @@ import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import com.spasinnya.mentoring.presentation.di.resetAppGraph
+import com.spasinnya.mentoring.presentation.model.UiMessageType
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeContract.Effect.ShowSnackbar
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +35,7 @@ class HomeViewModel(
         when (event) {
             is HomeContract.Event.Logout -> logout()
             is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
+            is HomeContract.Event.ToggleLogoutDialog -> toggleLogoutDialog(event.show)
             is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
             is HomeContract.Event.LoadedBooks -> setState { copy(books = event.books) }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
@@ -105,5 +108,11 @@ class HomeViewModel(
                 resetAppGraph()
             }
             .collect()
+    }
+
+    private fun toggleLogoutDialog(show: Boolean) {
+        setState {
+            copy(logoutDialog = if (show) DialogState.Shown(UiMessageType.Logout) else DialogState.Hidden)
+        }
     }
 }
