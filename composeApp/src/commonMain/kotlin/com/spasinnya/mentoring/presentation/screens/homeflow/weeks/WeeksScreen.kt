@@ -12,10 +12,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.common_mentorship
 import books.composeapp.generated.resources.ic_content
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun WeeksScreen(
@@ -36,7 +38,7 @@ fun WeeksScreen(
         containerColor = Color.Transparent,
         topBar = {
             CoreTopAppBar(
-                title = "Наставництво - $bookNumber",
+                title = stringResource(Res.string.common_mentorship) + " - $bookNumber",
                 onBackClick = navigateBack,
                 actions = {
                     CoreIconButton(
@@ -49,6 +51,7 @@ fun WeeksScreen(
         },
         content = {
             WeeksContent(
+                bookNumber = bookNumber,
                 state = state,
                 paddingValues = it,
                 navigateToLessons = navigateToLessons

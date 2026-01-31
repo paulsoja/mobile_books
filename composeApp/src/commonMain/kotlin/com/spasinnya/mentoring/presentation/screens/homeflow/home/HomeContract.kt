@@ -2,6 +2,8 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
 import com.spasinnya.mentoring.domain.enums.Language
 import com.spasinnya.mentoring.domain.model.ShortBook
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
+import com.spasinnya.mentoring.presentation.model.UiMessageType
 
 interface HomeContract {
     data class State(
@@ -9,6 +11,7 @@ interface HomeContract {
         val isLoading: Boolean = false,
         val isPurchaseLoading: Boolean = false,
         val showSettingsDialog: Boolean = false,
+        val logoutDialog: DialogState<UiMessageType> = DialogState.Hidden,
     )
 
     sealed class Event {
@@ -20,6 +23,7 @@ interface HomeContract {
         data class PurchaseBook(val bookId: Int) : Event()
         data class SetPurchasedBook(val bookId: Int) : Event()
         data class ToggleSettingsDialog(val show: Boolean) : Event()
+        data class ToggleLogoutDialog(val show: Boolean) : Event()
         data class OnLanguageChosen(val language: Language) : Event()
     }
 

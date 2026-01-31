@@ -11,6 +11,9 @@
     <string name="common_cancel">Abbrechen</string>
     <string name="common_open">Öffnen</string>
     <string name="common_buy">Kaufen</string>
+    <string name="common_mentorship">Mentoring</string>
+    <string name="common_content">Inhalt</string>
+    <string name="common_week">Woche</string>
 
     <!--Errors-->
     <string name="error_no_connection">Keine Internetverbindung</string>

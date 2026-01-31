@@ -107,7 +107,7 @@ fun SettingsModalBottomSheetContent(
             label = "Рус",
         ),
         LangOption(
-            lang = Language.DE, // ✅
+            lang = Language.DE,
             iconRes = Res.drawable.ic_lang_en,
             label = "De",
         ),

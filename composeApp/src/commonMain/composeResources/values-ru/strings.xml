@@ -11,6 +11,9 @@
     <string name="common_cancel">Отменить</string>
     <string name="common_open">Открыть</string>
     <string name="common_buy">Купить</string>
+    <string name="common_mentorship">Наставничество</string>
+    <string name="common_content">Содержание</string>
+    <string name="common_week">Неделя</string>
 
     <!--Errors-->
     <string name="error_no_connection">Нет интернета</string>

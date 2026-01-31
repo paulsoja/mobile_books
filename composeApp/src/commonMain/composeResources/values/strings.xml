@@ -11,6 +11,9 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_open">Open</string>
     <string name="common_buy">Buy</string>
+    <string name="common_mentorship">Mentorship</string>
+    <string name="common_content">Content</string>
+    <string name="common_week">Week</string>
 
     <!--Errors-->
     <string name="error_no_connection">No internet connection</string>

@@ -16,6 +16,8 @@ import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_settings
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toMessageTexts
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
 import com.spasinnya.mentoring.presentation.screens.homeflow.settings.SettingsModalBottomSheet
 import kotlinx.coroutines.launch
@@ -73,12 +75,22 @@ fun HomeScreen(
                         viewModel.dispatchEvent(HomeContract.Event.OnProfileClick)
                     },
                     onPromoCodesClick = navigateToPromoCodes,
-                    onLogoutClick = { viewModel.dispatchEvent(HomeContract.Event.Logout) },
+                    onLogoutClick = { viewModel.dispatchEvent(HomeContract.Event.ToggleLogoutDialog(true)) },
                     onAuthorsClick = navigateToAuthors,
                     onSpasinnyaBooksClick = navigateToSpasinnyaBooks,
                     onSpasinnyaChurchClick = navigateToSpasinnyaChurch,
                 )
             }
+
+            AppAlertDialog(
+                state = state.logoutDialog,
+                mapTexts = { it.toMessageTexts() },
+                onDismiss = { viewModel.dispatchEvent(HomeContract.Event.ToggleLogoutDialog(false)) },
+                onConfirm = {
+                    viewModel.dispatchEvent(HomeContract.Event.Logout)
+                    viewModel.dispatchEvent(HomeContract.Event.ToggleLogoutDialog(false))
+                },
+            )
         }
     )
 }
