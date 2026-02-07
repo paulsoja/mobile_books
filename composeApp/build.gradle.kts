@@ -44,6 +44,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.gcm)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -79,7 +81,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.spasinnya.mentoring"
+    namespace = "com.books.spasinnya"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -87,7 +89,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/composeResources")
 
     defaultConfig {
-        applicationId = "com.spasinnya.mentoring"
+        applicationId = "com.books.spasinnya"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

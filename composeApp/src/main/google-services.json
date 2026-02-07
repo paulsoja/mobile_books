@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637329561412",
+    "project_id": "mentorship-4b745",
+    "storage_bucket": "mentorship-4b745.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637329561412:android:f8298930baef91a128e911",
+        "android_client_info": {
+          "package_name": "com.books.spasinnya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNMRHDvSIT7jIODQw80cdp9eCmrt_lP4I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
