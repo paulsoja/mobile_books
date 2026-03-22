@@ -29,14 +29,7 @@ fun LoginScreen(
         state = state.dialog,
         mapTexts = { it.toAlertTexts() },
         onDismiss = { viewModel.dispatchEvent(LoginContract.Event.DismissDialog) },
-        onConfirm = {
-            viewModel.dispatchEvent(
-                LoginContract.Event.LoginClicked(
-                    email = state.email,
-                    password = state.password
-                )
-            )
-        },
+        onConfirm = { viewModel.dispatchEvent(LoginContract.Event.DismissDialog) },
     )
 }
 

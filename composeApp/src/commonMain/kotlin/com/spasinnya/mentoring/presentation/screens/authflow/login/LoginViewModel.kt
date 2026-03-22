@@ -42,13 +42,10 @@ class LoginViewModel(
     ) {
         when (val creds = Credentials.of(email, password)) {
             is Validated.Valid -> onValid(creds.value)
-
             is Validated.Invalid -> {
-                creds.errors.forEach { error ->
-                    when (error) {
-                        is Credentials.CredentialsError.Email -> setState { copy(emailError = error.error) }
-                        is Credentials.CredentialsError.Password -> setState { copy(passwordError = error.error) }
-                    }
+                when (val error = creds.error) {
+                    is Credentials.CredentialsError.Email -> setState { copy(emailError = error.error) }
+                    is Credentials.CredentialsError.Password -> setState { copy(passwordError = error.error) }
                 }
             }
         }
@@ -60,7 +57,7 @@ class LoginViewModel(
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
+                        error = result.error,
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,

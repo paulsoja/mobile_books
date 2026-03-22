@@ -17,9 +17,9 @@ value class Password private constructor(val value: String) {
         val pwd = value
 
         return when {
-            pwd.isEmpty() -> Validated.Invalid(listOf(Error.Empty))
-            pwd.length < 8 -> Validated.Invalid(listOf(Error.TooShort))
-            !pwd.any { it.isDigit() } -> Validated.Invalid(listOf(Error.NoDigit))
+            pwd.isEmpty() -> Validated.Invalid(Error.Empty)
+            pwd.length < 8 -> Validated.Invalid(Error.TooShort)
+            !pwd.any { it.isDigit() } -> Validated.Invalid(Error.NoDigit)
             else -> Validated.Valid(Valid(pwd))
         }
     }

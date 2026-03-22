@@ -31,6 +31,7 @@
     <!--Auth-->
     <string name="auth_login">Log in</string>
     <string name="auth_logout">Log out</string>
+    <string name="auth_logout_confirmation">Log out of your profile?</string>
     <string name="auth_email">Email</string>
     <string name="auth_password">Password</string>
     <string name="auth_already_have_account">Already have an account?</string>

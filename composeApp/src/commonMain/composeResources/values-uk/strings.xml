@@ -31,6 +31,7 @@
     <!--Auth-->
     <string name="auth_login">Увійти</string>
     <string name="auth_logout">Вийти</string>
+    <string name="auth_logout_confirmation">Вийти зі свого профілю?</string>
     <string name="auth_email">Email</string>
     <string name="auth_password">Пароль</string>
     <string name="auth_already_have_account">Вже маєте акаунт?</string>

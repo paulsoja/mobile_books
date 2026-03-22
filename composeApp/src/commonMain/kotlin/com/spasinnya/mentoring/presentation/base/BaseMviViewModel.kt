@@ -3,7 +3,7 @@ package com.spasinnya.mentoring.presentation.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.mapper.toUiErrorType
-import com.spasinnya.mentoring.domain.rules.DomainError
+import com.spasinnya.mentoring.domain.model.DomainError
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -41,10 +41,10 @@ abstract class BaseMviViewModel<State, Event, Effect>(
     }
 
     protected fun <S, Ev, Ef> BaseMviViewModel<S, Ev, Ef>.handleDomainErrors(
-        errors: List<DomainError>,
+        error: DomainError,
         reduce: S.(UiErrorType) -> S
     ) {
-        val error = (errors.firstOrNull() ?: DomainError.Unknown).toUiErrorType()
+        val error = error.toUiErrorType()
         setState { reduce(error) }
     }
 }

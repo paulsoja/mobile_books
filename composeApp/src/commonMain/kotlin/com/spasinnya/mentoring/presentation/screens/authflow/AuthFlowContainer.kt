@@ -2,26 +2,21 @@ package com.spasinnya.mentoring.presentation.screens.authflow
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_logo
 import com.spasinnya.mentoring.presentation.navigation.Screen
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginScreen
@@ -30,7 +25,6 @@ import com.spasinnya.mentoring.presentation.screens.authflow.otp.OtpScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.register.RegisterScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.resetpassword.ResetPasswordScreen
 import kotlinx.coroutines.flow.filter
-import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun AuthFlowContainer(
@@ -45,24 +39,14 @@ fun AuthFlowContainer(
             .collect { onLoginSuccess() }
     }
     Scaffold(
-        modifier = Modifier.fillMaxSize().systemBarsPadding().navigationBarsPadding(),
+        modifier = Modifier.fillMaxSize(),
         containerColor = Color(0xFFF5F7FC),
-        topBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    imageVector = vectorResource(Res.drawable.ic_logo),
-                    contentDescription = null
-                )
-            }
-        },
         content = { innerPadding ->
             NavHost(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()).systemBarsPadding().imePadding(),
                 navController = navController,
                 startDestination = Screen.AuthFlow.LoginScreen,
                 enterTransition = {

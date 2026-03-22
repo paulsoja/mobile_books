@@ -1,10 +1,12 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.dialog
 
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.window.DialogProperties
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
 
 @Composable
 fun <T> AppAlertDialog(
@@ -19,13 +21,22 @@ fun <T> AppAlertDialog(
     AlertDialog(
         containerColor = Color.White,
         onDismissRequest = onDismiss,
-        title = { Text(texts.title) },
-        text = { Text(texts.message) },
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+        title = { if (texts.title.isNotBlank()) CoreTextTitle(texts.title) },
+        text = { CoreTextBody(texts.message) },
         confirmButton = {
-            TextButton(onClick = onConfirm) { Text(texts.confirm) }
+            CoreTextButton(
+                text = texts.confirm.uppercase(),
+                onClick = onConfirm
+            )
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text(texts.dismiss) }
+            texts.cancel?.let {
+                CoreTextButton(
+                    text = texts.cancel.uppercase(),
+                    onClick = onDismiss
+                )
+            }
         }
     )
 }

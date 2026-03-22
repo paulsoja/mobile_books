@@ -45,7 +45,7 @@ fun createHttpClient(
         loggingPlugin()
         httpTimeoutPlugin()
 
-        expectSuccess = true
+        //expectSuccess = true
 
         attachAuth(tokenStore)
 

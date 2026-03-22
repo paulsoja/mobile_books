@@ -1,21 +1,17 @@
 package com.spasinnya.mentoring.presentation.app
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.spasinnya.mentoring.domain.enums.Language
 import com.spasinnya.mentoring.domain.model.AuthSteps
-import com.spasinnya.mentoring.presentation.base.LocalAppLocale
 import com.spasinnya.mentoring.presentation.base.ProvideAppLocale
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.AuthFlowContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratScreen
 import com.spasinnya.mentoring.presentation.screens.homeflow.HomeFlowContainer
-import io.github.aakira.napier.Napier
 
 @Composable
 fun AppContent() {
@@ -27,20 +23,6 @@ fun AppContent() {
         AuthSteps.Congrats -> ScreenContainer.CongratsFlow
         AuthSteps.Home -> ScreenContainer.HomeFlow
     }
-
-    val currentLanguageTag = LocalAppLocale.current
-
-    LaunchedEffect(currentLanguageTag) {
-        if (state.language == Language.System) {
-            viewModel.dispatchEvent(
-                SessionContract.Event.SetLanguage(
-                    Language.fromTag(tag = currentLanguageTag.substringBefore("-"))
-                )
-            )
-        }
-    }
-
-    Napier.d("AppContent: 1=${state.language}")
 
     ProvideAppLocale(language = state.language) {
         val navController = rememberNavController()

@@ -33,7 +33,7 @@ class WeeksViewModel(
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
+                        error = result.error,
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,

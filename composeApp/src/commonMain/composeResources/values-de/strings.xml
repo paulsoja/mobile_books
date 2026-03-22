@@ -31,6 +31,7 @@
     <!--Auth-->
     <string name="auth_login">Anmelden</string>
     <string name="auth_logout">Abmelden</string>
+    <string name="auth_logout_confirmation">Möchten Sie sich von Ihrem Profil abmelden?</string>
     <string name="auth_email">E-Mail</string>
     <string name="auth_password">Passwort</string>
     <string name="auth_already_have_account">Haben Sie bereits ein Konto?</string>

@@ -23,9 +23,9 @@ value class OtpCode private constructor(val value: String) {
         val code = value
 
         return when {
-            code.length != 4 -> Validated.Invalid(listOf(Error.NotFilled))
+            code.length != 4 -> Validated.Invalid(Error.NotFilled)
             isValid(code, RegexType.OTP_CODE) -> Validated.Valid(Valid(code))
-            else -> Validated.Invalid(listOf(Error.InvalidFormat))
+            else -> Validated.Invalid(Error.InvalidFormat)
         }
     }
 

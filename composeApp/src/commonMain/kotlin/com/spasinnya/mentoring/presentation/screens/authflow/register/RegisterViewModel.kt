@@ -39,12 +39,10 @@ class RegisterViewModel(
         when (creds) {
             is Validated.Valid -> onValid.invoke(creds.value)
             is Validated.Invalid -> {
-                creds.errors.forEach { error ->
-                        when (error) {
-                            is Credentials.CredentialsError.Email -> setState { copy(emailError = error.error) }
-                            is Credentials.CredentialsError.Password -> setState { copy(passwordError = error.error) }
-                        }
-                    }
+                when (val credError = creds.error) {
+                    is Credentials.CredentialsError.Email -> setState { copy(emailError = credError.error) }
+                    is Credentials.CredentialsError.Password -> setState { copy(passwordError = credError.error) }
+                }
             }
         }
     }
@@ -54,10 +52,14 @@ class RegisterViewModel(
             .withLoading { loading -> setState { copy(isLoading = loading) } }
             .collectLatest { result ->
                 when (result) {
-                    is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
-                        reduce = { errorType -> copy(dialog = DialogState.Shown(errorType)) }
-                    )
+                    is Validated.Invalid -> {
+                        handleDomainErrors(
+                            error = result.error,
+                            reduce = { errorType ->
+                                copy(dialog = DialogState.Shown(errorType))
+                            }
+                        )
+                    }
                     is Validated.Valid -> {
                         sendEffect { RegisterContract.Effect.NavigateToOtp(credentials.email.value) }
                     }

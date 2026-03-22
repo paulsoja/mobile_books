@@ -17,9 +17,9 @@ value class Email private constructor(val value: String) {
         val text = value.trim()
 
         return when {
-            text.isEmpty() -> Validated.Invalid(listOf(Error.Empty))
-            text.length > 254 -> Validated.Invalid(listOf(Error.TooLong))
-            !isValidEmail(text) -> Validated.Invalid(listOf(Error.InvalidFormat))
+            text.isEmpty() -> Validated.Invalid(Error.Empty)
+            text.length > 254 -> Validated.Invalid(Error.TooLong)
+            !isValidEmail(text) -> Validated.Invalid(Error.InvalidFormat)
             else -> Validated.Valid(Valid(text))
         }
     }
