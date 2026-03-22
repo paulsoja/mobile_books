@@ -1,13 +1,12 @@
 package com.spasinnya.mentoring.domain.usecase.auth
 
 import com.spasinnya.mentoring.domain.model.AuthSteps
+import com.spasinnya.mentoring.domain.model.DomainError
+import com.spasinnya.mentoring.domain.model.DomainResult
 import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.TokenRepository
-import com.spasinnya.mentoring.domain.rules.DomainError
-import com.spasinnya.mentoring.domain.rules.DomainResult
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.fold
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.zip
 
@@ -18,7 +17,6 @@ fun checkAuthStepsUseCase(
     congratsShownRepository: CongratsShownRepository
 ): AuthStepsUseCase = {
     tokenRepository.invoke().zip(congratsShownRepository.invoke()) { token, shown ->
-        Napier.d { "checkAuthStepsUseCase: $token, $shown" }
         shown.fold(
             onValid = {
                 when {
@@ -28,7 +26,7 @@ fun checkAuthStepsUseCase(
                 }
             },
             onInvalid = {
-                Validated.Invalid(listOf(DomainError.Unknown))
+                Validated.Invalid(DomainError.Unknown)
             }
         )
     }

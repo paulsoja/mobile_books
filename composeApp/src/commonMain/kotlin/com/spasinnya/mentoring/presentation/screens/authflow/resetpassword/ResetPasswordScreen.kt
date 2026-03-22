@@ -1,5 +1,7 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.resetpassword
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import books.composeapp.generated.resources.Res
+import books.composeapp.generated.resources.auth_recall_password
+import books.composeapp.generated.resources.auth_reset_password
+import books.composeapp.generated.resources.auth_reset_password_process
+import books.composeapp.generated.resources.auth_reset_password_type_email
+import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_repeat
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -24,6 +31,8 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButt
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun ResetPasswordScreen(
@@ -38,15 +47,24 @@ fun ResetPasswordScreen(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                imageVector = vectorResource(Res.drawable.ic_logo),
+                contentDescription = null
+            )
+        }
         CoreSpacerVertical(height = 100.dp)
         CoreTextScreenTitle(
-            text = "Скидання паролю \uD83D\uDD13",
+            text = stringResource(Res.string.auth_reset_password_process),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
         CoreSpacerVerticalMedium()
         CoreTextSubtitle(
-            text = "Вкажіть email вашого акаунту",
+            text = stringResource(Res.string.auth_reset_password_type_email),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Start,
         )
@@ -60,12 +78,12 @@ fun ResetPasswordScreen(
         CoreSpacerVerticalX2()
         CorePrimaryButton(
             onClick = { navigateToOtp.invoke() },
-            text = "Скинути пароль",
+            text = stringResource(Res.string.auth_reset_password),
             iconAfter = Res.drawable.ic_repeat
         )
         CoreSpacerVerticalMedium()
         CoreTextButton(
-            text = "Я згадав пароль",
+            text = stringResource(Res.string.auth_recall_password),
             onClick = { navigateToLogin.invoke() }
         )
     }

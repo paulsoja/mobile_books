@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.data.repository
 
 import com.spasinnya.mentoring.data.mapper.toDomain
+import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.LessonResponse
 import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
 import com.spasinnya.mentoring.data.model.ShortBookApiResponse
@@ -11,8 +12,10 @@ import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
-import com.spasinnya.mentoring.presentation.base.mapValid
+import com.spasinnya.mentoring.presentation.base.map
+import com.spasinnya.mentoring.presentation.base.mapErrors
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.map
 import kotlin.collections.map
 
 fun booksRepository(
@@ -21,7 +24,11 @@ fun booksRepository(
     http.getFlow<List<ShortBookApiResponse>>(
         path = "books",
     )
-        .mapValid { it.map(ShortBookApiResponse::toDomain) }
+        .map { result ->
+            result
+                .map { it.map(ShortBookApiResponse::toDomain) }
+                .mapErrors { it.toDomainError() }
+        }
 }
 
 fun purchaseBookRepository(
@@ -30,7 +37,11 @@ fun purchaseBookRepository(
     http.postFlow<Unit, PurchaseStatusApiResponse>(
         path = "books/$bookId/purchase",
     )
-        .mapValid(PurchaseStatusApiResponse::toDomain)
+        .map { result ->
+            result
+                .map(PurchaseStatusApiResponse::toDomain)
+                .mapErrors { it.toDomainError() }
+        }
 }
 
 fun weeksRepository(
@@ -39,7 +50,11 @@ fun weeksRepository(
     http.getFlow<List<WeekResponse>>(
         path = "weeks/$bookId",
     )
-        .mapValid { it.map(WeekResponse::toDomain) }
+        .map { result ->
+            result
+                .map { it.map(WeekResponse::toDomain) }
+                .mapErrors { it.toDomainError() }
+        }
 }
 
 fun lessonsRepository(
@@ -48,5 +63,9 @@ fun lessonsRepository(
     http.getFlow<List<LessonResponse>>(
         path = "lessons/$weekId",
     )
-        .mapValid { it.map(LessonResponse::toDomain) }
+        .map { result ->
+            result
+                .map { it.map(LessonResponse::toDomain) }
+                .mapErrors { it.toDomainError() }
+        }
 }

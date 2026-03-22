@@ -1,43 +1,84 @@
 package com.spasinnya.mentoring.data.mapper
 
-import com.spasinnya.mentoring.data.model.AppError
-import com.spasinnya.mentoring.data.model.ErrorEnvelope
-import com.spasinnya.mentoring.data.net.plugin.NoInternetException
-import io.github.aakira.napier.Napier
-import io.ktor.client.call.body
-import io.ktor.client.plugins.ResponseException
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
+import com.spasinnya.mentoring.data.model.ApiErrorResponse
+import com.spasinnya.mentoring.data.model.DataError
+import com.spasinnya.mentoring.domain.model.DomainError
+import io.ktor.client.call.NoTransformationFoundException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.serialization.JsonConvertException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.io.IOException
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
-import kotlin.coroutines.cancellation.CancellationException
 
-private val jsonLoose = Json { ignoreUnknownKeys = true }
+fun parseApiErrorOrNull(
+    json: Json,
+    raw: String?
+): ApiErrorResponse? {
+    if (raw.isNullOrBlank()) return null
 
-private suspend fun parseDomainError(r: HttpResponse): AppError.Domain? =
-    runCatching {
-        val text = r.bodyAsText()
-        val e = jsonLoose.decodeFromString(ErrorEnvelope.serializer(), text)
-        AppError.Domain(
-            code = e.code ?: r.status.value,
-            message_ = e.message,
-            statusCode = e.statusCode ?: "UNKNOWN"
-        )
+    return runCatching {
+        json.decodeFromString<ApiErrorResponse>(raw)
     }.getOrNull()
+}
 
-suspend fun mapToAppError(t: Throwable): AppError = when {
-    t is CancellationException -> throw t
+fun Throwable.toDataError(): DataError =
+    when (this) {
+        is HttpRequestTimeoutException,
+        is TimeoutCancellationException -> DataError.Timeout
 
-    t is NoInternetException -> AppError.NoConnection
+        is IOException -> DataError.NoInternet
 
-    t is ResponseException -> {
-        val resp = t.response
+        is SerializationException,
+        is JsonConvertException,
+        is NoTransformationFoundException -> DataError.Serialization
 
-        parseDomainError(resp) ?: AppError.Domain(
-            code = resp.status.value,
-            message_ = t.message,
-            statusCode = resp.body<String?>().orEmpty()
-        )
+        else -> DataError.Unknown
     }
 
-    else -> AppError.Unexpected(t)
-}.also { Napier.d("mapToAppError: $it") }
+fun mapHttpError(
+    statusCode: Int,
+    apiError: ApiErrorResponse?
+): DataError {
+    apiError?.error?.let { error ->
+        return when (error) {
+            "User already exists" -> DataError.ApiBusinessError("USER_ALREADY_EXISTS")
+            else -> DataError.Unknown
+        }
+    }
+
+    return when (statusCode) {
+        401 -> DataError.Unauthorized
+        403 -> DataError.Forbidden
+        404 -> DataError.NotFound
+        in 400..499 -> DataError.ClientError
+        in 500..599 -> DataError.ServerError
+        else -> DataError.Unknown
+    }
+}
+
+fun DataError.toDomainError(): DomainError =
+    when (this) {
+        DataError.NoInternet -> DomainError.NoInternet
+        DataError.Timeout -> DomainError.Timeout
+
+        DataError.Unauthorized -> DomainError.Unauthorized
+        DataError.Forbidden -> DomainError.Forbidden
+        DataError.NotFound -> DomainError.NotFound
+
+        DataError.ClientError -> DomainError.ClientError
+        DataError.ServerError -> DomainError.ServerError
+        DataError.Serialization -> DomainError.Serialization
+        DataError.Unknown -> DomainError.Unknown
+
+        is DataError.ApiBusinessError -> when (code) {
+            "USER_NOT_FOUND" -> DomainError.UserNotFound
+            "INVALID_OTP" -> DomainError.InvalidOtp
+            "EMAIL_ALREADY_EXISTS" -> DomainError.EmailAlreadyExists
+            "WRONG_PASSWORD" -> DomainError.WrongPassword
+            "OTP_EXPIRED" -> DomainError.OtpExpired
+            "WEAK_PASSWORD" -> DomainError.WeakPassword
+            "USER_ALREADY_EXISTS" -> DomainError.UserAlreadyExists
+            else -> DomainError.Unknown
+        }
+    }

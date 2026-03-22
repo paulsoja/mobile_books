@@ -22,19 +22,26 @@ private val otpCodeRegex = { "^\\d{4}\$".toRegex() }
 inline fun <E, A, B, C> Validated<E, A>.zip(
     other: Validated<E, B>,
     combine: (A, B) -> C
-): Validated<E, C> = when (this) {
-    is Validated.Valid -> when (other) {
-        is Validated.Valid -> Validated.Valid(combine(this.value, other.value))
-        is Validated.Invalid -> Validated.Invalid(other.errors)
+): Validated<E, C> =
+    when (this) {
+        is Validated.Valid -> when (other) {
+            is Validated.Valid -> Validated.Valid(combine(value, other.value))
+            is Validated.Invalid -> Validated.Invalid(other.error)
+        }
+
+        is Validated.Invalid -> Validated.Invalid(error)
     }
-    is Validated.Invalid -> when (other) {
-        is Validated.Valid -> Validated.Invalid(this.errors)
-        is Validated.Invalid -> Validated.Invalid(this.errors + other.errors)
-    }
-}
 
 inline fun <E, E2, A> Validated<E, A>.mapErrors(transform: (E) -> E2): Validated<E2, A> =
     when (this) {
         is Validated.Valid -> this
-        is Validated.Invalid -> Validated.Invalid(this.errors.map(transform))
+        is Validated.Invalid -> Validated.Invalid(transform(this.error))
+    }
+
+inline fun <E, F, A> Validated<E, A>.mapError(
+    transform: (E) -> F
+): Validated<F, A> =
+    when (this) {
+        is Validated.Valid -> Validated.Valid(value)
+        is Validated.Invalid -> Validated.Invalid(transform(this.error))
     }

@@ -3,12 +3,12 @@ package com.spasinnya.mentoring.data.repository
 import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
+import com.spasinnya.mentoring.domain.model.DomainError
 import com.spasinnya.mentoring.domain.repository.ChangeCongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.LocaleRepository
 import com.spasinnya.mentoring.domain.repository.SetLocaleRepository
 import com.spasinnya.mentoring.domain.repository.TokenRepository
-import com.spasinnya.mentoring.domain.rules.DomainError
 import com.spasinnya.mentoring.presentation.base.Validated
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -20,7 +20,7 @@ fun tokens(
 ): TokenRepository = {
     tokenStore.flow().map { token ->
         token?.let { Validated.Valid(it) }
-            ?: Validated.Invalid(listOf(DomainError.NotFound))
+            ?: Validated.Invalid(DomainError.NotFound)
     }
 }
 

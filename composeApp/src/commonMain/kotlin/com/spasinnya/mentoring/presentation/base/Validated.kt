@@ -2,8 +2,16 @@ package com.spasinnya.mentoring.presentation.base
 
 sealed class Validated<out E, out V> {
     data class Valid<V>(val value: V) : Validated<Nothing, V>()
-    data class Invalid<E>(val errors: List<E>) : Validated<E, Nothing>()
+    data class Invalid<E>(val error: E) : Validated<E, Nothing>()
 }
+
+inline fun <E, A, B> Validated<E, A>.map(
+    transform: (A) -> B
+): Validated<E, B> =
+    when (this) {
+        is Validated.Valid -> Validated.Valid(transform(value))
+        is Validated.Invalid -> Validated.Invalid(error)
+    }
 
 inline fun <E, V, T> Validated<E, V>.fold(
     onInvalid: (Validated.Invalid<E>) -> T,
@@ -17,16 +25,5 @@ fun <E, E2, V> Validated<E, V>.mapErrors(
     transform: (E) -> E2
 ): Validated<E2, V> = when (this) {
     is Validated.Valid -> Validated.Valid(value)
-    is Validated.Invalid -> Validated.Invalid(errors.map(transform))
-}
-
-fun <E, V1, V2, R> Validated<E, V1>.zip(
-    other: Validated<E, V2>,
-    combine: (V1, V2) -> R
-): Validated<E, R> = when {
-    this is Validated.Valid && other is Validated.Valid -> Validated.Valid(combine(this.value, other.value))
-    this is Validated.Invalid && other is Validated.Invalid -> Validated.Invalid(this.errors + other.errors)
-    this is Validated.Invalid -> this
-    other is Validated.Invalid -> other
-    else -> error("Unreachable")
+    is Validated.Invalid -> Validated.Invalid(transform(error))
 }

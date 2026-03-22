@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -17,8 +18,11 @@ import books.composeapp.generated.resources.ic_settings
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toAlertTexts
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toMessageTexts
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
+import com.spasinnya.mentoring.presentation.designsystem.composable.states.ErrorState
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.screens.homeflow.settings.SettingsModalBottomSheet
 import kotlinx.coroutines.launch
 
@@ -42,7 +46,7 @@ fun HomeScreen(
     )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().systemBarsPadding(),
+        modifier = Modifier.fillMaxSize().background(Color(0xFFF5F7FC)).systemBarsPadding(),
         containerColor = Color(0xFFF5F7FC),
         snackbarHost = {
             SnackbarHost(
@@ -57,14 +61,24 @@ fun HomeScreen(
             )
         },
         content = { padding ->
-            HomeContent(
-                state = state,
-                navigateToWeeks = navigateToWeeks,
-                padding = padding,
-                viewModel = viewModel,
-            )
+            if (state.isLoading.not() && state.error == UiErrorType.None) {
+                HomeContent(
+                    state = state,
+                    navigateToWeeks = navigateToWeeks,
+                    padding = padding,
+                    viewModel = viewModel,
+                )
+            }
 
             LoadingOverlay(visible = state.isLoading)
+
+            if (state.error != UiErrorType.None) {
+                ErrorState(
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+                    texts = state.error.toAlertTexts(),
+                    onClick = { viewModel.dispatchEvent(HomeContract.Event.OnErrorClick) }
+                )
+            }
 
             if (state.showSettingsDialog) {
                 SettingsModalBottomSheet(

@@ -1,8 +1,11 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +27,7 @@ import books.composeapp.generated.resources.auth_or
 import books.composeapp.generated.resources.auth_password
 import books.composeapp.generated.resources.auth_register
 import books.composeapp.generated.resources.ic_arrow_right
+import books.composeapp.generated.resources.ic_logo
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreHorizontalDividerWithText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
@@ -38,6 +42,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.inputs.Email
 import com.spasinnya.mentoring.presentation.designsystem.composable.inputs.PasswordInput
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun LoginContent(
@@ -46,9 +51,18 @@ fun LoginContent(
     navigateToRegister: () -> Unit,
     navigateToResetPassword: () -> Unit,
 ) = Column(
-    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+    modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            imageVector = vectorResource(Res.drawable.ic_logo),
+            contentDescription = null
+        )
+    }
     CoreSpacerVerticalXLarge()
     CoreTextScreenTitle(
         text = stringResource(Res.string.auth_login_hello),

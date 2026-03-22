@@ -27,14 +27,7 @@ fun RegisterScreen(
         state = state.dialog,
         mapTexts = { it.toAlertTexts() },
         onDismiss = { viewModel.dispatchEvent(RegisterContract.Event.DismissDialog) },
-        onConfirm = {
-            viewModel.dispatchEvent(
-                RegisterContract.Event.ValidateCredentials(
-                    email = state.email,
-                    password = state.password
-                )
-            )
-        },
+        onConfirm = { viewModel.dispatchEvent(RegisterContract.Event.DismissDialog) },
     )
 }
 

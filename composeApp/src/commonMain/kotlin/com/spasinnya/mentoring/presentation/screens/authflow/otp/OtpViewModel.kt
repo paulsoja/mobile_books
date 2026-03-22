@@ -71,8 +71,7 @@ class OtpViewModel(
                 onValid(creds)
             }
             is Validated.Invalid -> {
-                val firstError = result.errors.firstOrNull() ?: OtpCode.Error.NotFilled
-                setState { copy(otpError = firstError) }
+                setState { copy(otpError = result.error) }
             }
         }
     }
@@ -83,7 +82,7 @@ class OtpViewModel(
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
+                        error = result.error,
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,

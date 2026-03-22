@@ -2,9 +2,11 @@ package com.spasinnya.mentoring.presentation.designsystem.composable.dialog
 
 import androidx.compose.runtime.Composable
 import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_try_again
+import books.composeapp.generated.resources.common_ok
 import books.composeapp.generated.resources.error_check_connection
 import books.composeapp.generated.resources.error_no_connection
+import books.composeapp.generated.resources.error_try_again_later
+import books.composeapp.generated.resources.error_unexpected
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import org.jetbrains.compose.resources.stringResource
 
@@ -12,7 +14,7 @@ data class AlertTexts(
     val title: String,
     val message: String,
     val confirm: String,
-    val dismiss: String,
+    val cancel: String? = null
 )
 
 @Composable
@@ -21,30 +23,30 @@ fun UiErrorType.toAlertTexts(): AlertTexts =
         UiErrorType.NoInternet -> AlertTexts(
             title = stringResource(Res.string.error_no_connection),
             message = stringResource(Res.string.error_check_connection),
-            confirm = stringResource(Res.string.common_try_again),
-            dismiss = stringResource(Res.string.common_try_again),
+            confirm = stringResource(Res.string.common_ok),
         )
 
         UiErrorType.Client -> AlertTexts(
             title = stringResource(Res.string.error_no_connection),
             message = stringResource(Res.string.error_check_connection),
-            confirm = stringResource(Res.string.common_try_again),
-            dismiss = stringResource(Res.string.common_try_again),
+            confirm = stringResource(Res.string.common_ok),
         )
 
         UiErrorType.Server -> AlertTexts(
-            title = stringResource(Res.string.error_no_connection),
-            message = stringResource(Res.string.error_check_connection),
-            confirm = stringResource(Res.string.common_try_again),
-            dismiss = stringResource(Res.string.common_try_again),
+            title = stringResource(Res.string.error_unexpected),
+            message = stringResource(Res.string.error_try_again_later),
+            confirm = stringResource(Res.string.common_ok),
         )
 
-        UiErrorType.Unknown,
-        UiErrorType.None-> AlertTexts(
+        UiErrorType.Unknown -> AlertTexts(
             title = stringResource(Res.string.error_no_connection),
             message = stringResource(Res.string.error_check_connection),
-            confirm = stringResource(Res.string.common_try_again),
-            dismiss = stringResource(Res.string.common_try_again),
+            confirm = stringResource(Res.string.common_ok),
+        )
+        UiErrorType.None-> AlertTexts(
+            title = "",
+            message = "",
+            confirm = "",
         )
     }
 

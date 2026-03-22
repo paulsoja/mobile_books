@@ -1,6 +1,8 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.otp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import books.composeapp.generated.resources.auth_otp_no_code
 import books.composeapp.generated.resources.auth_otp_send_again
 import books.composeapp.generated.resources.common_confirm
 import books.composeapp.generated.resources.ic_arrow_right
+import books.composeapp.generated.resources.ic_logo
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
@@ -28,6 +31,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButt
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.inputs.OtpInput
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun OtpContent(
@@ -38,6 +42,15 @@ fun OtpContent(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                imageVector = vectorResource(Res.drawable.ic_logo),
+                contentDescription = null
+            )
+        }
         CoreSpacerVertical(height = 60.dp)
         CoreTextScreenTitle(
             text = stringResource(Res.string.auth_otp_confirm_your_email)

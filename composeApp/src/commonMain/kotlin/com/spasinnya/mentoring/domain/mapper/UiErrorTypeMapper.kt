@@ -1,6 +1,6 @@
 package com.spasinnya.mentoring.domain.mapper
 
-import com.spasinnya.mentoring.domain.rules.DomainError
+import com.spasinnya.mentoring.domain.model.DomainError
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 
 fun DomainError.toUiErrorType(): UiErrorType =
@@ -14,7 +14,14 @@ fun DomainError.toUiErrorType(): UiErrorType =
         DomainError.Forbidden,
         DomainError.NotFound,
         DomainError.ClientError,
-        is DomainError.Business -> UiErrorType.Client
 
         DomainError.Unknown -> UiErrorType.Unknown
+        DomainError.EmailAlreadyExists,
+        DomainError.InvalidOtp,
+        DomainError.OtpExpired,
+        DomainError.Serialization,
+        DomainError.UserNotFound,
+        DomainError.UserAlreadyExists,
+        DomainError.WeakPassword,
+        DomainError.WrongPassword -> UiErrorType.Client
     }

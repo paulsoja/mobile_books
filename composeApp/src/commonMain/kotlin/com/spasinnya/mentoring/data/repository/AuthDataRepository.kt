@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.data.repository
 
 import com.spasinnya.mentoring.data.mapper.toDomain
+import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.CredentialsApiRequest
 import com.spasinnya.mentoring.data.model.OtpCredentialsApiRequest
 import com.spasinnya.mentoring.data.model.OtpEmailApiRequest
@@ -16,9 +17,10 @@ import com.spasinnya.mentoring.domain.repository.OtpRepository
 import com.spasinnya.mentoring.domain.repository.RegisterRepository
 import com.spasinnya.mentoring.domain.repository.RequestOtpRepository
 import com.spasinnya.mentoring.presentation.base.alsoValidDo
-import com.spasinnya.mentoring.presentation.base.mapValid
-import io.github.aakira.napier.Napier
+import com.spasinnya.mentoring.presentation.base.map
+import com.spasinnya.mentoring.presentation.base.mapErrors
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.map
 
 fun loginRepository(
     http: HttpClient,
@@ -29,7 +31,11 @@ fun loginRepository(
         path = "login",
         body = creds
     )
-        .mapValid(TokenApiResponse::toDomain)
+        .map { result ->
+            result
+                .map(TokenApiResponse::toDomain)
+                .mapErrors { it.toDomainError() }
+        }
         .alsoValidDo(tokenStore::save)
         .alsoValidDo { appStore.save(true) }
 }
@@ -41,7 +47,12 @@ fun registerRepo(
         path = "register",
         body = creds
     )
-        .mapValid { it }
+        .map { result ->
+            result
+                .mapErrors {
+                    it.toDomainError()
+                }
+        }
 }
 
 fun requestOtpCode(
@@ -51,6 +62,10 @@ fun requestOtpCode(
         path = "request-otp",
         body = OtpEmailApiRequest(email.value)
     )
+        .map { result ->
+            result
+                .mapErrors { it.toDomainError() }
+        }
 }
 
 fun otpRepo(
@@ -61,7 +76,11 @@ fun otpRepo(
         path = "verify-otp",
         body = creds
     )
-        .mapValid(TokenApiResponse::toDomain)
+        .map { result ->
+            result
+                .map(TokenApiResponse::toDomain)
+                .mapErrors { it.toDomainError() }
+        }
         .alsoValidDo(tokenStore::save)
 }
 
@@ -73,13 +92,14 @@ fun logoutRepo(
 ): LogoutRepository = {
     val token = tokenStore.read() ?: throw Exception("Can't logout, no token")
 
-    Napier.d { "SessionViewModel: 2=$tokenStore" }
-
     http.postFlow<TokenApiRequest, Unit>(
         path = "logout",
         body = TokenApiRequest(token.refreshToken)
     )
-        .mapValid { it }
+        .map { result ->
+            result
+                .mapErrors { it.toDomainError() }
+        }
         .alsoValidDo { tokenStore.clear() }
         .alsoValidDo { appStore.clear() }
         .alsoValidDo { localeStore.clear() }

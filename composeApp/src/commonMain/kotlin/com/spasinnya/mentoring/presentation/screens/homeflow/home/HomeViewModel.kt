@@ -13,9 +13,9 @@ import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import com.spasinnya.mentoring.presentation.di.resetAppGraph
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.model.UiMessageType
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeContract.Effect.ShowSnackbar
-import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collect
@@ -37,16 +37,19 @@ class HomeViewModel(
             is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
             is HomeContract.Event.ToggleLogoutDialog -> toggleLogoutDialog(event.show)
             is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
-            is HomeContract.Event.LoadedBooks -> setState { copy(books = event.books) }
+            is HomeContract.Event.LoadedBooks -> setState { copy(books = event.books, error = UiErrorType.None) }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
             is HomeContract.Event.PurchaseBook -> purchaseBook(event.bookId)
             is HomeContract.Event.SetPurchasedBook -> {
                 setState { copy(books = books.setPurchasedBook(event.bookId)) }
                 sendEffect { ShowSnackbar("congrats") }
             }
-
             is HomeContract.Event.PurchaseLoading -> setState { copy(isPurchaseLoading = event.isLoading) }
             is HomeContract.Event.OnProfileClick -> sendEffect { HomeContract.Effect.NavigateToProfile }
+            is HomeContract.Event.OnErrorClick -> {
+                setState { copy(error = UiErrorType.None) }
+                loadBooks()
+            }
         }
     }
 
@@ -60,17 +63,18 @@ class HomeViewModel(
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
+                        error = result.error,
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,
-                                // TODO: add error fields and handle it here
+                                error = errorType
                             )
                         }
                     )
-                    is Validated.Valid -> dispatchEvent(HomeContract.Event.LoadedBooks(result.value))
+                    is Validated.Valid -> {
+                        dispatchEvent(HomeContract.Event.LoadedBooks(result.value))
+                    }
                 }
-
             }
     }
 
@@ -80,12 +84,9 @@ class HomeViewModel(
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
-                        errors = result.errors,
+                        error = result.error,
                         reduce = { errorType ->
-                            copy(
-                                isLoading = false,
-                                // TODO: add error fiels and handle it here
-                            )
+                            copy(isLoading = false)
                         }
                     )
                     is Validated.Valid -> dispatchEvent(HomeContract.Event.SetPurchasedBook(bookId))
@@ -94,7 +95,6 @@ class HomeViewModel(
     }
 
     private fun setNewLanguage(language: Language) = viewModelScope.launch(Dispatchers.IO) {
-        Napier.d("setNewLanguage: 1=$language")
         setAppLocaleUseCase(language).collect()
     }
 
