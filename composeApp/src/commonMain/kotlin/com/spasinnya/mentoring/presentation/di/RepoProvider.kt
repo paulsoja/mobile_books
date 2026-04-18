@@ -1,9 +1,8 @@
 package com.spasinnya.mentoring.presentation.di
 
-import com.spasinnya.mentoring.data.repository.booksRepository
+import com.spasinnya.mentoring.data.repository.bookReaderRepository
 import com.spasinnya.mentoring.data.repository.changeShownCongratsStatus
 import com.spasinnya.mentoring.data.repository.getAppLocale
-import com.spasinnya.mentoring.data.repository.lessonsRepository
 import com.spasinnya.mentoring.data.repository.loginRepository
 import com.spasinnya.mentoring.data.repository.logoutRepo
 import com.spasinnya.mentoring.data.repository.otpRepo
@@ -14,10 +13,13 @@ import com.spasinnya.mentoring.data.repository.setAppLocale
 import com.spasinnya.mentoring.data.repository.shownCongrats
 import com.spasinnya.mentoring.data.repository.tokens
 import com.spasinnya.mentoring.data.repository.weeksRepository
+import com.spasinnya.mentoring.data.storage.BookFileDataSource
+import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
+import com.spasinnya.mentoring.data.repository.booksRepository
+import com.spasinnya.mentoring.domain.repository.BookReaderRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.ChangeCongratsShownRepository
 import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
-import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.LocaleRepository
 import com.spasinnya.mentoring.domain.repository.LoginRepository
 import com.spasinnya.mentoring.domain.repository.LogoutRepository
@@ -29,6 +31,8 @@ import com.spasinnya.mentoring.domain.repository.SetLocaleRepository
 import com.spasinnya.mentoring.domain.repository.TokenRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
 import io.ktor.client.HttpClient
+import okio.FileSystem
+import okio.SYSTEM
 
 fun provideRepoModule(http: HttpClient, dataSourceModule: DataSourceModule): RepoModule =
     object : RepoModule {
@@ -63,15 +67,19 @@ fun provideRepoModule(http: HttpClient, dataSourceModule: DataSourceModule): Rep
             setAppLocale(dataSourceModule.localeStore)
         }
         override val booksRepository: BooksRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            booksRepository(http)
+            val fileDataSource = BookFileDataSource(FileSystem.SYSTEM)
+            booksRepository(fileDataSource)
         }
         override val purchaseBookRepository: PurchaseBookRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
             purchaseBookRepository(http)
         }
         override val weeksRepository: WeeksRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            weeksRepository(http)
+            val fileDataSource = BookFileDataSource(FileSystem.SYSTEM)
+            weeksRepository(fileDataSource)
         }
-        override val lessonsRepository: LessonsRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-            lessonsRepository(http)
+        override val bookImportRepository: BookReaderRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+            val fileDataSource = BookFileDataSource(FileSystem.SYSTEM)
+            val parser = MentorshipMarkdownParser()
+            bookReaderRepository(fileDataSource, parser)
         }
     }

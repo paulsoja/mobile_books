@@ -33,7 +33,7 @@ fun HomeScreen(
     navigateToAuthors: () -> Unit,
     navigateToSpasinnyaBooks: () -> Unit,
     navigateToSpasinnyaChurch: () -> Unit,
-    navigateToWeeks: (bookId: Int, bookNumber: String) -> Unit,
+    navigateToWeeks: (bookId: String, bookNumber: Int) -> Unit,
     navigateToLogin: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()

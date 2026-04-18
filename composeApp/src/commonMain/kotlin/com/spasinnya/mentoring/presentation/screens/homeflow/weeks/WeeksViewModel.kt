@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class WeeksViewModel(
-    private val bookId: Int,
+    private val bookId: String,
     private val weeksUseCase: GetWeeksUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : BaseMviViewModel<WeeksContract.State, WeeksContract.Event, WeeksContract.Effect>(initialState = WeeksContract.State()) {
@@ -40,7 +40,7 @@ class WeeksViewModel(
                             )
                         }
                     )
-                    is Validated.Valid -> setState { copy(weeks = result.value) }
+                    is Validated.Valid -> setState { copy(bookMeta = result.value) }
                 }
             }
     }

@@ -1,0 +1,277 @@
+{
+  "id": "born_again_1_en",
+  "bookNumber": 1,
+  "language": "en",
+  "title": "Born Again — Mentorship I",
+  "subtitle": "Difficult questions",
+  "author": "Philip Savochka",
+  "description": "This book is intended for the spiritual growth of new believers through mentorship in a home church from the first day after repentance until entering into a covenant with God through water baptism. It can also be used as a course to prepare new believers for water baptism through seminar sessions.",
+  "coverImage": "cover.png",
+  "previewImage": "preview.png",
+  "productId": "app.book.born_again_1_en",
+  "priceLabel": "Buy for $1",
+  "weeksCount": 10,
+  "lessonsPerWeek": 5,
+  "tableOfContents": [
+    {
+      "weekNumber": 1,
+      "weekTitle": "Difficult questions",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Have I switched my faith?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "What would people say?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Believing is not boring!"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Will I be able to do it?"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Not everyone is worth following!"
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "weekTitle": "The cause of all problems is sin",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "How it all happened"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "The primary sin"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "The father of sin"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "The consequences of sin"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "There is no other way"
+        }
+      ]
+    },
+    {
+      "weekNumber": 3,
+      "weekTitle": "The redeeming power of Jesus",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Why Jesus?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "How to receive forgiveness"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "The power of the Blood of Christ"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Always with us!"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "You can do it with Jesus!"
+        }
+      ]
+    },
+    {
+      "weekNumber": 4,
+      "weekTitle": "Church is my new family",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Why go to church?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Home church is a spiritual family"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "What happens in a church and why?"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Offerings and tithe"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Mentorship"
+        }
+      ]
+    },
+    {
+      "weekNumber": 5,
+      "weekTitle": "Prayer is great!",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "What is prayer?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "How to pray every day"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "How to organize your prayer"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Types of prayer"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "God answers prayers"
+        }
+      ]
+    },
+    {
+      "weekNumber": 6,
+      "weekTitle": "The most interesting and useful book",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Bread will never get boring"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "A little bit about the Bible"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "How to read the Bible"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Practical application of the Bible"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Faith"
+        }
+      ]
+    },
+    {
+      "weekNumber": 7,
+      "weekTitle": "How to overcome yourself",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Resentment and unforgiveness"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Addictions and strongholds"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Curses and occultism"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Idols"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Changing your lifestyle"
+        }
+      ]
+    },
+    {
+      "weekNumber": 8,
+      "weekTitle": "A serious relationship",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Faithfulness"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Water baptism"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Baptism with the Holy Spirit"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Gifts of the Spirit"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Exams"
+        }
+      ]
+    },
+    {
+      "weekNumber": 9,
+      "weekTitle": "A room of fellowship with God",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Can I hear God’s voice?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "What is fellowship?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "How to hear God"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Different methods"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Regularity and time produce results"
+        }
+      ]
+    },
+    {
+      "weekNumber": 10,
+      "weekTitle": "Go and do not stop",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "The Great Commission"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Serving others as Jesus did"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Fulfilling the Great Commission"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Dedication"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "What is next?"
+        }
+      ]
+    }
+  ]
+}

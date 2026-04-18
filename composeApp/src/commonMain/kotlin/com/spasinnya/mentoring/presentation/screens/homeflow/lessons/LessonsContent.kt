@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,20 +32,16 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
-import books.composeapp.generated.resources.img_cover_01
-import com.spasinnya.mentoring.domain.model.LessonContentType
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LessonsContent(
@@ -200,7 +195,7 @@ fun LessonsContent(
                             )
                         )
                         CoreTextBody(
-                            text = "Давайте разом прочитаємо уривок із Біблії, який записано у 1 посланні до Коринтян 4:3-4",
+                            text = state.lessons[page].quotes.first(),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Bold,
                                 color = Color(0xFFCF7D47),
@@ -209,37 +204,29 @@ fun LessonsContent(
                             )
                         )
                     }
-                    CoreTextBody(
-                        text = state.lessons[page].quote.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFFCF7D47),
-                            fontSize = 18.sp,
-                            lineHeight = 28.sp
-                        )
-                    )
-                }
 
-                state.lessons[page].content.forEach { content ->
-                    when (content.type) {
-                        LessonContentType.text -> CoreTextBody(
-                            text = content.data,
+                    state.lessons[page].quotes.drop(1).forEach { quote ->
+                        CoreTextBody(
+                            text = quote,
                             style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.Normal,
-                                color = Color(0xFF54595F),
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFFCF7D47),
                                 fontSize = 18.sp,
                                 lineHeight = 28.sp
                             )
                         )
-
-                        LessonContentType.image -> Image(
-                            painter = painterResource(resource = Res.drawable.img_cover_01),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth()
-                        )
                     }
                 }
+
+                CoreTextBody(
+                    text = state.lessons[page].body,
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        fontWeight = FontWeight.Normal,
+                        color = Color(0xFF54595F),
+                        fontSize = 18.sp,
+                        lineHeight = 28.sp
+                    )
+                )
             }
         }
     }

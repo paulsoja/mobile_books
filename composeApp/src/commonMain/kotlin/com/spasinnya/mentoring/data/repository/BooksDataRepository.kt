@@ -1,34 +1,37 @@
 package com.spasinnya.mentoring.data.repository
 
+import com.spasinnya.mentoring.data.mapper.toDataError
 import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
-import com.spasinnya.mentoring.data.model.LessonResponse
 import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
-import com.spasinnya.mentoring.data.model.ShortBookApiResponse
-import com.spasinnya.mentoring.data.model.WeekResponse
-import com.spasinnya.mentoring.data.net.getFlow
 import com.spasinnya.mentoring.data.net.postFlow
+import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
+import com.spasinnya.mentoring.data.storage.BookFileDataSource
+import com.spasinnya.mentoring.domain.model.DomainError
+import com.spasinnya.mentoring.domain.repository.BookReaderRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
-import com.spasinnya.mentoring.domain.repository.LessonsRepository
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import com.spasinnya.mentoring.domain.repository.WeeksRepository
+import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.map
 import com.spasinnya.mentoring.presentation.base.mapErrors
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlin.collections.map
 
 fun booksRepository(
-    http: HttpClient,
+    bookFileDataSource: BookFileDataSource,
 ): BooksRepository = {
-    http.getFlow<List<ShortBookApiResponse>>(
-        path = "books",
-    )
-        .map { result ->
-            result
-                .map { it.map(ShortBookApiResponse::toDomain) }
-                .mapErrors { it.toDomainError() }
-        }
+    flow {
+        val test = try {
+            val result = bookFileDataSource.readAllMetaJson("en")
+            Validated.Valid(result.map { it.toDomain() })
+        } catch (t: Throwable) {
+            Validated.Invalid(t.toDataError())
+        }.mapErrors { it.toDomainError() }
+        emit(test)
+    }
 }
 
 fun purchaseBookRepository(
@@ -45,27 +48,41 @@ fun purchaseBookRepository(
 }
 
 fun weeksRepository(
-    http: HttpClient,
+    bookFileDataSource: BookFileDataSource,
 ): WeeksRepository = { bookId ->
-    http.getFlow<List<WeekResponse>>(
-        path = "weeks/$bookId",
-    )
-        .map { result ->
-            result
-                .map { it.map(WeekResponse::toDomain) }
-                .mapErrors { it.toDomainError() }
-        }
+    flow {
+        val test = try {
+            val result = bookFileDataSource.readMetaJson(bookId)
+            Validated.Valid(result.toDomain())
+        } catch (t: Throwable) {
+            Validated.Invalid(t.toDataError())
+        }.mapErrors { it.toDomainError() }
+        emit(test)
+    }
 }
 
-fun lessonsRepository(
-    http: HttpClient,
-): LessonsRepository = { weekId ->
-    http.getFlow<List<LessonResponse>>(
-        path = "lessons/$weekId",
-    )
-        .map { result ->
-            result
-                .map { it.map(LessonResponse::toDomain) }
-                .mapErrors { it.toDomainError() }
+fun bookReaderRepository(
+    resourceDataSource: BookFileDataSource,
+    parser: MentorshipMarkdownParser,
+): BookReaderRepository = { bookId, weekNumber ->
+    flow {
+        val result = try {
+            val markdown = resourceDataSource.readWeekMarkdown(
+                bookId = bookId,
+                weekNumber = weekNumber,
+            )
+
+            if (markdown.isBlank()) {
+                Validated.Invalid(DomainError.EmptyContent)
+            } else {
+                val parsedWeek = parser.parseWeek(markdown)
+                Validated.Valid(parsedWeek)
+            }
+        } catch (t: Throwable) {
+            Napier.d { "bookReaderRepository: ${t}" }
+            Validated.Invalid(DomainError.Unknown)
         }
+
+        emit(result)
+    }
 }

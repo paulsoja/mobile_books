@@ -21,11 +21,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun WeeksScreen(
-    bookNumber: String,
-    bookId: Int,
+    bookNumber: Int,
+    bookId: String,
     navigateBack: () -> Unit,
     onActionClicked: () -> Unit,
-    navigateToLessons: (weekId: Int) -> Unit
+    navigateToLessons: (bookId: String, weekNumber: Int) -> Unit
 ) {
     val (viewModel, state) = setupWeeksScreenModel(bookId)
 
@@ -54,7 +54,9 @@ fun WeeksScreen(
                 bookNumber = bookNumber,
                 state = state,
                 paddingValues = it,
-                navigateToLessons = navigateToLessons
+                navigateToLessons = {
+                    navigateToLessons.invoke(bookId, it)
+                }
             )
         }
     )
@@ -62,7 +64,7 @@ fun WeeksScreen(
 
 @Composable
 fun setupWeeksScreenModel(
-    bookId: Int
+    bookId: String
 ): Pair<WeeksViewModel, WeeksContract.State> =
     rememberScreenModel<WeeksViewModel, WeeksContract.State, WeeksContract.Effect>(
         create = { graph, handle ->

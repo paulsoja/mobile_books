@@ -5,7 +5,7 @@ import com.spasinnya.mentoring.domain.model.PurchaseStatus
 import com.spasinnya.mentoring.domain.repository.PurchaseBookRepository
 import kotlinx.coroutines.flow.Flow
 
-typealias PurchaseBookUseCase = suspend (bookId: Int) -> Flow<DomainResult<PurchaseStatus>>
+typealias PurchaseBookUseCase = suspend (bookId: String) -> Flow<DomainResult<PurchaseStatus>>
 
 fun purchaseBookUseCase(repository: PurchaseBookRepository): PurchaseBookUseCase = { bookId ->
     repository.invoke(bookId)

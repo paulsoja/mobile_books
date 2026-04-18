@@ -24,4 +24,11 @@ fun DomainError.toUiErrorType(): UiErrorType =
         DomainError.UserAlreadyExists,
         DomainError.WeakPassword,
         DomainError.WrongPassword -> UiErrorType.Client
+
+        DomainError.EmptyContent -> TODO()
+        DomainError.FileNotFound -> TODO()
+        DomainError.FileRead -> TODO()
+        DomainError.InvalidBookFormat -> TODO()
+        DomainError.InvalidLessonFormat -> TODO()
+        DomainError.InvalidWeekFormat -> TODO()
     }

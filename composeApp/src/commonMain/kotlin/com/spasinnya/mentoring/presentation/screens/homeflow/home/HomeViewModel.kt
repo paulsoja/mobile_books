@@ -3,7 +3,7 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.enums.Language
-import com.spasinnya.mentoring.domain.model.ShortBook
+import com.spasinnya.mentoring.domain.model.BookMeta
 import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
@@ -78,7 +78,7 @@ class HomeViewModel(
             }
     }
 
-    private fun purchaseBook(bookId: Int) = viewModelScope.launch(Dispatchers.IO) {
+    private fun purchaseBook(bookId: String) = viewModelScope.launch(Dispatchers.IO) {
         purchaseBookUseCase.invoke(bookId)
             .withLoading { loading -> setState { copy(isPurchaseLoading = loading) } }
             .collectLatest { result ->
@@ -98,7 +98,7 @@ class HomeViewModel(
         setAppLocaleUseCase(language).collect()
     }
 
-    private fun List<ShortBook>.setPurchasedBook(bookId: Int): List<ShortBook> {
+    private fun List<BookMeta>.setPurchasedBook(bookId: String): List<BookMeta> {
         return this.map { if (it.id == bookId) it.copy(isPurchased = true) else it }
     }
 
