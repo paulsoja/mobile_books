@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
@@ -32,16 +34,23 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import books.composeapp.generated.resources.Res
 import books.composeapp.generated.resources.ic_check
+import books.composeapp.generated.resources.img_cover_01
+import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
+import com.spasinnya.mentoring.domain.model.LessonBlock
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LessonsContent(
@@ -194,20 +203,27 @@ fun LessonsContent(
                                 fontSize = 32.sp
                             )
                         )
-                        CoreTextBody(
-                            text = state.lessons[page].quotes.first(),
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFCF7D47),
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp
+
+                        state.lessons[page].quotes.getOrNull(0)?.let { quote ->
+                            CoreTextBody(
+                                text = quote.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFCF7D47),
+                                    fontSize = 16.sp,
+                                    lineHeight = 24.sp
+                                )
                             )
-                        )
+                        }
                     }
 
-                    state.lessons[page].quotes.drop(1).forEach { quote ->
+                    state.lessons[page].quotes.getOrNull(1)?.let { quote ->
                         CoreTextBody(
-                            text = quote,
+                            text = quote.asAnnotatedString(
+                                highlightColor = Color.Green
+                            ),
                             style = MaterialTheme.typography.bodySmall.copy(
                                 fontWeight = FontWeight.Medium,
                                 color = Color(0xFFCF7D47),
@@ -218,15 +234,62 @@ fun LessonsContent(
                     }
                 }
 
-                CoreTextBody(
-                    text = state.lessons[page].body,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Normal,
-                        color = Color(0xFF54595F),
-                        fontSize = 18.sp,
-                        lineHeight = 28.sp
-                    )
-                )
+                state.lessons[page].blocks.forEach { block ->
+                    when (block) {
+                        is LessonBlock.Paragraph -> {
+                            CoreText(
+                                text = block.paragraph.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xFF54595F),
+                                    fontSize = 18.sp,
+                                    lineHeight = 28.sp
+                                ),
+                            )
+                        }
+
+                        is LessonBlock.Divider -> {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            )
+                        }
+
+                        is LessonBlock.Image -> {
+                            Image(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentScale = ContentScale.Fit,
+                                contentDescription = null,
+                                painter = painterResource(Res.drawable.img_cover_01),
+                            )
+                        }
+
+                        is LessonBlock.Table -> {
+                            CoreText(
+                                text = "table",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().height(100.dp).background(Color.Green).padding(top = 12.dp),
+                            )
+                        }
+
+                        is LessonBlock.CenterText -> {
+                            CoreText(
+                                text = block.paragraph.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xFF54595F),
+                                    fontSize = 18.sp,
+                                    lineHeight = 28.sp
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
+                }
             }
         }
     }
