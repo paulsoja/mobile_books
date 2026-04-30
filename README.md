@@ -41,6 +41,7 @@ A week file consists of:
 -   Quote (`> ...`)
 -   Paragraphs
 -   Divider (`---`)
+-   CenterText (`center: ...`)
 -   Image placeholder (`image: path`)
 -   Table placeholder (`table`)
 

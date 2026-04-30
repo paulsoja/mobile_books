@@ -22,6 +22,7 @@ import books.composeapp.generated.resources.auth_reset_password_process
 import books.composeapp.generated.resources.auth_reset_password_type_email
 import books.composeapp.generated.resources.ic_logo
 import books.composeapp.generated.resources.ic_repeat
+import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
@@ -39,8 +40,7 @@ fun ResetPasswordScreen(
     navigateToLogin: () -> Unit,
     navigateToOtp: () -> Unit
 ) {
-
-    //val viewModel: ResetPasswordViewModel = viewModel(factory = createResetPasswordViewModel)
+    val (viewModel, state) = rememberScreenModel<ResetPasswordViewModel, ResetPasswordContract.State, ResetPasswordContract.Effect>()
     var email by remember { mutableStateOf("") }
 
     Column(

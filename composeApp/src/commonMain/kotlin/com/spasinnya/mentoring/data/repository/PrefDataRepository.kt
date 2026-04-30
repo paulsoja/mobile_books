@@ -4,52 +4,47 @@ import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.model.DomainError
-import com.spasinnya.mentoring.domain.repository.ChangeCongratsShownRepository
-import com.spasinnya.mentoring.domain.repository.CongratsShownRepository
-import com.spasinnya.mentoring.domain.repository.LocaleRepository
-import com.spasinnya.mentoring.domain.repository.SetLocaleRepository
-import com.spasinnya.mentoring.domain.repository.TokenRepository
+import com.spasinnya.mentoring.domain.model.DomainResult
+import com.spasinnya.mentoring.domain.model.Token
+import com.spasinnya.mentoring.domain.repository.PrefRepository
 import com.spasinnya.mentoring.presentation.base.Validated
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
-fun tokens(
-    tokenStore: TokenStore
-): TokenRepository = {
-    tokenStore.flow().map { token ->
-        token?.let { Validated.Valid(it) }
-            ?: Validated.Invalid(DomainError.NotFound)
-    }
-}
+class PrefDataRepository(
+    private val tokenStore: TokenStore,
+    private val appStore: AppStore,
+    private val localeStore: LocaleStore,
+) : PrefRepository {
 
-fun shownCongrats(
-    appStore: AppStore
-): CongratsShownRepository = {
-    appStore.flow().map { Validated.Valid(it) }
-}
+    override fun getToken(): Flow<DomainResult<Token>> =
+        tokenStore.flow().map { token ->
+            token?.let { Validated.Valid(it) }
+                ?: Validated.Invalid(DomainError.NotFound)
+        }
 
-fun changeShownCongratsStatus(
-    appStore: AppStore
-): ChangeCongratsShownRepository = {
-    flow {
+    override fun getCongratsShown(): Flow<DomainResult<Boolean>> =
+        appStore.flow().map { Validated.Valid(it) }
+
+    override fun changeCongratsShown(): Flow<DomainResult<Unit>> = flow {
         appStore.save(true)
         emit(Validated.Valid(Unit))
     }
-}
 
-fun getAppLocale(
-    localeStore: LocaleStore
-): LocaleRepository = {
-    localeStore.flow()
-        .map { Validated.Valid(it) }
-        .catch { Validated.Invalid(listOf(DomainError.NotFound)) }
-}
+    override fun getLocale(): Flow<DomainResult<String?>> {
+        return localeStore.flow()
+            .map { lang ->
+                lang?.let { Validated.Valid(it) }
+                    ?:Validated.Invalid(DomainError.NotFound)
+            }
+    }
 
-fun setAppLocale(
-    localeStore: LocaleStore
-): SetLocaleRepository = { languageTag ->
-    localeStore.save(languageTag)
-    flowOf(Validated.Valid(Unit))
+    override suspend fun getLocaleTag(): String? = localeStore.read()
+
+
+    override fun setLocale(locale: String): Flow<DomainResult<Unit>> = flow {
+        localeStore.save(locale)
+        emit(Validated.Valid(Unit))
+    }
 }

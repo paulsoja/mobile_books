@@ -7,8 +7,10 @@ import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.Token
 import kotlinx.coroutines.flow.Flow
 
-typealias LoginRepository = suspend (CredentialsApiRequest) -> Flow<DomainResult<Token>>
-typealias RegisterRepository = (CredentialsApiRequest) -> Flow<DomainResult<String>>
-typealias OtpRepository = suspend (OtpCredentialsApiRequest) -> Flow<DomainResult<Token>>
-typealias RequestOtpRepository = suspend (Email.Valid) -> Flow<DomainResult<Unit>>
-typealias LogoutRepository = suspend () -> Flow<DomainResult<Unit>>
+interface AuthRepository {
+    fun login(credentials: CredentialsApiRequest): Flow<DomainResult<Token>>
+    fun register(credentials: CredentialsApiRequest): Flow<DomainResult<String>>
+    fun otp(credentials: OtpCredentialsApiRequest): Flow<DomainResult<Token>>
+    fun requestOtp(email: Email.Valid): Flow<DomainResult<Unit>>
+    fun logout(): Flow<DomainResult<Unit>>
+}

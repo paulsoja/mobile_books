@@ -1,10 +1,9 @@
 package com.spasinnya.mentoring.presentation.app
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.enums.Language
 import com.spasinnya.mentoring.domain.model.AuthSteps
-import com.spasinnya.mentoring.domain.usecase.auth.AuthStepsUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.CheckAuthStepsUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
@@ -15,10 +14,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class SessionViewModel(
-    private val checkAuthStepsUseCase: AuthStepsUseCase,
+    private val checkAuthStepsUseCase: CheckAuthStepsUseCase,
     private val getAppLocaleUseCase: GetAppLocaleUseCase,
-    private val setAppLocaleUseCase: SetAppLocaleUseCase,
-    private val handle: SavedStateHandle
+    private val setAppLocaleUseCase: SetAppLocaleUseCase
 ) : BaseMviViewModel<SessionContract.State, SessionContract.Event, SessionContract.Effect>(initialState = SessionContract.State()) {
 
     override fun handleEvent(event: SessionContract.Event) {

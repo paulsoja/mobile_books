@@ -49,6 +49,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.gcm)
+            implementation(libs.koin.android)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -79,6 +80,9 @@ kotlin {
             implementation(libs.datastore.preferences)
             implementation(libs.okio)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
     }
 }

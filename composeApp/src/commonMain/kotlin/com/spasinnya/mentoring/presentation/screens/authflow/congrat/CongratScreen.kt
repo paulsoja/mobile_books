@@ -103,16 +103,11 @@ fun setupCongratsScreenModel(
     navigateTo: () -> Unit
 ): Pair<CongratViewModel, CongratContract.State> =
     rememberScreenModel<CongratViewModel, CongratContract.State, CongratContract.Effect>(
-        create = { graph, _ ->
-            CongratViewModel(
-                changeCongratsShownStatusUseCase = graph.useCases.changeCongratsShownStatusUseCase,
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 CongratContract.Effect.NavigateToMain -> navigateTo.invoke()
             }
-        }
+        },
+        getState = { it.state },
+        getEffect = { it.effect }
     )

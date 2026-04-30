@@ -18,6 +18,7 @@ import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import org.jetbrains.compose.resources.stringResource
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun WeeksScreen(
@@ -67,18 +68,5 @@ fun setupWeeksScreenModel(
     bookId: String
 ): Pair<WeeksViewModel, WeeksContract.State> =
     rememberScreenModel<WeeksViewModel, WeeksContract.State, WeeksContract.Effect>(
-        create = { graph, handle ->
-            WeeksViewModel(
-                bookId = bookId,
-                weeksUseCase = graph.useCases.weeksUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
-        onEffect = { effect ->
-            when (effect) {
-                else -> {}
-            }
-        }
+        parameters = { parametersOf(bookId) }
     )

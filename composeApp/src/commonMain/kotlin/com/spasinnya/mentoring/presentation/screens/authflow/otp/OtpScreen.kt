@@ -41,15 +41,6 @@ fun setupOtpScreenModel(
     navigateTo: () -> Unit
 ): Pair<OtpViewModel, OtpContract.State> =
     rememberScreenModel<OtpViewModel, OtpContract.State, OtpContract.Effect>(
-        create = { graph, handle ->
-            OtpViewModel(
-                requestOtpUseCase = graph.useCases.requestOtpUseCase,
-                otpCodeUseCase = graph.useCases.otpUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 OtpContract.Effect.NavigateToCongratScreen -> navigateTo.invoke()

@@ -116,17 +116,6 @@ fun setupHomeScreenModel(
     showSnackbar: (String) -> Unit,
 ): Pair<HomeViewModel, HomeContract.State> =
     rememberScreenModel<HomeViewModel, HomeContract.State, HomeContract.Effect>(
-        create = { graph, handle ->
-            HomeViewModel(
-                logoutUseCase = graph.useCases.logoutUseCase,
-                getBooksUseCase = graph.useCases.booksUseCase,
-                purchaseBookUseCase = graph.useCases.purchaseBookUseCase,
-                setAppLocaleUseCase = graph.useCases.setAppLocaleUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()

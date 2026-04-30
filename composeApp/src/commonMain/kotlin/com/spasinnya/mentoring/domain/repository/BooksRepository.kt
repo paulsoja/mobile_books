@@ -6,7 +6,9 @@ import com.spasinnya.mentoring.domain.model.ParsedWeek
 import com.spasinnya.mentoring.domain.model.PurchaseStatus
 import kotlinx.coroutines.flow.Flow
 
-typealias BooksRepository = suspend () -> Flow<DomainResult<List<BookMeta>>>
-typealias PurchaseBookRepository = suspend (bookId: String) -> Flow<DomainResult<PurchaseStatus>>
-typealias WeeksRepository = suspend (bookId: String) -> Flow<DomainResult<BookMeta>>
-typealias BookReaderRepository = suspend (bookId: String, weekNumber: Int) -> Flow<DomainResult<ParsedWeek>>
+interface BooksRepository {
+    fun getBooks(): Flow<DomainResult<List<BookMeta>>>
+    fun purchaseBook(bookId: String): Flow<DomainResult<PurchaseStatus>>
+    fun getWeeks(bookId: String): Flow<DomainResult<BookMeta>>
+    fun observeBook(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedWeek>>
+}

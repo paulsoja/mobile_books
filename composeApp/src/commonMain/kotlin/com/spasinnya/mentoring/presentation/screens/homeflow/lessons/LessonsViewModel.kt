@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
@@ -15,8 +14,7 @@ import kotlinx.coroutines.launch
 class LessonsViewModel(
     private val bookId: String,
     private val weekNumber: Int,
-    private val importBookFromMarkdownUseCase: ObserveBookUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val importBookFromMarkdownUseCase: ObserveBookUseCase
 ) : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>(initialState = LessonsContract.State()) {
 
     override fun handleEvent(event: LessonsContract.Event) {

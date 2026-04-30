@@ -4,8 +4,11 @@ import com.spasinnya.mentoring.domain.model.DomainResult
 import com.spasinnya.mentoring.domain.model.Token
 import kotlinx.coroutines.flow.Flow
 
-typealias TokenRepository = suspend () -> Flow<DomainResult<Token>>
-typealias CongratsShownRepository = suspend () -> Flow<DomainResult<Boolean>>
-typealias ChangeCongratsShownRepository = suspend () -> Flow<DomainResult<Unit>>
-typealias LocaleRepository = suspend () -> Flow<DomainResult<String?>>
-typealias SetLocaleRepository = suspend (String) -> Flow<DomainResult<Unit>>
+interface PrefRepository {
+    fun getToken(): Flow<DomainResult<Token>>
+    fun getCongratsShown(): Flow<DomainResult<Boolean>>
+    fun changeCongratsShown(): Flow<DomainResult<Unit>>
+    fun getLocale(): Flow<DomainResult<String?>>
+    suspend fun getLocaleTag(): String?
+    fun setLocale(locale: String): Flow<DomainResult<Unit>>
+}

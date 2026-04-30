@@ -24,6 +24,7 @@ datastore                           = "1.2.0"
 okio                                = "3.16.4"
 kotlinx-datetime                    = "0.7.1-0.6.x-compat"
 firebase-bom                        = "34.10.0"
+koin                                = "4.0.0"
 
 [libraries]
 kotlin-test                         = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -60,6 +61,10 @@ okio                                = { module = "com.squareup.okio:okio", versi
 kotlinx-datetime                    = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 firebase-bom                        = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-gcm                        = { module = "com.google.firebase:firebase-messaging" }
+koin-core                           = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android                        = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose                        = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel              = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 
 [plugins]
 androidApplication                  = { id = "com.android.application", version.ref = "agp" }

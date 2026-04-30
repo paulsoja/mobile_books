@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,8 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedDropDown
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
@@ -30,20 +28,13 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
-import com.spasinnya.mentoring.presentation.di.viewModelFactory
 
 @Composable
 fun ProfileScreen(
     navigateBack: () -> Unit,
     navigateToChangePassword: () -> Unit,
 ) {
-    val factory = remember {
-        viewModelFactory { _, handle ->
-            ProfileViewModel(savedStateHandle = handle)
-        }
-    }
-    val viewModel: ProfileViewModel = viewModel(factory = factory)
-    val state: ProfileContract.State by viewModel.state.collectAsStateWithLifecycle()
+    val (viewModel, state) = rememberScreenModel<ProfileViewModel, ProfileContract.State, ProfileContract.Effect>()
 
     val cityOptions = listOf("Київ", "Вишневе", "Боярка", "Святопетрівське")
 

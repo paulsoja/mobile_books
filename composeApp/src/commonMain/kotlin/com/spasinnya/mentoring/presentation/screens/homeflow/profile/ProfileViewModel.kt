@@ -1,11 +1,8 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.profile
 
-import androidx.lifecycle.SavedStateHandle
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 
-class ProfileViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : BaseMviViewModel<ProfileContract.State, ProfileContract.Event, ProfileContract.Effect>(initialState = ProfileContract.State()) {
+class ProfileViewModel : BaseMviViewModel<ProfileContract.State, ProfileContract.Event, ProfileContract.Effect>(initialState = ProfileContract.State()) {
 
     override fun handleEvent(event: ProfileContract.Event) {
         when (event) {

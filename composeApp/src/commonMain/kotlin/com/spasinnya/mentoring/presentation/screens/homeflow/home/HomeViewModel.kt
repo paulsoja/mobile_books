@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.home
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.enums.Language
 import com.spasinnya.mentoring.domain.model.BookMeta
@@ -12,7 +11,6 @@ import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
-import com.spasinnya.mentoring.presentation.di.resetAppGraph
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.model.UiMessageType
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeContract.Effect.ShowSnackbar
@@ -20,15 +18,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val getBooksUseCase: GetBooksUseCase,
     private val purchaseBookUseCase: PurchaseBookUseCase,
-    private val setAppLocaleUseCase: SetAppLocaleUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val setAppLocaleUseCase: SetAppLocaleUseCase
 ) : BaseMviViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>(initialState = HomeContract.State()) {
 
     override fun handleEvent(event: HomeContract.Event) {
@@ -104,9 +100,6 @@ class HomeViewModel(
 
     private fun logout() = viewModelScope.launch {
         logoutUseCase.invoke()
-            .onCompletion {
-                resetAppGraph()
-            }
             .collect()
     }
 
