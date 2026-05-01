@@ -194,7 +194,7 @@ fun LessonsContent(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.Top
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         CoreTextBody(
                             text = "\uD83D\uDCD6",

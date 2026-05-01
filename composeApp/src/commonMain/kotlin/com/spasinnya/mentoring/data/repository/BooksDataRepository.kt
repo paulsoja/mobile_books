@@ -26,7 +26,7 @@ class BooksDataRepository(
 
     override fun getBooks(): Flow<DomainResult<List<BookMeta>>> = flow {
         val result = try {
-            val meta = bookFileDataSource.readAllMetaJson("en")
+            val meta = bookFileDataSource.readAllMetaJson("uk")
             Validated.Valid(meta.map { it.toDomain() })
         } catch (t: Throwable) {
             Validated.Invalid(t.toDataError())
