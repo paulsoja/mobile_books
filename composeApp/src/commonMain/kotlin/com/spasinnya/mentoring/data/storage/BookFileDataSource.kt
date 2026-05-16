@@ -1,8 +1,8 @@
 package com.spasinnya.mentoring.data.storage
 
-import books.composeapp.generated.resources.Res
 import com.spasinnya.mentoring.data.model.BookMetaResponse
 import com.spasinnya.mentoring.data.model.BooksIndexResponse
+import com.spasinnya.mentoring.generated.resources.Res
 import io.github.aakira.napier.Napier
 import kotlinx.serialization.json.Json
 import okio.FileSystem

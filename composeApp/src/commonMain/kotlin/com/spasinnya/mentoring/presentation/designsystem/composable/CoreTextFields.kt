@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_check
-import books.composeapp.generated.resources.ic_chevron_right
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_check
+import com.spasinnya.mentoring.generated.resources.ic_chevron_right
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputDefaults
 import org.jetbrains.compose.resources.painterResource

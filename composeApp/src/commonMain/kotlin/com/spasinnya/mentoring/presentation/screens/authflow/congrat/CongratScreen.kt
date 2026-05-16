@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_arrow_right
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_arrow_right
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton

@@ -40,11 +40,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_check
-import books.composeapp.generated.resources.img_cover_01
 import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
 import com.spasinnya.mentoring.domain.model.LessonBlock
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_check
+import com.spasinnya.mentoring.generated.resources.img_cover_01
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody

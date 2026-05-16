@@ -24,10 +24,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_back
-import books.composeapp.generated.resources.ic_close
-import books.composeapp.generated.resources.ic_logo
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_back
+import com.spasinnya.mentoring.generated.resources.ic_close
+import com.spasinnya.mentoring.generated.resources.ic_logo
 import com.spasinnya.mentoring.presentation.designsystem.UiDimensions
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource

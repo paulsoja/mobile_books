@@ -29,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_week
-import books.composeapp.generated.resources.ic_chevron_right
 import com.spasinnya.mentoring.domain.model.BookWeek
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_week
+import com.spasinnya.mentoring.generated.resources.ic_chevron_right
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCardWithContent
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody

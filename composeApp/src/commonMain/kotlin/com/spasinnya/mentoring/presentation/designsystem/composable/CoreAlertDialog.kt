@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_ok
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_ok
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
