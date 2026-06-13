@@ -1,0 +1,277 @@
+{
+  "id": "born_again_1_uk",
+  "bookNumber": 1,
+  "language": "uk",
+  "title": "Народження згори — Наставництво – I",
+  "subtitle": "Difficult questions",
+  "author": "Пилип Савочка",
+  "description": "Ця книга – результат довгих бесід із людьми, які ставили автору прямі запитання і хотіли отримати на них чесні відповіді.",
+  "coverImage": "cover.png",
+  "previewImage": "preview.png",
+  "productId": "app.book.born_again_1_uk",
+  "priceLabel": "Buy for $1",
+  "weeksCount": 10,
+  "lessonsPerWeek": 5,
+  "tableOfContents": [
+    {
+      "weekNumber": 1,
+      "weekTitle": "Складні питання",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Чи не змінив я віру"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "А що скажуть люди?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Вірити не нудно!"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Чи зможу я?"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Ідеали не всі!"
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "weekTitle": "Причина усіх бід – гріх",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Як усе було"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Головний гріх"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Отець гріха"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Наслідки гріха"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Всі методи марні"
+        }
+      ]
+    },
+    {
+      "weekNumber": 3,
+      "weekTitle": "Викупна сила Христа",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Чому Ісус?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Як отримувати прощення"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Сила Крові Христа"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Завжди з нами!"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Ти зможеш з Ісусом!"
+        }
+      ]
+    },
+    {
+      "weekNumber": 4,
+      "weekTitle": "Моя нова сім’я - ЦЕРКВА",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Для чого ходити в церкву"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Домашня церква – духовна сім’я"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Що і для чого робиться у церкві"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Пожертви та десятина"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Наставництво"
+        }
+      ]
+    },
+    {
+      "weekNumber": 5,
+      "weekTitle": "Молитва - це здорово!",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Що таке молитва"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Як молитися кожний день"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Як організувати молитву"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Види молитви"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Бог відповідає на молитви"
+        }
+      ]
+    },
+    {
+      "weekNumber": 6,
+      "weekTitle": "Найцікавіша та найкорисніша книга",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Хліб ніколи не набридне"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Трохи про Біблію"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Як читати Біблію"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Практичне використання Біблії"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Віра"
+        }
+      ]
+    },
+    {
+      "weekNumber": 7,
+      "weekTitle": "Як перемогти себе",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Образи та непрощення"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Залежності та твердині"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Прокляття та окультизм"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Ідоли"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Змінюючи спосіб життя"
+        }
+      ]
+    },
+    {
+      "weekNumber": 8,
+      "weekTitle": "Серйозні відносини через РАГС",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Вірність"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Водне хрещення"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Хрещення Святим Духом"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Дари Духа"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Екзамени"
+        }
+      ]
+    },
+    {
+      "weekNumber": 9,
+      "weekTitle": "Кімната спілкування з Богом",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Чи можу я чути голос Божий?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Що таке спілкування?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Як чути Бога"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Різні методи"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Регулярність і час дають результат"
+        }
+      ]
+    },
+    {
+      "weekNumber": 10,
+      "weekTitle": "Йдіть і не зупиняйтеся",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Велике доручення"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Служачи іншим, як Ісус"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Виконуючи Велике Доручення"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Посвячення"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "А що далі?"
+        }
+      ]
+    }
+  ]
+}
