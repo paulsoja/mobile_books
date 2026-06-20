@@ -5,7 +5,7 @@ weekTitle: Моя нова сім’я - ЦЕРКВА
 lessonsCount: 5
 language: uk
 ---
-# Week 3 Subject: Моя нова сім’я - ЦЕРКВА
+# Week 4 Subject: Моя нова сім’я - ЦЕРКВА
 ## Lesson 1 Для чого ходити в церкву?
 
 > Прочитайте Євреїв 10:25.
