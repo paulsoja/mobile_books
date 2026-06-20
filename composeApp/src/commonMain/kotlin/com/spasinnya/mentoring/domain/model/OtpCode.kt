@@ -1,11 +1,11 @@
 package com.spasinnya.mentoring.domain.model
 
 import androidx.compose.runtime.Composable
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.error_otp_invalid
-import books.composeapp.generated.resources.error_otp_not_filled
 import com.spasinnya.mentoring.domain.rules.RegexType
 import com.spasinnya.mentoring.domain.rules.isValid
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.error_otp_invalid
+import com.spasinnya.mentoring.generated.resources.error_otp_not_filled
 import com.spasinnya.mentoring.presentation.base.Validated
 import org.jetbrains.compose.resources.stringResource
 import kotlin.jvm.JvmInline

@@ -19,6 +19,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
@@ -35,14 +36,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_check
-import books.composeapp.generated.resources.img_cover_01
-import com.spasinnya.mentoring.domain.model.LessonContentType
+import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
+import com.spasinnya.mentoring.domain.model.LessonBlock
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_check
+import com.spasinnya.mentoring.generated.resources.img_cover_01
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import kotlinx.coroutines.launch
@@ -190,7 +194,7 @@ fun LessonsContent(
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
-                        verticalAlignment = Alignment.Top
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         CoreTextBody(
                             text = "\uD83D\uDCD6",
@@ -199,45 +203,91 @@ fun LessonsContent(
                                 fontSize = 32.sp
                             )
                         )
-                        CoreTextBody(
-                            text = "Давайте разом прочитаємо уривок із Біблії, який записано у 1 посланні до Коринтян 4:3-4",
-                            style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.Bold,
-                                color = Color(0xFFCF7D47),
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp
-                            )
-                        )
-                    }
-                    CoreTextBody(
-                        text = state.lessons[page].quote.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFFCF7D47),
-                            fontSize = 18.sp,
-                            lineHeight = 28.sp
-                        )
-                    )
-                }
 
-                state.lessons[page].content.forEach { content ->
-                    when (content.type) {
-                        LessonContentType.text -> CoreTextBody(
-                            text = content.data,
+                        state.lessons[page].quotes.getOrNull(0)?.let { quote ->
+                            CoreTextBody(
+                                text = quote.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFFCF7D47),
+                                    fontSize = 16.sp,
+                                    lineHeight = 24.sp
+                                )
+                            )
+                        }
+                    }
+
+                    state.lessons[page].quotes.getOrNull(1)?.let { quote ->
+                        CoreTextBody(
+                            text = quote.asAnnotatedString(
+                                highlightColor = Color.Green
+                            ),
                             style = MaterialTheme.typography.bodySmall.copy(
-                                fontWeight = FontWeight.Normal,
-                                color = Color(0xFF54595F),
+                                fontWeight = FontWeight.Medium,
+                                color = Color(0xFFCF7D47),
                                 fontSize = 18.sp,
                                 lineHeight = 28.sp
                             )
                         )
+                    }
+                }
 
-                        LessonContentType.image -> Image(
-                            painter = painterResource(resource = Res.drawable.img_cover_01),
-                            contentDescription = null,
-                            contentScale = ContentScale.FillWidth,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                state.lessons[page].blocks.forEach { block ->
+                    when (block) {
+                        is LessonBlock.Paragraph -> {
+                            CoreText(
+                                text = block.paragraph.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xFF54595F),
+                                    fontSize = 18.sp,
+                                    lineHeight = 28.sp
+                                ),
+                            )
+                        }
+
+                        is LessonBlock.Divider -> {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            )
+                        }
+
+                        is LessonBlock.Image -> {
+                            Image(
+                                modifier = Modifier.fillMaxWidth(),
+                                contentScale = ContentScale.Fit,
+                                contentDescription = null,
+                                painter = painterResource(Res.drawable.img_cover_01),
+                            )
+                        }
+
+                        is LessonBlock.Table -> {
+                            CoreText(
+                                text = "table",
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth().height(100.dp).background(Color.Green).padding(top = 12.dp),
+                            )
+                        }
+
+                        is LessonBlock.CenterText -> {
+                            CoreText(
+                                text = block.paragraph.asAnnotatedString(
+                                    highlightColor = Color.Green
+                                ),
+                                style = MaterialTheme.typography.bodySmall.copy(
+                                    fontWeight = FontWeight.Normal,
+                                    color = Color(0xFF54595F),
+                                    fontSize = 18.sp,
+                                    lineHeight = 28.sp
+                                ),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
                     }
                 }
             }

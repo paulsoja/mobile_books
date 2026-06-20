@@ -9,6 +9,12 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+compose.resources {
+    publicResClass = true
+    generateResClass = always
+    packageOfResClass = "com.spasinnya.mentoring.generated.resources"
+}
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -33,33 +39,23 @@ kotlin {
     }
     
     sourceSets {
-        all {
-            languageSettings {
-                compilerOptions {
-                    freeCompilerArgs.add("-Xexpect-actual-classes")
-                }
-            }
-        }
         androidMain.dependencies {
-            implementation(compose.preview)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.ktor.client.cio)
             implementation(libs.kotlinx.coroutines.android)
-            implementation(libs.androidx.lifecycle.viewmodel.compose)
-            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.gcm)
+            implementation(libs.koin.android)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.ktor.client.core)
@@ -74,11 +70,14 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.navigation.compose)
             api(libs.napier)
-            implementation(libs.inspektor)
+            //implementation(libs.inspektor)
             implementation(libs.datastore.core)
             implementation(libs.datastore.preferences)
             implementation(libs.okio)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
     }
 }
@@ -95,8 +94,8 @@ android {
         applicationId = "com.books.spasinnya"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "0.1.1"
     }
     packaging {
         resources {
@@ -115,6 +114,6 @@ android {
 }
 
 dependencies {
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
 }
 

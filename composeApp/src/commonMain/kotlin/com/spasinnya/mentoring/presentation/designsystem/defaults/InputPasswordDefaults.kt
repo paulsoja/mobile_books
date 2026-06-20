@@ -15,9 +15,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_eye_off
-import books.composeapp.generated.resources.ic_eye_on
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_eye_off
+import com.spasinnya.mentoring.generated.resources.ic_eye_on
 import org.jetbrains.compose.resources.painterResource
 
 interface InputDefaults {

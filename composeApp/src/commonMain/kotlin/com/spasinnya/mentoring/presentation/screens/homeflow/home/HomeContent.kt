@@ -46,15 +46,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_buy
-import books.composeapp.generated.resources.common_content
-import books.composeapp.generated.resources.common_mentorship
-import books.composeapp.generated.resources.common_open
-import books.composeapp.generated.resources.home_choose_book
-import books.composeapp.generated.resources.ic_arrow_right
-import books.composeapp.generated.resources.ic_content
-import com.spasinnya.mentoring.domain.model.ShortBook
+import com.spasinnya.mentoring.domain.model.BookMeta
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_buy
+import com.spasinnya.mentoring.generated.resources.common_content
+import com.spasinnya.mentoring.generated.resources.common_open
+import com.spasinnya.mentoring.generated.resources.home_choose_book
+import com.spasinnya.mentoring.generated.resources.ic_arrow_right
+import com.spasinnya.mentoring.generated.resources.ic_content
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -68,7 +67,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun HomeContent(
     state: HomeContract.State,
-    navigateToWeeks: (bookId: Int, bookNumber: String) -> Unit,
+    navigateToWeeks: (bookId: String, bookNumber: Int) -> Unit,
     padding: PaddingValues,
     viewModel: HomeViewModel,
 ) {
@@ -82,7 +81,7 @@ fun HomeContent(
         )
         Pager(
             list = state.books,
-            pageContent = { _: PagerState, item: ShortBook ->
+            pageContent = { _: PagerState, item: BookMeta ->
                 PagerCard(
                     item = item,
                     isLoading = state.isPurchaseLoading,
@@ -92,7 +91,7 @@ fun HomeContent(
                         )
                     },
                     onOpenClicked = {
-                        navigateToWeeks.invoke(item.id, item.number)
+                        navigateToWeeks.invoke(item.id, item.bookNumber)
                     }
                 )
             },
@@ -122,8 +121,8 @@ fun HomeContent(
 
 @Composable
 private fun Pager(
-    list: List<ShortBook>,
-    pageContent: @Composable (pagerState: PagerState, item: ShortBook) -> Unit,
+    list: List<BookMeta>,
+    pageContent: @Composable (pagerState: PagerState, item: BookMeta) -> Unit,
     indicatorContent: @Composable (pageCount: Int, currentPage: Int) -> Unit
 ) {
     Box(
@@ -167,9 +166,9 @@ private fun Pager(
 
 @Composable
 private fun PagerCard(
-    item: ShortBook,
+    item: BookMeta,
     isLoading: Boolean,
-    onPurchaseClicked: (bookId: Int) -> Unit,
+    onPurchaseClicked: (bookId: String) -> Unit,
     onOpenClicked: () -> Unit
 ) {
     Box(
@@ -189,15 +188,15 @@ private fun PagerCard(
 
 @Composable
 private fun PageItem(
-    item: ShortBook,
+    item: BookMeta,
     isLoading: Boolean,
     onContentClicked: () -> Unit,
-    onPurchaseClicked: (bookId: Int) -> Unit,
+    onPurchaseClicked: (bookId: String) -> Unit,
     onOpenClicked: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = coverPainter(bookNumber = item.number),
+            painter = coverPainter(bookNumber = item.bookNumber),
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
@@ -205,11 +204,11 @@ private fun PageItem(
             contentScale = ContentScale.FillWidth
         )
         Column(modifier = Modifier.fillMaxSize().padding(all = 16.dp)) {
-            CoreTextTitle(text = stringResource(Res.string.common_mentorship) + " - ${item.number}")
-            CoreTextSubtitle(text = item.title)
+            CoreTextTitle(text = item.title)
+            CoreTextSubtitle(text = item.subtitle)
             Spacer(modifier = Modifier.height(12.dp))
             CoreTextBody(
-                text = item.subtitle,
+                text = item.description,
                 modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -261,10 +260,10 @@ private fun PagerIndicator(
 
 @Composable
 fun BookCardBottomBar(
-    item: ShortBook,
+    item: BookMeta,
     isLoading: Boolean,
     onContentClicked: () -> Unit,
-    onPurchaseClicked: (bookId: Int) -> Unit,
+    onPurchaseClicked: (bookId: String) -> Unit,
     onOpenClicked: () -> Unit,
 ) = Row(
     modifier = Modifier.fillMaxWidth().animateContentSize(),

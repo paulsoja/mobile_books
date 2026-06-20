@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.weeks
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
@@ -12,9 +11,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class WeeksViewModel(
-    private val bookId: Int,
-    private val weeksUseCase: GetWeeksUseCase,
-    private val savedStateHandle: SavedStateHandle
+    private val bookId: String,
+    private val weeksUseCase: GetWeeksUseCase
 ) : BaseMviViewModel<WeeksContract.State, WeeksContract.Event, WeeksContract.Effect>(initialState = WeeksContract.State()) {
 
     override fun handleEvent(event: WeeksContract.Event) {
@@ -40,7 +38,7 @@ class WeeksViewModel(
                             )
                         }
                     )
-                    is Validated.Valid -> setState { copy(weeks = result.value) }
+                    is Validated.Valid -> setState { copy(bookMeta = result.value) }
                 }
             }
     }

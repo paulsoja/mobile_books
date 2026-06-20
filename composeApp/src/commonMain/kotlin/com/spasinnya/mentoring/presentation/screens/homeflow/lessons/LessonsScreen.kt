@@ -3,13 +3,17 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 import androidx.compose.runtime.Composable
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 
+import org.koin.core.parameter.parametersOf
+
 @Composable
 fun LessonsScreen(
-    weekId: Int,
+    bookId: String,
+    weekNumber: Int,
     navigateBack: () -> Unit,
 ) {
     val (viewModel, state) = setupLessonsScreenModel(
-        weekId = weekId,
+        bookId = bookId,
+        weekNumber = weekNumber,
     )
 
     LessonsContent(
@@ -20,22 +24,9 @@ fun LessonsScreen(
 
 @Composable
 fun setupLessonsScreenModel(
-    weekId: Int,
+    bookId: String,
+    weekNumber: Int,
 ): Pair<LessonsViewModel, LessonsContract.State> =
     rememberScreenModel<LessonsViewModel, LessonsContract.State, LessonsContract.Effect>(
-        create = { graph, handle ->
-            LessonsViewModel(
-                weekId = weekId,
-                lessonsUseCase = graph.useCases.lessonsUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
-        onEffect = { effect ->
-            when (effect) {
-
-                else -> {}
-            }
-        }
+        parameters = { parametersOf(bookId, weekNumber) }
     )

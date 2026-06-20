@@ -3,9 +3,9 @@ package com.spasinnya.mentoring.presentation.designsystem.composable.inputs
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.error_email_invalid
 import com.spasinnya.mentoring.domain.model.Email
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.error_email_invalid
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import org.jetbrains.compose.resources.stringResource

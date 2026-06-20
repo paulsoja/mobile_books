@@ -30,10 +30,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.error_otp_invalid
-import books.composeapp.generated.resources.error_otp_not_filled
 import com.spasinnya.mentoring.domain.model.OtpCode
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.error_otp_invalid
+import com.spasinnya.mentoring.generated.resources.error_otp_not_filled
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle

@@ -79,8 +79,8 @@ fun HomeFlowContainer(onLogout: () -> Unit) {
                 onActionClicked = {
 
                 },
-                navigateToLessons = { weekId ->
-                    navController.navigate(Screen.HomeFlow.LessonsScreen(weekId))
+                navigateToLessons = { bookId, weekNumber ->
+                    navController.navigate(Screen.HomeFlow.LessonsScreen(bookId, weekNumber))
                 }
             )
 
@@ -88,7 +88,8 @@ fun HomeFlowContainer(onLogout: () -> Unit) {
         composable<Screen.HomeFlow.LessonsScreen> {
             val params = it.toRoute<Screen.HomeFlow.LessonsScreen>()
             LessonsScreen(
-                weekId = params.weekId,
+                bookId = params.bookId,
+                weekNumber = params.weekNumber,
                 navigateBack = { navController.navigateUp() },
             )
         }

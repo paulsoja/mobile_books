@@ -1,0 +1,16 @@
+{
+  "books": [
+    {
+      "id": "born_again_1_en",
+      "language": "en"
+    },
+    {
+      "id": "born_again_1_uk",
+      "language": "uk"
+    },
+    {
+      "id": "available_about_god_and_the_bible_0_uk",
+      "language": "uk"
+    }
+  ]
+}

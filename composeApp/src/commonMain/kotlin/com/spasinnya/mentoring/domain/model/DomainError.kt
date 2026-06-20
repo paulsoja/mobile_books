@@ -21,6 +21,14 @@ sealed interface DomainError {
     data object ClientError : DomainError
     data object ServerError : DomainError
     data object Serialization : DomainError
+
+    data object FileNotFound : DomainError
+    data object FileRead : DomainError
+    data object EmptyContent : DomainError
+    data object InvalidBookFormat : DomainError
+    data object InvalidWeekFormat : DomainError
+    data object InvalidLessonFormat : DomainError
+
     data object Unknown : DomainError
 }
 

@@ -11,9 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_check
-import books.composeapp.generated.resources.ic_logo
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_check
+import com.spasinnya.mentoring.generated.resources.ic_logo
+import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
@@ -24,8 +25,7 @@ import org.jetbrains.compose.resources.vectorResource
 fun NewPasswordScreen(
     navigateToSuccess: () -> Unit,
 ) {
-
-    //val viewModel: NewPasswordViewModel = viewModel(factory = createNewPasswordViewModel)
+    val (viewModel, state) = rememberScreenModel<NewPasswordViewModel, NewPasswordContract.State, NewPasswordContract.Effect>()
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),

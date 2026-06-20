@@ -1,12 +1,12 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.dialog
 
 import androidx.compose.runtime.Composable
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_ok
-import books.composeapp.generated.resources.error_check_connection
-import books.composeapp.generated.resources.error_no_connection
-import books.composeapp.generated.resources.error_try_again_later
-import books.composeapp.generated.resources.error_unexpected
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_ok
+import com.spasinnya.mentoring.generated.resources.error_check_connection
+import com.spasinnya.mentoring.generated.resources.error_no_connection
+import com.spasinnya.mentoring.generated.resources.error_try_again_later
+import com.spasinnya.mentoring.generated.resources.error_unexpected
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import org.jetbrains.compose.resources.stringResource
 

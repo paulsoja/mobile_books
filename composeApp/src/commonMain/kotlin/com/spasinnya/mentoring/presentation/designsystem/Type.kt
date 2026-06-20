@@ -4,16 +4,16 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.raleway_black
-import books.composeapp.generated.resources.raleway_bold
-import books.composeapp.generated.resources.raleway_extra_bold
-import books.composeapp.generated.resources.raleway_extra_light
-import books.composeapp.generated.resources.raleway_light
-import books.composeapp.generated.resources.raleway_medium
-import books.composeapp.generated.resources.raleway_regular
-import books.composeapp.generated.resources.raleway_semi_bold
-import books.composeapp.generated.resources.raleway_thin
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.raleway_black
+import com.spasinnya.mentoring.generated.resources.raleway_bold
+import com.spasinnya.mentoring.generated.resources.raleway_extra_bold
+import com.spasinnya.mentoring.generated.resources.raleway_extra_light
+import com.spasinnya.mentoring.generated.resources.raleway_light
+import com.spasinnya.mentoring.generated.resources.raleway_medium
+import com.spasinnya.mentoring.generated.resources.raleway_regular
+import com.spasinnya.mentoring.generated.resources.raleway_semi_bold
+import com.spasinnya.mentoring.generated.resources.raleway_thin
 import org.jetbrains.compose.resources.Font
 
 @Composable

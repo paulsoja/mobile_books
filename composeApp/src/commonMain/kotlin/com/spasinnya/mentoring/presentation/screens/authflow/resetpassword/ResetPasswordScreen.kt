@@ -15,13 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.auth_recall_password
-import books.composeapp.generated.resources.auth_reset_password
-import books.composeapp.generated.resources.auth_reset_password_process
-import books.composeapp.generated.resources.auth_reset_password_type_email
-import books.composeapp.generated.resources.ic_logo
-import books.composeapp.generated.resources.ic_repeat
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.auth_recall_password
+import com.spasinnya.mentoring.generated.resources.auth_reset_password
+import com.spasinnya.mentoring.generated.resources.auth_reset_password_process
+import com.spasinnya.mentoring.generated.resources.auth_reset_password_type_email
+import com.spasinnya.mentoring.generated.resources.ic_logo
+import com.spasinnya.mentoring.generated.resources.ic_repeat
+import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
@@ -39,8 +40,7 @@ fun ResetPasswordScreen(
     navigateToLogin: () -> Unit,
     navigateToOtp: () -> Unit
 ) {
-
-    //val viewModel: ResetPasswordViewModel = viewModel(factory = createResetPasswordViewModel)
+    val (viewModel, state) = rememberScreenModel<ResetPasswordViewModel, ResetPasswordContract.State, ResetPasswordContract.Effect>()
     var email by remember { mutableStateOf("") }
 
     Column(

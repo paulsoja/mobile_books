@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.login
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.model.Credentials
 import com.spasinnya.mentoring.domain.model.Email
@@ -16,8 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase,
-    private val savedState: SavedStateHandle
+    private val loginUseCase: LoginUseCase
 ) : BaseMviViewModel<LoginContract.State, LoginContract.Event, LoginContract.Effect>(LoginContract.State()) {
 
     override fun handleEvent(event: LoginContract.Event) {

@@ -11,21 +11,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_mentorship
-import books.composeapp.generated.resources.ic_content
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_mentorship
+import com.spasinnya.mentoring.generated.resources.ic_content
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import org.jetbrains.compose.resources.stringResource
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun WeeksScreen(
-    bookNumber: String,
-    bookId: Int,
+    bookNumber: Int,
+    bookId: String,
     navigateBack: () -> Unit,
     onActionClicked: () -> Unit,
-    navigateToLessons: (weekId: Int) -> Unit
+    navigateToLessons: (bookId: String, weekNumber: Int) -> Unit
 ) {
     val (viewModel, state) = setupWeeksScreenModel(bookId)
 
@@ -54,7 +55,9 @@ fun WeeksScreen(
                 bookNumber = bookNumber,
                 state = state,
                 paddingValues = it,
-                navigateToLessons = navigateToLessons
+                navigateToLessons = {
+                    navigateToLessons.invoke(bookId, it)
+                }
             )
         }
     )
@@ -62,21 +65,8 @@ fun WeeksScreen(
 
 @Composable
 fun setupWeeksScreenModel(
-    bookId: Int
+    bookId: String
 ): Pair<WeeksViewModel, WeeksContract.State> =
     rememberScreenModel<WeeksViewModel, WeeksContract.State, WeeksContract.Effect>(
-        create = { graph, handle ->
-            WeeksViewModel(
-                bookId = bookId,
-                weeksUseCase = graph.useCases.weeksUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
-        onEffect = { effect ->
-            when (effect) {
-                else -> {}
-            }
-        }
+        parameters = { parametersOf(bookId) }
     )

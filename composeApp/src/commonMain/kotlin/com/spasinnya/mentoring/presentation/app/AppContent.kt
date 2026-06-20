@@ -94,16 +94,4 @@ fun AppContent() {
 
 @Composable
 fun setupSessionScreenModel(): Pair<SessionViewModel, SessionContract.State> =
-    rememberScreenModel<SessionViewModel, SessionContract.State, SessionContract.Effect>(
-        create = { graph, handle ->
-            SessionViewModel(
-                checkAuthStepsUseCase = graph.useCases.authStepsUseCase,
-                getAppLocaleUseCase = graph.useCases.getAppLocaleUseCase,
-                setAppLocaleUseCase = graph.useCases.setAppLocaleUseCase,
-                handle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
-        onEffect = { effect -> }
-    )
+    rememberScreenModel<SessionViewModel, SessionContract.State, SessionContract.Effect>()

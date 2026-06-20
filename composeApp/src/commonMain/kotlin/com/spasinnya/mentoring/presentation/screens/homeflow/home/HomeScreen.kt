@@ -13,8 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.ic_settings
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.ic_settings
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
@@ -33,7 +33,7 @@ fun HomeScreen(
     navigateToAuthors: () -> Unit,
     navigateToSpasinnyaBooks: () -> Unit,
     navigateToSpasinnyaChurch: () -> Unit,
-    navigateToWeeks: (bookId: Int, bookNumber: String) -> Unit,
+    navigateToWeeks: (bookId: String, bookNumber: Int) -> Unit,
     navigateToLogin: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -116,17 +116,6 @@ fun setupHomeScreenModel(
     showSnackbar: (String) -> Unit,
 ): Pair<HomeViewModel, HomeContract.State> =
     rememberScreenModel<HomeViewModel, HomeContract.State, HomeContract.Effect>(
-        create = { graph, handle ->
-            HomeViewModel(
-                logoutUseCase = graph.useCases.logoutUseCase,
-                getBooksUseCase = graph.useCases.booksUseCase,
-                purchaseBookUseCase = graph.useCases.purchaseBookUseCase,
-                setAppLocaleUseCase = graph.useCases.setAppLocaleUseCase,
-                savedStateHandle = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()

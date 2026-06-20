@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.presentation.screens.authflow.register
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.model.Credentials
 import com.spasinnya.mentoring.domain.model.Email
@@ -16,8 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val registerUseCase: RegisterUseCase,
-    private val savedState: SavedStateHandle
+    private val registerUseCase: RegisterUseCase
 ) : BaseMviViewModel<RegisterContract.State, RegisterContract.Event, RegisterContract.Effect>(initialState = RegisterContract.State()) {
 
     override fun handleEvent(event: RegisterContract.Event) {

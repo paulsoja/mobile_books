@@ -1,7 +1,5 @@
 package com.spasinnya.mentoring.data.net
 
-import com.gyanoba.inspektor.Inspektor
-import com.gyanoba.inspektor.UnstableInspektorAPI
 import com.spasinnya.mentoring.data.net.plugin.Connectivity
 import com.spasinnya.mentoring.data.net.plugin.NetStatus
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
@@ -40,7 +38,7 @@ fun createHttpClient(
 ): HttpClient {
     val client = HttpClient(platformEngine()) {
         connectivityPlugin()
-        inspektorPlugin()
+        //inspektorPlugin()
         contentNegotiationPlugin()
         loggingPlugin()
         httpTimeoutPlugin()
@@ -76,14 +74,14 @@ inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.connectivity
     }
 }
 
-@OptIn(UnstableInspektorAPI::class)
+/*@OptIn(UnstableInspektorAPI::class)
 inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.inspektorPlugin() {
     install(Inspektor) {
         level = com.gyanoba.inspektor.LogLevel.BODY
         sanitizeHeader { it == "Authorization" }
         showNotifications = true
     }
-}
+}*/
 
 inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.contentNegotiationPlugin() {
     install(ContentNegotiation) {

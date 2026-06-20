@@ -38,14 +38,6 @@ fun setupLoginScreenModel(
     onNavigateToHome: () -> Unit
 ): Pair<LoginViewModel, LoginContract.State> =
     rememberScreenModel<LoginViewModel, LoginContract.State, LoginContract.Effect>(
-        create = { graph, handle ->
-            LoginViewModel(
-                loginUseCase = graph.useCases.loginUseCase,
-                savedState = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 LoginContract.Effect.NavigateToMain -> onNavigateToHome()

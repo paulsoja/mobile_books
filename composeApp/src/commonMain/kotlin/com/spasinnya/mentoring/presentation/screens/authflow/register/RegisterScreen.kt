@@ -36,14 +36,6 @@ fun setupRegisterScreenModel(
     navigateToOtp: (String) -> Unit
 ): Pair<RegisterViewModel, RegisterContract.State> =
     rememberScreenModel<RegisterViewModel, RegisterContract.State, RegisterContract.Effect>(
-        create = { graph, handle ->
-            RegisterViewModel(
-                registerUseCase = graph.useCases.registerUseCase,
-                savedState = handle
-            )
-        },
-        getState = { it.state },
-        getEffect = { it.effect },
         onEffect = { effect ->
             when (effect) {
                 is RegisterContract.Effect.NavigateToOtp -> navigateToOtp.invoke(effect.email)

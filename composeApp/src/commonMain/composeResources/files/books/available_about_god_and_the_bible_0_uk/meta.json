@@ -1,0 +1,173 @@
+{
+  "id": "available_about_god_and_the_bible_0_uk",
+  "bookNumber": 0,
+  "language": "uk",
+  "title": "Доступно про Бога та Біблію",
+  "subtitle": "Ви хотіли про це запитати",
+  "author": "Микола Савчук",
+  "description": "Ця книга – результат довгих бесід із людьми, які ставили автору прямі запитання і хотіли отримати на них чесні відповіді: «Чи існує Бог і, якщо так, то який Він? У чому сенс життя, і чому в світі стільки страждань? Як розібратися у величезній кількості релігій, і чи можна вірити Біблії? Врешті решт, як усе це допоможе мені впоратися із повсякденними проблемами, позбутися внутрішніх страждань і стати по-справжньому щасливим?»",
+  "coverImage": "cover.png",
+  "previewImage": "preview.png",
+  "productId": "app.book.available_about_god_and_the_bible_0_uk",
+  "priceLabel": "Buy for $1",
+  "weeksCount": 6,
+  "lessonsPerWeek": 5,
+  "tableOfContents": [
+    {
+      "weekNumber": 1,
+      "weekTitle": "Важкі запитання",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Чи існує Бог?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Що є добрим, а що поганим?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Чому у світі стільки страждань?"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Бог один, а релігій багато?"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Як щодо «хрестових походів»?"
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "weekTitle": "Якщо Бог є, то який Він?",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Найпрекрасніша Особистість"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Ісус – Дорога, Правда і Життя"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Навіщо потрібне пекло?"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Дорога ціна"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Воістину воскрес!"
+        }
+      ]
+    },
+    {
+      "weekNumber": 3,
+      "weekTitle": "Чи можна вірити Біблії?",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Єдина у своєму роді"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Хто це написав?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Здійснені пророцтва"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Змінені долі"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Що робити з «незрозумілими місцями»?"
+        }
+      ]
+    },
+    {
+      "weekNumber": 4,
+      "weekTitle": "Таємниці духовного світу",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Чи варто сподіватися на чудо?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Обережно, підробка!"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Війна світів"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Майбутнє Всесвіту"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Небеса"
+        }
+      ]
+    },
+    {
+      "weekNumber": 5,
+      "weekTitle": "Як стати щасливим?",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Що таке щастя?"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Як звільнитися від тягаря образи?"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "Як позбутися почуття провини?"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Як подолати шкідливі звички?"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Як реагувати на труднощі?"
+        }
+      ]
+    },
+    {
+      "weekNumber": 6,
+      "weekTitle": "А що далі?",
+      "lessons": [
+        {
+          "lessonNumber": 1,
+          "title": "Довірливі відносини"
+        },
+        {
+          "lessonNumber": 2,
+          "title": "Ми не одні!"
+        },
+        {
+          "lessonNumber": 3,
+          "title": "У яку церкву піти?"
+        },
+        {
+          "lessonNumber": 4,
+          "title": "Так в чому ж сенс?"
+        },
+        {
+          "lessonNumber": 5,
+          "title": "Крок назустріч"
+        }
+      ]
+    }
+  ]
+}

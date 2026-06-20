@@ -29,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import books.composeapp.generated.resources.Res
-import books.composeapp.generated.resources.common_week
-import books.composeapp.generated.resources.ic_chevron_right
-import com.spasinnya.mentoring.domain.model.Week
+import com.spasinnya.mentoring.domain.model.BookWeek
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_week
+import com.spasinnya.mentoring.generated.resources.ic_chevron_right
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCardWithContent
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
@@ -42,7 +42,7 @@ import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun WeeksContent(
-    bookNumber: String,
+    bookNumber: Int,
     state: WeeksContract.State,
     paddingValues: PaddingValues,
     navigateToLessons: (weekId: Int) -> Unit
@@ -74,9 +74,9 @@ fun WeeksContent(
             ) {
                 CoreCircularProgressIndicator()
             }
-            false -> when (state.weeks.isEmpty()) {
+            false -> when (state.bookMeta == null) {
                 true -> Unit // TODO: empty state
-                false -> state.weeks.forEach { week ->
+                false -> state.bookMeta.tableOfContents.forEach { week ->
                     WeekItem(
                         week = week,
                         onClick = { weekId -> navigateToLessons.invoke(weekId) }
@@ -89,14 +89,14 @@ fun WeeksContent(
 
 @Composable
 fun WeekItem(
-    week: Week,
+    week: BookWeek,
     onClick: (weekId: Int) -> Unit
 ) {
     CoreCardWithContent(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         contentPadding = 0.dp,
         onClick = {
-            onClick.invoke(week.id)
+            onClick.invoke(week.weekNumber)
         },
     ) {
         Row(
@@ -109,14 +109,14 @@ fun WeekItem(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 CoreTextBody(
-                    text = stringResource(Res.string.common_week) + " ${week.number}",
+                    text = stringResource(Res.string.common_week) + " ${week.weekNumber}",
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = Color(0xFFDFA672),
                         fontWeight = FontWeight.Normal
                     )
                 )
                 CoreTextBody(
-                    text = week.title,
+                    text = week.weekTitle,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF3C4E73),
