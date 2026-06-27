@@ -44,7 +44,7 @@ import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
 import com.spasinnya.mentoring.domain.model.LessonBlock
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.ic_check
-import com.spasinnya.mentoring.generated.resources.img_cover_01
+import com.spasinnya.mentoring.presentation.designsystem.AppResources
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
@@ -261,7 +261,7 @@ fun LessonsContent(
                                 modifier = Modifier.fillMaxWidth(),
                                 contentScale = ContentScale.Fit,
                                 contentDescription = null,
-                                painter = painterResource(Res.drawable.img_cover_01),
+                                painter = painterResource(AppResources.drawable(block.path)),
                             )
                         }
 
