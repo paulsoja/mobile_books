@@ -67,7 +67,6 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .systemBarsPadding()
-                .navigationBarsPadding()
         ) {
             CoreTopAppBar(
                 title = "Мій профайл",

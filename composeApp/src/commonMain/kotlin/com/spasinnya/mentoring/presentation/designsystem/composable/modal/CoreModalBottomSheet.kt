@@ -1,7 +1,6 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.modal
 
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +26,6 @@ fun <A> CoreModalBottomSheet(
 
     containerColor: Color = Color(0xFFF5F7FC), // TODO move to design system
     showDragHandle: Boolean = true,
-    enablePadding: Boolean = true,
     contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
 
     content: @Composable CoreBottomSheetScope<A>.() -> Unit
@@ -43,7 +41,7 @@ fun <A> CoreModalBottomSheet(
     fun dismissInternal(after: (() -> Unit)? = null) {
         coroutineScope.launch {
             if (sheetState.isVisible) {
-                sheetState.hide() // ✅ close animation
+                sheetState.hide()
             }
             after?.invoke()
             latestOnDismissed()
@@ -65,10 +63,10 @@ fun <A> CoreModalBottomSheet(
     }
 
     ModalBottomSheet(
-        modifier = if (enablePadding) modifier.statusBarsPadding() else modifier,
-        onDismissRequest = { sheetScope.dismiss() }, // ✅ no recursion
+        modifier = modifier,
+        onDismissRequest = { sheetScope.dismiss() },
         sheetState = sheetState,
-        dragHandle = { if (showDragHandle) DragHandlerBottomSheet() else null },
+        dragHandle = { if (showDragHandle) DragHandlerBottomSheet() },
         containerColor = containerColor,
         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         contentWindowInsets = contentWindowInsets

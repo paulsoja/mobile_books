@@ -2,8 +2,8 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.weeks
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -34,8 +34,7 @@ fun WeeksScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(brush = Brush.verticalGradient(colors = listOf(Color(0xFFF5F7FC), Color(0xFFE7F2F8))))
-            .systemBarsPadding()
-            .navigationBarsPadding(),
+            .statusBarsPadding(),
         containerColor = Color.Transparent,
         topBar = {
             CoreTopAppBar(
