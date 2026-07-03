@@ -32,6 +32,8 @@ import com.spasinnya.mentoring.presentation.designsystem.UiDimensions
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.vectorResource
 
+private val NavigationIconBalanceWidth = 56.dp
+
 @Composable
 fun CoreTopBar(
     actionIcon: DrawableResource,
@@ -109,9 +111,13 @@ fun CoreTopAppBar(
                 )
             }
         },
-        actions = { actions?.invoke() },
+        actions = {
+            when {
+                actions != null -> actions.invoke()
+                onBackClick != null -> Spacer(Modifier.width(NavigationIconBalanceWidth))
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors().copy(containerColor = Color(0xFFF5F7FC)),
-        //elevation = 0.dp
     )
 }
 

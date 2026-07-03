@@ -37,6 +37,7 @@ fun CoreOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     errorText: String = "",
+    enabled: Boolean = true,
     inputDefaults: InputDefaults = InputCommonDefaults(),
 ) {
     OutlinedTextField(
@@ -49,23 +50,26 @@ fun CoreOutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
+        enabled = enabled,
         singleLine = inputDefaults.singleLine,
         shape = inputDefaults.shape,
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = inputDefaults.keyboardType),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
+            disabledContainerColor = Color(0xFFE7EBF4),
             errorContainerColor = Color.Transparent,
             focusedTextColor = Color(0xFF54595F),
             unfocusedTextColor = Color(0XFF54595F),
+            disabledTextColor = Color(0xFFB6C3D8),
             unfocusedPlaceholderColor = Color(0xFFB6C3D8),
             focusedPlaceholderColor = Color(0xFFB6C3D8),
+            disabledPlaceholderColor = Color(0xFFB6C3D8),
             errorSupportingTextColor = Color(0xFFED1A3D),
             errorIndicatorColor = Color(0xFFED1A3D),
             focusedIndicatorColor = Color(0xFFB6C3D8),
             unfocusedIndicatorColor = Color(0xFFB6C3D8),
-            disabledIndicatorColor = Color(0xFFB6C3D8),
+            disabledIndicatorColor = Color(0xFFDDE4EF),
         ),
         visualTransformation = inputDefaults.visualTransformation(),
         placeholder = {
@@ -105,7 +109,7 @@ fun CoreOutlinedDropDown(
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
+                disabledContainerColor = Color(0xFFE7EBF4),
                 errorContainerColor = Color.Transparent,
                 focusedTextColor = Color(0xFF54595F),
                 unfocusedTextColor = Color(0XFF54595F),
@@ -115,7 +119,7 @@ fun CoreOutlinedDropDown(
                 disabledPlaceholderColor = Color(0xFFB6C3D8),
                 focusedIndicatorColor = Color(0xFFB6C3D8),
                 unfocusedIndicatorColor = Color(0xFFB6C3D8),
-                disabledIndicatorColor = Color(0xFFB6C3D8),
+                disabledIndicatorColor = Color(0xFFDDE4EF),
             ),
             placeholder = {
                 inputDefaults.placeholder.takeIf { it.isNotEmpty() }?.let {

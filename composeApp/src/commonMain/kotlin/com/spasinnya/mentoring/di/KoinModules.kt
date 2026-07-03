@@ -5,10 +5,12 @@ import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
 import com.spasinnya.mentoring.data.repository.AuthDataRepository
 import com.spasinnya.mentoring.data.repository.BooksDataRepository
 import com.spasinnya.mentoring.data.repository.PrefDataRepository
+import com.spasinnya.mentoring.data.repository.ProfileDataRepository
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
 import com.spasinnya.mentoring.domain.repository.AuthRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.PrefRepository
+import com.spasinnya.mentoring.domain.repository.ProfileRepository
 import com.spasinnya.mentoring.domain.usecase.auth.ChangeCongratsShownStatusUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.CheckAuthStepsUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.ConfirmOtpCodeUseCase
@@ -20,6 +22,8 @@ import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
+import com.spasinnya.mentoring.domain.usecase.profile.GetProfileUseCase
+import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.app.SessionViewModel
@@ -59,6 +63,7 @@ val repositoryModule = module {
     singleOf(::AuthDataRepository) bind AuthRepository::class
     singleOf(::BooksDataRepository) bind BooksRepository::class
     singleOf(::PrefDataRepository) bind PrefRepository::class
+    singleOf(::ProfileDataRepository) bind ProfileRepository::class
 }
 
 val useCaseModule = module {
@@ -73,6 +78,8 @@ val useCaseModule = module {
     factoryOf(::PurchaseBookUseCase)
     factoryOf(::GetWeeksUseCase)
     factoryOf(::ObserveBookUseCase)
+    factoryOf(::GetProfileUseCase)
+    factoryOf(::UpdateProfileUseCase)
     factoryOf(::GetAppLocaleUseCase)
     factoryOf(::SetAppLocaleUseCase)
 }
