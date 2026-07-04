@@ -92,3 +92,15 @@ inline fun <reified Res> HttpClient.getFlow(
     bodyObj = null,
     builder = builder
 )
+
+inline fun <Req : Any, reified Res> HttpClient.patchFlow(
+    path: String,
+    body: Req? = null,
+    noinline builder: HttpRequestBuilder.() -> Unit = {}
+): Flow<DataResult<Res>> = requestDataFlow(
+    json = json,
+    method = HttpMethod.Patch,
+    path = path,
+    bodyObj = body,
+    builder = builder
+)

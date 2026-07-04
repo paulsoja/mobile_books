@@ -36,6 +36,7 @@ fun CoreButton(
     elevation: ButtonElevation? = null,
     border: BorderStroke? = null,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
+    enabled: Boolean = true,
     content: @Composable () -> Unit
 ) {
     Button(
@@ -44,6 +45,7 @@ fun CoreButton(
         elevation = elevation,
         border = border,
         colors = colors,
+        enabled = enabled,
         onClick = onClick) {
             content()
     }
@@ -74,6 +76,7 @@ fun CorePrimaryButton(
     text: String,
     iconAfter: DrawableResource? = null,
     iconTint: Color = Color.Unspecified,
+    enabled: Boolean = true,
     onClick: () -> Unit,
 ) {
     CoreButton(
@@ -82,6 +85,7 @@ fun CorePrimaryButton(
         elevation = null,
         border = border,
         colors = colors,
+        enabled = enabled,
         onClick = onClick,
         content = {
             iconBefore?.let {

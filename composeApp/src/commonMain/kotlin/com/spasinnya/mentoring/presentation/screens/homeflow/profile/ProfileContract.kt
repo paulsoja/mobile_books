@@ -14,12 +14,12 @@ interface ProfileContract {
     sealed class Event {
         data class UpdateFirstName(val value: String) : Event()
         data class UpdateLastName(val value: String) : Event()
-        data class UpdateEmail(val value: String) : Event()
-        data class UpdateCity(val value: String) : Event()
-        data class UpdateChurch(val value: String) : Event()
+        data object SaveProfile : Event()
     }
 
     sealed class Effect {
         data object NavigateToChangePassword : Effect()
+        data object ProfileSaved : Effect()
+        data object SaveFailed : Effect()
     }
 }
