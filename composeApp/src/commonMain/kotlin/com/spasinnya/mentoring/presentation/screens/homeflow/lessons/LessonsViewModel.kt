@@ -15,7 +15,7 @@ class LessonsViewModel(
     private val bookId: String,
     private val weekNumber: Int,
     private val importBookFromMarkdownUseCase: ObserveBookUseCase
-) : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>(initialState = LessonsContract.State()) {
+) : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>(initialState = LessonsContract.State(weekNumber = weekNumber)) {
 
     override fun handleEvent(event: LessonsContract.Event) {
         when (event) {
@@ -34,8 +34,6 @@ class LessonsViewModel(
                 Napier.d { "importBookFromMarkdownUseCase: catch=${it.message}" }
             }
             .collectLatest { result ->
-                Napier.d { "importBookFromMarkdownUseCase: collect=${result}" }
-                Napier.d { "importBookFromMarkdownUseCase: weekId=$weekNumber" }
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
                         error = result.error,
@@ -46,26 +44,13 @@ class LessonsViewModel(
                         }
                     )
 
-                    is Validated.Valid -> setState { copy(lessons = result.value.lessons) }
+                    is Validated.Valid -> setState {
+                        copy(
+                            lessons = result.value.lessons,
+                            weekTitle = result.value.weekTitle
+                        )
+                    }
                 }
             }
-
-
-        /*lessonsUseCase.invoke(weekId)
-            .withLoading { loading -> setState { copy(isLoading = loading) } }
-            .collectLatest { result ->
-                when (result) {
-                    is Validated.Invalid -> handleDomainErrors(
-                        error = result.error,
-                        reduce = { errorType ->
-                            copy(
-                                isLoading = false,
-                            )
-                        }
-                    )
-
-                    is Validated.Valid -> setState { copy(lessons = result.value) }
-                }
-            }*/
     }
 }

@@ -5,6 +5,8 @@ import com.spasinnya.mentoring.domain.model.ParsedLesson
 interface LessonsContract {
     data class State(
         val lessons: List<ParsedLesson> = emptyList(),
+        val weekNumber: Int,
+        val weekTitle: String = "",
         val isLoading: Boolean = false,
     )
 

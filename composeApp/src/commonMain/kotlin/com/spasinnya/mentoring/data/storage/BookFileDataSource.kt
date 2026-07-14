@@ -50,7 +50,7 @@ class BookFileDataSource(
     suspend fun readAllMetaJson(
         language: String,
     ): List<BookMetaResponse> =
-        readBookIds(language).map { bookId ->
-            readMetaJson(bookId)
-        }
+        readBookIds(language)
+            .map { bookId -> readMetaJson(bookId) }
+            .sortedBy { it.bookNumber }
 }

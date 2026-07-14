@@ -43,8 +43,6 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.kotlinx.coroutines.android)
-            implementation(project.dependencies.platform(libs.firebase.bom))
-            implementation(libs.firebase.gcm)
             implementation(libs.koin.android)
         }
         iosMain.dependencies {

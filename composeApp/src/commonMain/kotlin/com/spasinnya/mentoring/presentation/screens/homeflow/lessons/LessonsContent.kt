@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -64,8 +63,8 @@ fun LessonsContent(
             .statusBarsPadding()
     ) {
         CoreTopAppBar(
-            title = "Тиждень 1",
-            subtitle = "«Особисте життя з Богом»",
+            title = "Тиждень ${state.weekNumber}",
+            subtitle = state.weekTitle,
             onBackClick = navigateBack
         )
 

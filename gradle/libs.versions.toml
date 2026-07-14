@@ -25,11 +25,9 @@ kotlinx-serialization       = "1.8.1"
 kotlinx-datetime            = "0.8.0"
 
 napier                      = "2.7.1"
-inspektor                   = "0.3.9"
 datastore                   = "1.2.1"
 okio                        = "3.17.0"
-firebase-bom                = "34.13.0"
-koin                        = "4.2.1"
+koin                        = "4.2.2"
 
 junit                       = "4.13.2"
 
@@ -61,13 +59,10 @@ kotlinx-coroutines-android          = { module = "org.jetbrains.kotlinx:kotlinx-
 navigation-compose                  = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
 compose-components-resources        = { module = "org.jetbrains.compose.components:components-resources", version.ref = "components-resources" }
 napier                              = { module = "io.github.aakira:napier", version.ref = "napier" }
-inspektor                           = { module = "com.gyanoba.inspektor:inspektor", version.ref = "inspektor" }
 datastore-core                      = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 datastore-preferences               = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 okio                                = { module = "com.squareup.okio:okio", version.ref = "okio" }
 kotlinx-datetime                    = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-firebase-bom                        = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
-firebase-gcm                        = { module = "com.google.firebase:firebase-messaging" }
 koin-core                           = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android                        = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-compose                        = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
