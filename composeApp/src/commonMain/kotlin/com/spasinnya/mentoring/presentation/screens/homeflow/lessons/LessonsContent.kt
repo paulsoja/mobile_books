@@ -25,7 +25,11 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,20 +46,25 @@ import androidx.compose.ui.unit.sp
 import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
 import com.spasinnya.mentoring.domain.model.LessonBlock
 import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_week
 import com.spasinnya.mentoring.generated.resources.ic_check
 import com.spasinnya.mentoring.presentation.designsystem.AppResources
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
+import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreText
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LessonsContent(
     state: LessonsContract.State,
     navigateBack: () -> Unit,
 ) {
+    var showPracticalWork by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,7 +72,7 @@ fun LessonsContent(
             .statusBarsPadding()
     ) {
         CoreTopAppBar(
-            title = "Тиждень ${state.weekNumber}",
+            title = stringResource(Res.string.common_week) + " " + state.weekNumber,
             subtitle = state.weekTitle,
             onBackClick = navigateBack
         )
@@ -288,7 +297,18 @@ fun LessonsContent(
                         }
                     }
                 }
+
+                CorePrimaryButton(
+                    text = "Практична робота",
+                    onClick = { showPracticalWork = true }
+                )
             }
+        }
+
+        if (showPracticalWork) {
+            PracticalWorkModalBottomSheet(
+                onClose = { showPracticalWork = false }
+            )
         }
     }
 }
