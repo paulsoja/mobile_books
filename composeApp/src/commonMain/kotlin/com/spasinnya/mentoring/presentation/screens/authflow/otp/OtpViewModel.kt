@@ -57,7 +57,10 @@ class OtpViewModel(
             .withLoading {  }
             .collectLatest { result ->
                 when (result) {
-                    is Validated.Invalid -> Unit // handle error
+                    is Validated.Invalid -> handleDomainErrors(
+                        error = result.error,
+                        reduce = { errorType -> copy(dialog = DialogState.Shown(errorType)) }
+                    )
                     is Validated.Valid -> Unit //TODO start timer
                 }
             }

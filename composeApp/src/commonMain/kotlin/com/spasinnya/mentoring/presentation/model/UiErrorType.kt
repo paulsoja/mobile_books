@@ -12,5 +12,9 @@ sealed class UiErrorType {
     /** Any 5xx-exception */
     data object Server : UiErrorType()
 
+    data object UserNotFound : UiErrorType()
+
+    data object OtpExpired : UiErrorType()
+
     data object Unknown : UiErrorType()
 }

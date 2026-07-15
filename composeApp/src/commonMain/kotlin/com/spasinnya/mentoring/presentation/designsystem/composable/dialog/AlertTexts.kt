@@ -4,9 +4,13 @@ import androidx.compose.runtime.Composable
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.common_ok
 import com.spasinnya.mentoring.generated.resources.error_check_connection
+import com.spasinnya.mentoring.generated.resources.error_check_email
 import com.spasinnya.mentoring.generated.resources.error_no_connection
+import com.spasinnya.mentoring.generated.resources.error_otp_expired
+import com.spasinnya.mentoring.generated.resources.error_request_new_code
 import com.spasinnya.mentoring.generated.resources.error_try_again_later
 import com.spasinnya.mentoring.generated.resources.error_unexpected
+import com.spasinnya.mentoring.generated.resources.error_user_not_found
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import org.jetbrains.compose.resources.stringResource
 
@@ -35,6 +39,18 @@ fun UiErrorType.toAlertTexts(): AlertTexts =
         UiErrorType.Server -> AlertTexts(
             title = stringResource(Res.string.error_unexpected),
             message = stringResource(Res.string.error_try_again_later),
+            confirm = stringResource(Res.string.common_ok),
+        )
+
+        UiErrorType.UserNotFound -> AlertTexts(
+            title = stringResource(Res.string.error_user_not_found),
+            message = stringResource(Res.string.error_check_email),
+            confirm = stringResource(Res.string.common_ok),
+        )
+
+        UiErrorType.OtpExpired -> AlertTexts(
+            title = stringResource(Res.string.error_otp_expired),
+            message = stringResource(Res.string.error_request_new_code),
             confirm = stringResource(Res.string.common_ok),
         )
 
