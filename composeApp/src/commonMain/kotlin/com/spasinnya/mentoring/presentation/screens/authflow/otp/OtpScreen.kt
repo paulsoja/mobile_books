@@ -25,14 +25,7 @@ fun OtpScreen(
         state = state.dialog,
         mapTexts = { it.toAlertTexts() },
         onDismiss = { viewModel.dispatchEvent(OtpContract.Event.DismissDialog) },
-        onConfirm = {
-            viewModel.dispatchEvent(
-                OtpContract.Event.ConfirmClicked(
-                    email = state.email,
-                    otp = state.otp
-                )
-            )
-        },
+        onConfirm = { viewModel.dispatchEvent(OtpContract.Event.DismissDialog) },
     )
 }
 

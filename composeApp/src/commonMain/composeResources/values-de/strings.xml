@@ -27,6 +27,10 @@
     <string name="error_invalid_credentials">Ungültige E-Mail oder Passwort</string>
     <string name="error_validation">Validierungsfehler</string>
     <string name="error_user_already_exists">Ein Benutzer mit dieser E-Mail existiert bereits</string>
+    <string name="error_user_not_found">Konto nicht gefunden</string>
+    <string name="error_check_email">Bitte überprüfen Sie Ihre E-Mail oder registrieren Sie sich erneut</string>
+    <string name="error_otp_expired">Code abgelaufen</string>
+    <string name="error_request_new_code">Bitte fordern Sie einen neuen Code an und versuchen Sie es erneut</string>
 
     <!--Auth-->
     <string name="auth_login">Anmelden</string>

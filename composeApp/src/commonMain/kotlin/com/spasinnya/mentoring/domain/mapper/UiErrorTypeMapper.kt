@@ -16,11 +16,14 @@ fun DomainError.toUiErrorType(): UiErrorType =
         DomainError.ClientError,
 
         DomainError.Unknown -> UiErrorType.Unknown
-        DomainError.EmailAlreadyExists,
+
+        DomainError.UserNotFound -> UiErrorType.UserNotFound
+
         DomainError.InvalidOtp,
-        DomainError.OtpExpired,
+        DomainError.OtpExpired -> UiErrorType.OtpExpired
+
+        DomainError.EmailAlreadyExists,
         DomainError.Serialization,
-        DomainError.UserNotFound,
         DomainError.UserAlreadyExists,
         DomainError.WeakPassword,
         DomainError.WrongPassword -> UiErrorType.Client

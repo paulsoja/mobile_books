@@ -43,6 +43,8 @@ fun mapHttpError(
     apiError?.error?.let { error ->
         return when (error) {
             "User already exists" -> DataError.ApiBusinessError("USER_ALREADY_EXISTS")
+            "User not found" -> DataError.ApiBusinessError("USER_NOT_FOUND")
+            "OTP not found or expired" -> DataError.ApiBusinessError("OTP_EXPIRED")
             else -> DataError.Unknown
         }
     }

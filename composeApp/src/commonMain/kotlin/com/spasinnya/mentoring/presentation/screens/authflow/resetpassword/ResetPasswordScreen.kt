@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -23,7 +19,6 @@ import com.spasinnya.mentoring.generated.resources.auth_reset_password_type_emai
 import com.spasinnya.mentoring.generated.resources.ic_logo
 import com.spasinnya.mentoring.generated.resources.ic_repeat
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVertical
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
@@ -31,6 +26,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVe
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.inputs.EmailInput
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
@@ -38,10 +34,15 @@ import org.jetbrains.compose.resources.vectorResource
 @Composable
 fun ResetPasswordScreen(
     navigateToLogin: () -> Unit,
-    navigateToOtp: () -> Unit
+    navigateToOtp: (email: String) -> Unit
 ) {
-    val (viewModel, state) = rememberScreenModel<ResetPasswordViewModel, ResetPasswordContract.State, ResetPasswordContract.Effect>()
-    var email by remember { mutableStateOf("") }
+    val (viewModel, state) = rememberScreenModel<ResetPasswordViewModel, ResetPasswordContract.State, ResetPasswordContract.Effect>(
+        onEffect = { effect ->
+            when (effect) {
+                is ResetPasswordContract.Effect.NavigateToOtp -> navigateToOtp.invoke(effect.email)
+            }
+        }
+    )
 
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
@@ -69,15 +70,16 @@ fun ResetPasswordScreen(
             textAlign = TextAlign.Start,
         )
         CoreSpacerVertical(height = 40.dp)
-        CoreOutlinedTextField(
+        EmailInput(
             modifier = Modifier.fillMaxWidth(),
-            value = email,
-            onValueChange = { email = it },
-            inputDefaults = InputEmailDefaults()
+            email = state.email,
+            emailError = state.emailError,
+            defaults = InputEmailDefaults(),
+            onValueChange = { viewModel.dispatchEvent(ResetPasswordContract.Event.EmailChanged(it)) }
         )
         CoreSpacerVerticalX2()
         CorePrimaryButton(
-            onClick = { navigateToOtp.invoke() },
+            onClick = { viewModel.dispatchEvent(ResetPasswordContract.Event.ValidateEmail) },
             text = stringResource(Res.string.auth_reset_password),
             iconAfter = Res.drawable.ic_repeat
         )

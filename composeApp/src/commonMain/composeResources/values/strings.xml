@@ -27,6 +27,10 @@
     <string name="error_invalid_credentials">Invalid email or password</string>
     <string name="error_validation">Validation error</string>
     <string name="error_user_already_exists">A user with this email already exists</string>
+    <string name="error_user_not_found">Account not found</string>
+    <string name="error_check_email">Please check your email or register again</string>
+    <string name="error_otp_expired">Code expired</string>
+    <string name="error_request_new_code">Please request a new code and try again</string>
 
     <!--Auth-->
     <string name="auth_login">Log in</string>

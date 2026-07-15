@@ -109,8 +109,8 @@ fun AuthFlowContainer(
                         navigateToLogin = {
                             navController.navigateUp()
                         },
-                        navigateToOtp = {
-                            navController.navigate(Screen.AuthFlow.OtpScreen)
+                        navigateToOtp = { email ->
+                            navController.navigate(Screen.AuthFlow.OtpScreen(email))
                         }
                     )
                 }
