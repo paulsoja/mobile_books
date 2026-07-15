@@ -60,10 +60,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LessonsContent(
+    bookId: String,
     state: LessonsContract.State,
     navigateBack: () -> Unit,
 ) {
-    var showPracticalWork by remember { mutableStateOf(false) }
+    var practicalWorkLesson by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier
@@ -300,14 +301,17 @@ fun LessonsContent(
 
                 CorePrimaryButton(
                     text = "Практична робота",
-                    onClick = { showPracticalWork = true }
+                    onClick = { practicalWorkLesson = state.lessons[page].lessonNumber }
                 )
             }
         }
 
-        if (showPracticalWork) {
+        practicalWorkLesson?.let { lessonNumber ->
             PracticalWorkModalBottomSheet(
-                onClose = { showPracticalWork = false }
+                bookId = bookId,
+                weekNumber = state.weekNumber,
+                lessonNumber = lessonNumber,
+                onClose = { practicalWorkLesson = null }
             )
         }
     }

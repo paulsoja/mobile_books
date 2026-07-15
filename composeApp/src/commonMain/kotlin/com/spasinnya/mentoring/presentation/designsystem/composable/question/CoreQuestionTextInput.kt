@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
@@ -12,10 +13,10 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 
 @Composable
 fun CoreQuestionTextInput(
-    question: String,
+    question: AnnotatedString,
     segments: List<QuestionSegment>,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),

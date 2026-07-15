@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
 
 /**
@@ -11,11 +12,11 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVe
  */
 @Composable
 fun CoreQuestionCheckbox(
-    question: String,
+    question: AnnotatedString,
     options: List<QuestionOption>,
     onOptionToggle: (QuestionOption) -> Unit,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         CoreQuestion(question = question, description = description)

@@ -1,13 +1,14 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.question
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.text.AnnotatedString
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputDefaults
 
 @Immutable
 data class QuestionOption(
     val id: String,
-    val label: String,
+    val label: AnnotatedString,
     val checked: Boolean = false,
     val enabled: Boolean = true,
 )
@@ -16,7 +17,7 @@ data class QuestionOption(
 sealed interface QuestionSegment {
 
     @Immutable
-    data class Text(val text: String) : QuestionSegment
+    data class Text(val text: AnnotatedString) : QuestionSegment
 
     @Immutable
     data class Input(

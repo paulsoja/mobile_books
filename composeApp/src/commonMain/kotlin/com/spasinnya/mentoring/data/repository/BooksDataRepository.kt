@@ -5,6 +5,7 @@ import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
 import com.spasinnya.mentoring.data.net.postFlow
+import com.spasinnya.mentoring.data.parser.HomeworkMarkdownParser
 import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
@@ -23,6 +24,7 @@ class BooksDataRepository(
     private val bookFileDataSource: BookFileDataSource,
     private val http: HttpClient,
     private val parser: MentorshipMarkdownParser,
+    private val homeworkParser: HomeworkMarkdownParser,
     private val localeStore: LocaleStore,
 ) : BooksRepository {
 
@@ -71,6 +73,26 @@ class BooksDataRepository(
             }
         } catch (t: Throwable) {
             Napier.d { "observeBook: ${t}" }
+            Validated.Invalid(DomainError.Unknown)
+        }
+        emit(result)
+    }
+
+    override fun observeHomework(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedHomeworkWeek>> = flow {
+        val result = try {
+            val markdown = bookFileDataSource.readHomeworkWeekMarkdown(
+                bookId = bookId,
+                weekNumber = weekNumber,
+            )
+
+            if (markdown.isBlank()) {
+                Validated.Invalid(DomainError.EmptyContent)
+            } else {
+                val parsedHomework = homeworkParser.parseWeek(markdown)
+                Validated.Valid(parsedHomework)
+            }
+        } catch (t: Throwable) {
+            Napier.d { "observeHomework: $t" }
             Validated.Invalid(DomainError.Unknown)
         }
         emit(result)

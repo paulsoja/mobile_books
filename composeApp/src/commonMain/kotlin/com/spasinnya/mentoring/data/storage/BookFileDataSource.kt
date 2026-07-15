@@ -23,6 +23,15 @@ class BookFileDataSource(
         return Res.readBytes(path).decodeToString()
     }
 
+    suspend fun readHomeworkWeekMarkdown(
+        bookId: String,
+        weekNumber: Int,
+    ): String {
+        val path = "files/homeworks/$bookId/homework_week$weekNumber.md"
+        Napier.d { "Reading $path" }
+        return Res.readBytes(path).decodeToString()
+    }
+
     suspend fun readMetaJson(
         bookId: String,
     ): BookMetaResponse {

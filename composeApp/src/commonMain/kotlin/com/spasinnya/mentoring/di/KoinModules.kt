@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.di
 
 import com.spasinnya.mentoring.data.net.createHttpClient
+import com.spasinnya.mentoring.data.parser.HomeworkMarkdownParser
 import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
 import com.spasinnya.mentoring.data.repository.AuthDataRepository
 import com.spasinnya.mentoring.data.repository.BooksDataRepository
@@ -21,6 +22,7 @@ import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
+import com.spasinnya.mentoring.domain.usecase.books.ObserveHomeworkUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.GetProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
@@ -35,6 +37,7 @@ import com.spasinnya.mentoring.presentation.screens.authflow.register.RegisterVi
 import com.spasinnya.mentoring.presentation.screens.authflow.resetpassword.ResetPasswordViewModel
 import com.spasinnya.mentoring.presentation.screens.homeflow.home.HomeViewModel
 import com.spasinnya.mentoring.presentation.screens.homeflow.lessons.LessonsViewModel
+import com.spasinnya.mentoring.presentation.screens.homeflow.lessons.PracticalWorkViewModel
 import com.spasinnya.mentoring.presentation.screens.homeflow.profile.ProfileViewModel
 import com.spasinnya.mentoring.presentation.screens.homeflow.weeks.WeeksViewModel
 import okio.FileSystem
@@ -50,6 +53,7 @@ val dataModule = module {
     single { FileSystem.SYSTEM }
     singleOf(::BookFileDataSource)
     singleOf(::MentorshipMarkdownParser)
+    singleOf(::HomeworkMarkdownParser)
     single {
         createHttpClient(
             tokenStore = get(),
@@ -78,6 +82,7 @@ val useCaseModule = module {
     factoryOf(::PurchaseBookUseCase)
     factoryOf(::GetWeeksUseCase)
     factoryOf(::ObserveBookUseCase)
+    factoryOf(::ObserveHomeworkUseCase)
     factoryOf(::GetProfileUseCase)
     factoryOf(::UpdateProfileUseCase)
     factoryOf(::GetAppLocaleUseCase)
@@ -100,6 +105,13 @@ val viewModelModule = module {
             bookId = params.get(),
             weekNumber = params.get(),
             importBookFromMarkdownUseCase = get()
+        )
+    }
+    viewModel { params ->
+        PracticalWorkViewModel(
+            bookId = params.get(),
+            weekNumber = params.get(),
+            observeHomeworkUseCase = get()
         )
     }
 }

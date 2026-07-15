@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
@@ -11,13 +12,13 @@ import com.spasinnya.mentoring.presentation.designsystem.defaults.InputDefaults
 
 @Composable
 fun CoreQuestionCheckboxInput(
-    question: String,
+    question: AnnotatedString,
     options: List<QuestionOption>,
     onOptionToggle: (QuestionOption) -> Unit,
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    description: String? = null,
+    description: AnnotatedString? = null,
     errorText: String = "",
     enabled: Boolean = true,
     inputDefaults: InputDefaults = InputCommonDefaults(),

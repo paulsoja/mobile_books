@@ -17,6 +17,7 @@ fun LessonsScreen(
     )
 
     LessonsContent(
+        bookId = bookId,
         state = state,
         navigateBack = navigateBack,
     )
