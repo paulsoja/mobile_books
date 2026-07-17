@@ -79,7 +79,7 @@ inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.inspektorPlu
     install(Inspektor) {
         level = com.gyanoba.inspektor.LogLevel.BODY
         sanitizeHeader { it == "Authorization" }
-        showNotifications = true
+        //showNotifications = true
     }
 }*/
 
