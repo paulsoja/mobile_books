@@ -30,6 +30,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.question.Cor
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionCheckbox
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionCheckboxInput
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionInput
+import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionRadioButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionTextInput
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionOption
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionSegment
@@ -59,6 +60,7 @@ fun PracticalWorkModalBottomSheet(
         PracticalWorkModalBottomSheetContent(
             lesson = state.lessons.firstOrNull { it.lessonNumber == lessonNumber },
             checkedOptions = state.checkedOptions,
+            selectedOptions = state.selectedOptions,
             textAnswers = state.textAnswers,
             onEvent = viewModel::dispatchEvent,
             onAction = ::send,
@@ -70,6 +72,7 @@ fun PracticalWorkModalBottomSheet(
 private fun PracticalWorkModalBottomSheetContent(
     lesson: HomeworkLesson?,
     checkedOptions: Map<String, Boolean>,
+    selectedOptions: Map<String, String>,
     textAnswers: Map<String, String>,
     onEvent: (PracticalWorkContract.Event) -> Unit,
     onAction: (PracticalWorkSheetAction) -> Unit,
@@ -91,6 +94,7 @@ private fun PracticalWorkModalBottomSheetContent(
             LessonSection(
                 lesson = it,
                 checkedOptions = checkedOptions,
+                selectedOptions = selectedOptions,
                 textAnswers = textAnswers,
                 onEvent = onEvent,
             )
@@ -111,6 +115,7 @@ private fun PracticalWorkModalBottomSheetContent(
 private fun LessonSection(
     lesson: HomeworkLesson,
     checkedOptions: Map<String, Boolean>,
+    selectedOptions: Map<String, String>,
     textAnswers: Map<String, String>,
     onEvent: (PracticalWorkContract.Event) -> Unit,
 ) {
@@ -131,6 +136,7 @@ private fun LessonSection(
             HomeworkQuestionItem(
                 question = question,
                 checkedOptions = checkedOptions,
+                selectedOptions = selectedOptions,
                 textAnswers = textAnswers,
                 onEvent = onEvent,
             )
@@ -142,6 +148,7 @@ private fun LessonSection(
 private fun HomeworkQuestionItem(
     question: HomeworkQuestion,
     checkedOptions: Map<String, Boolean>,
+    selectedOptions: Map<String, String>,
     textAnswers: Map<String, String>,
     onEvent: (PracticalWorkContract.Event) -> Unit,
 ) {
@@ -152,6 +159,15 @@ private fun HomeworkQuestionItem(
             options = question.options.toOptions(question.id, checkedOptions),
             onOptionToggle = { option ->
                 onEvent(PracticalWorkContract.Event.ToggleOption(option.id, option.checked))
+            },
+        )
+
+        is HomeworkQuestion.RadioButton -> CoreQuestionRadioButton(
+            question = question.question.rich(),
+            description = question.description?.rich(),
+            options = question.options.toRadioOptions(question.id, selectedOptions),
+            onOptionSelect = { option ->
+                onEvent(PracticalWorkContract.Event.SelectOption(question.id, option.id))
             },
         )
 
@@ -223,6 +239,18 @@ private fun List<RichParagraph>.toOptions(
         id = optionId,
         label = label.rich(),
         checked = checkedOptions[optionId] == true,
+    )
+}
+
+private fun List<RichParagraph>.toRadioOptions(
+    questionId: String,
+    selectedOptions: Map<String, String>,
+): List<QuestionOption> = mapIndexed { index, label ->
+    val optionId = "${questionId}_o$index"
+    QuestionOption(
+        id = optionId,
+        label = label.rich(),
+        checked = selectedOptions[questionId] == optionId,
     )
 }
 

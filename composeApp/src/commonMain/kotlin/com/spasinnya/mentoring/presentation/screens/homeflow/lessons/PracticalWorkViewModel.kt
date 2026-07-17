@@ -25,6 +25,10 @@ class PracticalWorkViewModel(
                 copy(checkedOptions = checkedOptions + (event.optionId to event.checked))
             }
 
+            is PracticalWorkContract.Event.SelectOption -> setState {
+                copy(selectedOptions = selectedOptions + (event.questionId to event.optionId))
+            }
+
             is PracticalWorkContract.Event.ChangeText -> setState {
                 copy(textAnswers = textAnswers + (event.key to event.value))
             }

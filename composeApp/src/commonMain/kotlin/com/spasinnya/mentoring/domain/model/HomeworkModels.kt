@@ -32,6 +32,14 @@ sealed interface HomeworkQuestion {
         val description: RichParagraph? = null,
     ) : HomeworkQuestion
 
+    /** `Type: radiobutton` -> CoreQuestionRadioButton (single choice) */
+    data class RadioButton(
+        override val id: String,
+        override val question: RichParagraph,
+        val options: List<RichParagraph>,
+        val description: RichParagraph? = null,
+    ) : HomeworkQuestion
+
     /** `Type: checkbox_input` -> CoreQuestionCheckboxInput */
     data class CheckboxInput(
         override val id: String,

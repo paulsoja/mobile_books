@@ -127,6 +127,13 @@ class HomeworkMarkdownParser {
                 description = description,
             )
 
+            options.isNotEmpty() && type == "radiobutton" -> HomeworkQuestion.RadioButton(
+                id = id,
+                question = question,
+                options = optionParagraphs,
+                description = description,
+            )
+
             options.isNotEmpty() -> HomeworkQuestion.Checkbox(
                 id = id,
                 question = question,

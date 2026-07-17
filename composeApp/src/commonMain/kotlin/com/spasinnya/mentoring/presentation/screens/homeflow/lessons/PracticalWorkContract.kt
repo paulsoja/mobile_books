@@ -6,6 +6,7 @@ interface PracticalWorkContract {
     data class State(
         val lessons: List<HomeworkLesson> = emptyList(),
         val checkedOptions: Map<String, Boolean> = emptyMap(),
+        val selectedOptions: Map<String, String> = emptyMap(),
         val textAnswers: Map<String, String> = emptyMap(),
         val isLoading: Boolean = false,
         val isError: Boolean = false,
@@ -13,6 +14,7 @@ interface PracticalWorkContract {
 
     sealed class Event {
         data class ToggleOption(val optionId: String, val checked: Boolean) : Event()
+        data class SelectOption(val questionId: String, val optionId: String) : Event()
         data class ChangeText(val key: String, val value: String) : Event()
     }
 
