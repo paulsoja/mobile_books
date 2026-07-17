@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.spasinnya.mentoring.domain.model.AuthSteps
 import com.spasinnya.mentoring.presentation.base.ProvideAppLocale
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
+import com.spasinnya.mentoring.presentation.designsystem.BooksTheme
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.AuthFlowContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratScreen
@@ -25,67 +26,69 @@ fun AppContent() {
     }
 
     ProvideAppLocale(language = state.language) {
-        val navController = rememberNavController()
+        BooksTheme(darkTheme = false) {
+            val navController = rememberNavController()
 
-        key(state.language, startDestination) {
-            NavHost(
-                navController = navController,
-                startDestination = startDestination
-            ) {
-                composable<ScreenContainer.SplashFlow> { backStackEntry ->
+            key(state.language, startDestination) {
+                NavHost(
+                    navController = navController,
+                    startDestination = startDestination
+                ) {
+                    composable<ScreenContainer.SplashFlow> { backStackEntry ->
 
-                }
-                composable<ScreenContainer.AuthFlow> {
-                    AuthFlowContainer(
-                        onLoginSuccess = {
-                            navController.navigate(ScreenContainer.HomeFlow) {
-                                launchSingleTop = true
-                                popUpTo(navController.graph.startDestinationId) {
-                                    inclusive = true
+                    }
+                    composable<ScreenContainer.AuthFlow> {
+                        AuthFlowContainer(
+                            onLoginSuccess = {
+                                navController.navigate(ScreenContainer.HomeFlow) {
+                                    launchSingleTop = true
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onRegisterSuccess = {
+                                navController.navigate(ScreenContainer.CongratsFlow) {
+                                    launchSingleTop = true
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = true
+                                    }
                                 }
                             }
-                        },
-                        onRegisterSuccess = {
-                            navController.navigate(ScreenContainer.CongratsFlow) {
-                                launchSingleTop = true
-                                popUpTo(navController.graph.startDestinationId) {
-                                    inclusive = true
+                        )
+                    }
+                    composable<ScreenContainer.CongratsFlow> { backStackEntry ->
+                        CongratScreen(
+                            navigateTo = {
+                                navController.navigate(ScreenContainer.HomeFlow) {
+                                    launchSingleTop = true
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = true
+                                    }
                                 }
                             }
-                        }
-                    )
-                }
-                composable<ScreenContainer.CongratsFlow> { backStackEntry ->
-                    CongratScreen(
-                        navigateTo = {
-                            navController.navigate(ScreenContainer.HomeFlow) {
+                        )
+                    }
+                    composable<ScreenContainer.HomeFlow> {
+                        HomeFlowContainer {
+                            navController.navigate(ScreenContainer.AuthFlow) {
+                                popUpTo(0) { inclusive = true }
                                 launchSingleTop = true
-                                popUpTo(navController.graph.startDestinationId) {
-                                    inclusive = true
-                                }
                             }
-                        }
-                    )
-                }
-                composable<ScreenContainer.HomeFlow> {
-                    HomeFlowContainer {
-                        navController.navigate(ScreenContainer.AuthFlow) {
-                            popUpTo(0) { inclusive = true }
-                            launchSingleTop = true
                         }
                     }
-                }
-                composable<ScreenContainer.SettingsFlow> { backStackEntry ->
+                    composable<ScreenContainer.SettingsFlow> { backStackEntry ->
 
-                }
-                composable<ScreenContainer.PaymentFlow> {
+                    }
+                    composable<ScreenContainer.PaymentFlow> {
 
-                }
-                composable<ScreenContainer.PromoCodesFlow> { backStackEntry ->
+                    }
+                    composable<ScreenContainer.PromoCodesFlow> { backStackEntry ->
 
-                }
-                composable<ScreenContainer.LessonsFlow> { backStackEntry ->
+                    }
+                    composable<ScreenContainer.LessonsFlow> { backStackEntry ->
 
+                    }
                 }
             }
         }

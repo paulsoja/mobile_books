@@ -30,27 +30,28 @@ fun ralewayFamily() = FontFamily(
 )
 
 @Composable
-fun appTypography() = Typography().run {
-    val fontFamily = ralewayFamily()
-    copy(
-        displayLarge  = this.displayLarge.copy(fontFamily = fontFamily),
-        displayMedium = this.displayMedium.copy(fontFamily = fontFamily),
-        displaySmall  = this.displaySmall.copy(fontFamily = fontFamily),
+fun appTypography(): Typography {
+    val family = ralewayFamily()
 
-        headlineLarge  = this.headlineLarge.copy(fontFamily = fontFamily),
-        headlineMedium = this.headlineMedium.copy(fontFamily = fontFamily),
-        headlineSmall  = this.headlineSmall.copy(fontFamily = fontFamily),
+    return Typography(
+        bodySmall = Typography().bodySmall.copy(fontFamily = family),
+        bodyMedium = Typography().bodyMedium.copy(fontFamily = family),
+        bodyLarge = Typography().bodyLarge.copy(fontFamily = family),
 
-        titleLarge  = this.titleLarge.copy(fontFamily = fontFamily),
-        titleMedium = this.titleMedium.copy(fontFamily = fontFamily),
-        titleSmall  = this.titleSmall.copy(fontFamily = fontFamily),
+        titleSmall = Typography().titleSmall.copy(fontFamily = family),
+        titleMedium = Typography().titleMedium.copy(fontFamily = family),
+        titleLarge = Typography().titleLarge.copy(fontFamily = family),
 
-        bodyLarge  = this.bodyLarge.copy(fontFamily = fontFamily),
-        bodyMedium = this.bodyMedium.copy(fontFamily = fontFamily),
-        bodySmall  = this.bodySmall.copy(fontFamily = fontFamily),
+        headlineSmall = Typography().headlineSmall.copy(fontFamily = family),
+        headlineMedium = Typography().headlineMedium.copy(fontFamily = family),
+        headlineLarge = Typography().headlineLarge.copy(fontFamily = family),
 
-        labelLarge  = this.labelLarge.copy(fontFamily = fontFamily),
-        labelMedium = this.labelMedium.copy(fontFamily = fontFamily),
-        labelSmall  = this.labelSmall.copy(fontFamily = fontFamily),
+        displaySmall = Typography().displaySmall.copy(fontFamily = family),
+        displayMedium = Typography().displayMedium.copy(fontFamily = family),
+        displayLarge = Typography().displayLarge.copy(fontFamily = family),
+
+        labelSmall = Typography().labelSmall.copy(fontFamily = family),
+        labelMedium = Typography().labelMedium.copy(fontFamily = family),
+        labelLarge = Typography().labelLarge.copy(fontFamily = family),
     )
 }
