@@ -144,3 +144,23 @@ fun CoreTextTitle(
         )
     )
 }
+
+@Composable
+fun CoreTextTitle(
+    text: AnnotatedString,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Start,
+    color: Color = Color(0xFF3C4E73)
+) {
+    CoreText(
+        modifier = modifier,
+        text = text,
+        textAlign = textAlign,
+        style = MaterialTheme.typography.headlineSmall.copy(
+            fontWeight = FontWeight.Bold,
+            color = color,
+            fontSize = 18.sp,
+            lineHeight = 22.sp
+        )
+    )
+}

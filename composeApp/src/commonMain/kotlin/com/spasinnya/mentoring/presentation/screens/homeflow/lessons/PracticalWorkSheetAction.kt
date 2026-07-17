@@ -1,0 +1,7 @@
+package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
+
+sealed interface PracticalWorkSheetAction
+sealed interface PracticalWorkSheetDismissAction : PracticalWorkSheetAction
+
+data object PracticalWorkClose : PracticalWorkSheetDismissAction
+data object PracticalWorkConfirm : PracticalWorkSheetDismissAction

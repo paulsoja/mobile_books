@@ -5,8 +5,6 @@ import com.spasinnya.mentoring.domain.model.LessonContent
 import com.spasinnya.mentoring.domain.model.ParsedLesson
 import com.spasinnya.mentoring.domain.model.ParsedWeek
 import com.spasinnya.mentoring.domain.model.RichParagraph
-import com.spasinnya.mentoring.domain.model.TextSpan
-import com.spasinnya.mentoring.domain.model.TextStyleMark
 
 class MentorshipMarkdownParser {
 
@@ -159,95 +157,8 @@ class MentorshipMarkdownParser {
         return blocks
     }
 
-    private fun parseRichParagraph(text: String): RichParagraph {
-        return RichParagraph(
-            spans = parseInline(text),
-        )
-    }
-
-    private fun parseInline(text: String): List<TextSpan> {
-        val rootStyle = TextStyleMark()
-        return parseInlineRecursive(
-            text = text,
-            startIndex = 0,
-            currentStyle = rootStyle,
-            stopTag = null,
-        ).spans
-    }
-
-    private fun parseInlineRecursive(
-        text: String,
-        startIndex: Int,
-        currentStyle: TextStyleMark,
-        stopTag: String?,
-    ): InlineParseResult {
-        val spans = mutableListOf<TextSpan>()
-        val buffer = StringBuilder()
-
-        var index = startIndex
-
-        fun flushBuffer() {
-            if (buffer.isNotEmpty()) {
-                spans += TextSpan(
-                    text = buffer.toString(),
-                    style = currentStyle,
-                )
-                buffer.clear()
-            }
-        }
-
-        while (index < text.length) {
-            if (stopTag != null && text.startsWith("</$stopTag>", index)) {
-                flushBuffer()
-                return InlineParseResult(
-                    spans = spans,
-                    nextIndex = index + stopTag.length + 3,
-                )
-            }
-
-            val openTag = findOpeningTag(text, index)
-            if (openTag != null) {
-                flushBuffer()
-
-                val nestedStyle = when (openTag) {
-                    "b" -> currentStyle.copy(bold = true)
-                    "i" -> currentStyle.copy(italic = true)
-                    "u" -> currentStyle.copy(underline = true)
-                    "mark" -> currentStyle.copy(highlighted = true)
-                    else -> currentStyle
-                }
-
-                val nestedResult = parseInlineRecursive(
-                    text = text,
-                    startIndex = index + openingTagLength(openTag),
-                    currentStyle = nestedStyle,
-                    stopTag = openTag,
-                )
-
-                spans += nestedResult.spans
-                index = nestedResult.nextIndex
-                continue
-            }
-
-            buffer.append(text[index])
-            index++
-        }
-
-        flushBuffer()
-
-        return InlineParseResult(
-            spans = spans,
-            nextIndex = index,
-        )
-    }
-
-    private fun findOpeningTag(text: String, index: Int): String? {
-        return supportedTags.firstOrNull { tag ->
-            text.startsWith("<$tag>", index)
-        }
-    }
-
-    private fun openingTagLength(tag: String): Int = tag.length + 2
+    private fun parseRichParagraph(text: String): RichParagraph =
+        InlineMarkdownParser.parseParagraph(text)
 
     private fun extractWeekNumber(markdown: String): Int {
         frontMatterWeekNumberRegex.find(markdown)?.let {
@@ -279,17 +190,10 @@ class MentorshipMarkdownParser {
             .replace("\r", "\n")
             .trim()
 
-    private data class InlineParseResult(
-        val spans: List<TextSpan>,
-        val nextIndex: Int,
-    )
-
     private companion object {
         val frontMatterWeekNumberRegex = Regex("""(?m)^weekNumber:\s*(\d+)\s*$""")
         val frontMatterWeekTitleRegex = Regex("""(?m)^weekTitle:\s*(.+?)\s*$""")
         val englishWeekHeaderRegex = Regex("""(?m)^#\s+Week\s+(\d+)\s+Subject:\s+(.+?)\s*$""")
         val lessonHeaderRegex = Regex("""(?m)^##\s+Lesson\s+(\d+)\s+(.+?)\s*$""")
-
-        val supportedTags = listOf("mark", "b", "i", "u")
     }
 }
