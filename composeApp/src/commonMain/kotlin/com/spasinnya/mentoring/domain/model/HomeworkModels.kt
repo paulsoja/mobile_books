@@ -75,6 +75,25 @@ sealed interface HomeworkQuestion {
         override val question: RichParagraph,
         val description: RichParagraph? = null,
     ) : HomeworkQuestion
+
+    /**
+     * `Type: text_radiobutton` -> CoreQuestionTextRadioButton.
+     *
+     * A prompt followed by several rows, each of which is a short statement with
+     * its own single-choice radio options. In the markdown each row is a line
+     * like `1. <prompt>? <Так / Ні>`; the answers live inside `<...>` separated
+     * by `/`.
+     */
+    data class TextRadioButton(
+        override val id: String,
+        override val question: RichParagraph,
+        val items: List<Item>,
+    ) : HomeworkQuestion {
+        data class Item(
+            val prompt: RichParagraph,
+            val options: List<RichParagraph>,
+        )
+    }
 }
 
 /**
@@ -84,4 +103,10 @@ sealed interface HomeworkQuestion {
 sealed interface HomeworkTextSegment {
     data class Text(val text: RichParagraph) : HomeworkTextSegment
     data class Input(val index: Int) : HomeworkTextSegment
+
+    /**
+     * `<input_number>` placeholder: a compact, square numeric field. The static
+     * text that follows it is rendered larger and to its right.
+     */
+    data class NumberInput(val index: Int) : HomeworkTextSegment
 }

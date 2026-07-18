@@ -19,6 +19,7 @@ fun LessonsScreen(
     LessonsContent(
         bookId = bookId,
         state = state,
+        onEvent = viewModel::dispatchEvent,
         navigateBack = navigateBack,
     )
 }

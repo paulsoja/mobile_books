@@ -27,4 +27,15 @@ sealed interface QuestionSegment {
         val enabled: Boolean = true,
         val inputDefaults: InputDefaults = InputCommonDefaults(),
     ) : QuestionSegment
+
+    /**
+     * A compact, square numeric field. Any [Text] segment that immediately
+     * follows it is rendered larger and to its right on the same row.
+     */
+    @Immutable
+    data class NumberInput(
+        val value: String,
+        val onValueChange: (String) -> Unit,
+        val enabled: Boolean = true,
+    ) : QuestionSegment
 }

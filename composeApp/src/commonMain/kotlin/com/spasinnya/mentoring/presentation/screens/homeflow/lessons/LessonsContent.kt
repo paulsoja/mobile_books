@@ -25,11 +25,7 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,10 +58,9 @@ import org.jetbrains.compose.resources.stringResource
 fun LessonsContent(
     bookId: String,
     state: LessonsContract.State,
+    onEvent: (LessonsContract.Event) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    var practicalWorkLesson by remember { mutableStateOf<Int?>(null) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -299,19 +294,22 @@ fun LessonsContent(
                     }
                 }
 
+                val lessonNumber = state.lessons[page].lessonNumber
+                val hasHomework = lessonNumber in state.lessonsWithHomework
+
                 CorePrimaryButton(
-                    text = "Практична робота",
-                    onClick = { practicalWorkLesson = state.lessons[page].lessonNumber }
+                    text = if (hasHomework) "Практична робота" else "Підтвердити",
+                    onClick = { if (hasHomework) onEvent(LessonsContract.Event.OpenPracticalWork(lessonNumber)) }
                 )
             }
         }
 
-        practicalWorkLesson?.let { lessonNumber ->
+        state.practicalWorkLesson?.let { lessonNumber ->
             PracticalWorkModalBottomSheet(
                 bookId = bookId,
                 weekNumber = state.weekNumber,
                 lessonNumber = lessonNumber,
-                onClose = { practicalWorkLesson = null }
+                onClose = { onEvent(LessonsContract.Event.ClosePracticalWork) }
             )
         }
     }

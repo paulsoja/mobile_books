@@ -32,7 +32,9 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.question.Cor
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionInput
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionRadioButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionTextInput
+import com.spasinnya.mentoring.presentation.designsystem.composable.question.CoreQuestionTextRadioButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionOption
+import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionRadioRow
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionSegment
 import org.koin.core.parameter.parametersOf
 
@@ -201,6 +203,13 @@ private fun HomeworkQuestionItem(
                             onValueChange = { onEvent(PracticalWorkContract.Event.ChangeText(key, it)) },
                         )
                     }
+                    is HomeworkTextSegment.NumberInput -> {
+                        val key = "${question.id}_i${segment.index}"
+                        QuestionSegment.NumberInput(
+                            value = textAnswers[key].orEmpty(),
+                            onValueChange = { onEvent(PracticalWorkContract.Event.ChangeText(key, it)) },
+                        )
+                    }
                 }
             },
         )
@@ -213,6 +222,21 @@ private fun HomeworkQuestionItem(
         is HomeworkQuestion.Open -> CoreQuestion(
             question = question.question.rich(),
             description = question.description?.rich(),
+        )
+
+        is HomeworkQuestion.TextRadioButton -> CoreQuestionTextRadioButton(
+            question = question.question.rich(),
+            rows = question.items.mapIndexed { rowIndex, item ->
+                val rowId = "${question.id}_r$rowIndex"
+                QuestionRadioRow(
+                    id = rowId,
+                    prompt = item.prompt.rich(),
+                    options = item.options.toRadioOptions(rowId, selectedOptions),
+                )
+            },
+            onOptionSelect = { rowId, option ->
+                onEvent(PracticalWorkContract.Event.SelectOption(rowId, option.id))
+            },
         )
     }
 }
