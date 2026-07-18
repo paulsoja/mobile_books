@@ -89,6 +89,7 @@ class HomeworkMarkdownParser {
         var type: String? = null
         val options = mutableListOf<String>()
         val textLines = mutableListOf<String>()
+        val bodyLines = mutableListOf<String>()
 
         content.lines().forEach { rawLine ->
             val line = rawLine.trim()
@@ -107,17 +108,32 @@ class HomeworkMarkdownParser {
                     textRegex.find(line)?.groupValues?.get(1)?.let { text ->
                         textLines += text.trim()
                     }
+
+                else -> bodyLines += line
             }
         }
 
         val question = parseRich(questionText)
         val optionParagraphs = options.map { parseRich(it) }
 
-        val hasInlineInput = textLines.any { it.contains(INPUT_PLACEHOLDER) }
+        val hasInlineInput = textLines.any {
+            it.contains(INPUT_PLACEHOLDER) || it.contains(NUMBER_INPUT_PLACEHOLDER)
+        }
         val description = textLines
             .takeIf { it.isNotEmpty() && !hasInlineInput }
             ?.joinToString("\n\n") { cleanText(it) }
             ?.let { parseRich(it) }
+
+        if (type == "text_radiobutton") {
+            val items = parseRadioItems(bodyLines)
+            if (items.isNotEmpty()) {
+                return HomeworkQuestion.TextRadioButton(
+                    id = id,
+                    question = question,
+                    items = items,
+                )
+            }
+        }
 
         return when {
             options.isNotEmpty() && type == "checkbox_input" -> HomeworkQuestion.CheckboxInput(
@@ -181,29 +197,69 @@ class HomeworkMarkdownParser {
 
     /**
      * Splits the `Text:` lines into rendered segments. Each `<input>` placeholder
-     * becomes an [HomeworkTextSegment.Input] with a running index; everything else
-     * becomes static [HomeworkTextSegment.Text].
+     * becomes an [HomeworkTextSegment.Input] and each `<input_number>` becomes an
+     * [HomeworkTextSegment.NumberInput], both sharing one running index so their
+     * answer keys stay unique; everything else becomes static
+     * [HomeworkTextSegment.Text].
      */
     private fun parseSegments(textLines: List<String>): List<HomeworkTextSegment> {
         val segments = mutableListOf<HomeworkTextSegment>()
         var inputIndex = 0
 
         textLines.forEach { line ->
-            val parts = cleanText(line).split(INPUT_PLACEHOLDER)
-            parts.forEachIndexed { index, part ->
-                val text = part.trim()
-                if (text.isNotEmpty()) {
-                    segments += HomeworkTextSegment.Text(parseRich(text))
+            val cleaned = cleanText(line)
+            var cursor = 0
+
+            inputTokenRegex.findAll(cleaned).forEach { match ->
+                val before = cleaned.substring(cursor, match.range.first).trim()
+                if (before.isNotEmpty()) {
+                    segments += HomeworkTextSegment.Text(parseRich(before))
                 }
-                if (index < parts.lastIndex) {
-                    segments += HomeworkTextSegment.Input(inputIndex)
-                    inputIndex++
+
+                segments += if (match.value == NUMBER_INPUT_PLACEHOLDER) {
+                    HomeworkTextSegment.NumberInput(inputIndex)
+                } else {
+                    HomeworkTextSegment.Input(inputIndex)
                 }
+                inputIndex++
+
+                cursor = match.range.last + 1
+            }
+
+            val tail = cleaned.substring(cursor).trim()
+            if (tail.isNotEmpty()) {
+                segments += HomeworkTextSegment.Text(parseRich(tail))
             }
         }
 
         return segments
     }
+
+    /**
+     * Builds the rows of a `text_radiobutton` question. Each body line looks like
+     * `1. <prompt>? <Так / Ні>`: the prompt is the text before the trailing
+     * `<...>`, and the options are the values inside it, separated by `/`.
+     * Lines without a trailing `<...>` group are ignored.
+     */
+    private fun parseRadioItems(bodyLines: List<String>): List<HomeworkQuestion.TextRadioButton.Item> =
+        bodyLines.mapNotNull { line ->
+            val match = radioRowRegex.find(line) ?: return@mapNotNull null
+
+            val prompt = match.groupValues[1].trim()
+            val options = match.groupValues[2]
+                .split('/')
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+
+            if (prompt.isEmpty() || options.isEmpty()) {
+                null
+            } else {
+                HomeworkQuestion.TextRadioButton.Item(
+                    prompt = parseRich(cleanText(prompt)),
+                    options = options.map { parseRich(it) },
+                )
+            }
+        }
 
     /**
      * Parses inline formatting tags (`<b>`, `<i>`, `<u>`, `<mark>`) into a
@@ -236,6 +292,7 @@ class HomeworkMarkdownParser {
 
     private companion object {
         const val INPUT_PLACEHOLDER = "<input>"
+        const val NUMBER_INPUT_PLACEHOLDER = "<input_number>"
         const val CENTER_PREFIX = "center:"
 
         val weekHeaderRegex = Regex("""(?m)^#\s+Week\s+(\d+)\s*$""")
@@ -244,5 +301,7 @@ class HomeworkMarkdownParser {
         val typeRegex = Regex("""(?i)^Type:\s*(.+?)\s*$""")
         val optionRegex = Regex("""^□\s*(.+?)\s*$""")
         val textRegex = Regex("""(?i)^Text:\s*(.+?)\s*$""")
+        val radioRowRegex = Regex("""^(.*?)<([^>]*)>\s*$""")
+        val inputTokenRegex = Regex(NUMBER_INPUT_PLACEHOLDER + "|" + INPUT_PLACEHOLDER)
     }
 }

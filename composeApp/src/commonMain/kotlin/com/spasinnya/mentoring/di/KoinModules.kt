@@ -104,7 +104,8 @@ val viewModelModule = module {
         LessonsViewModel(
             bookId = params.get(),
             weekNumber = params.get(),
-            importBookFromMarkdownUseCase = get()
+            importBookFromMarkdownUseCase = get(),
+            observeHomeworkUseCase = get()
         )
     }
     viewModel { params ->
