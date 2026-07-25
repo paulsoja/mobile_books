@@ -42,7 +42,6 @@ class PrefDataRepository(
 
     override suspend fun getLocaleTag(): String? = localeStore.read()
 
-
     override fun setLocale(locale: String): Flow<DomainResult<Unit>> = flow {
         localeStore.save(locale)
         emit(Validated.Valid(Unit))

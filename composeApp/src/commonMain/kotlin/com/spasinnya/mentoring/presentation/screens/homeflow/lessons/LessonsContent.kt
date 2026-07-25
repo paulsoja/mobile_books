@@ -42,8 +42,10 @@ import androidx.compose.ui.unit.sp
 import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
 import com.spasinnya.mentoring.domain.model.LessonBlock
 import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_confirm
 import com.spasinnya.mentoring.generated.resources.common_week
 import com.spasinnya.mentoring.generated.resources.ic_check
+import com.spasinnya.mentoring.generated.resources.lessons_practical_work
 import com.spasinnya.mentoring.presentation.designsystem.AppResources
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreBadge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -298,7 +300,7 @@ fun LessonsContent(
                 val hasHomework = lessonNumber in state.lessonsWithHomework
 
                 CorePrimaryButton(
-                    text = if (hasHomework) "Практична робота" else "Підтвердити",
+                    text = if (hasHomework) stringResource(Res.string.lessons_practical_work) else stringResource(Res.string.common_confirm),
                     onClick = { if (hasHomework) onEvent(LessonsContract.Event.OpenPracticalWork(lessonNumber)) }
                 )
             }
