@@ -66,4 +66,7 @@
     <string name="home_settings_app_language">Язык приложения:</string>
     <string name="home_settings_autors">Авторы пособий</string>
     <string name="home_settings_salvation_church">Церковь "Спасение"</string>
+
+    <!--Lessons-->
+    <string name="lessons_practical_work">Практическая работа</string>
 </resources>

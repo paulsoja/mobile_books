@@ -66,4 +66,7 @@
     <string name="home_settings_app_language">App-Sprache:</string>
     <string name="home_settings_autors">Autoren der Anleitungen</string>
     <string name="home_settings_salvation_church">Kirche "Rettung"</string>
+
+    <!--Lessons-->
+    <string name="lessons_practical_work">Praktische Arbeit</string>
 </resources>
