@@ -2,6 +2,7 @@ package com.spasinnya.mentoring.domain.repository
 
 import com.spasinnya.mentoring.domain.model.BookMeta
 import com.spasinnya.mentoring.domain.model.DomainResult
+import com.spasinnya.mentoring.domain.model.HomeworkAnswer
 import com.spasinnya.mentoring.domain.model.ParsedHomeworkWeek
 import com.spasinnya.mentoring.domain.model.ParsedWeek
 import com.spasinnya.mentoring.domain.model.PurchaseStatus
@@ -13,4 +14,17 @@ interface BooksRepository {
     fun getWeeks(bookId: String): Flow<DomainResult<BookMeta>>
     fun observeBook(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedWeek>>
     fun observeHomework(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedHomeworkWeek>>
+
+    fun getHomeworkAnswers(
+        bookId: String,
+        weekNumber: Int,
+        lessonNumber: Int,
+    ): Flow<DomainResult<List<HomeworkAnswer>>>
+
+    fun saveHomeworkAnswers(
+        bookId: String,
+        weekNumber: Int,
+        lessonNumber: Int,
+        answers: List<HomeworkAnswer>,
+    ): Flow<DomainResult<Unit>>
 }

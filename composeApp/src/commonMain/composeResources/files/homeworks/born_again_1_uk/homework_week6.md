@@ -11,21 +11,24 @@ Type: question
 # Lesson 2
 ## Question: ✍️ СКІЛЬКИ КНИГ У СТАРОМУ ЗАВІТІ? (оберіть правильну відповідь)
 Type: radiobutton
-□ 38
-□ 45
-□ 66
-□ 27
-□ 39
-□ 71
+QuestionId: books_are_in_the_old_testament
+□ <id: 38> 38
+□ <id: 45> 45
+□ <id: 66> 66
+□ <id: 27> 27
+□ <id: 39> 39
+□ <id: 71> 71
 ## Question: ✍️ СКІЛЬКИ КНИГ У НОВОМУ ЗАВІТІ?
 Type: radiobutton
-□ 27
-□ 36
-□ 39
-□ 51
-□ 66
+QuestionId: books_are_in_the_new_testament
+□ <id: 27> 27
+□ <id: 36> 36
+□ <id: 39> 39
+□ <id: 51> 51
+□ <id: 66> 66
 ## Question: ✍️ РОЗШИФРУЙТЕ:
 Type: text_input
+QuestionId: decipher
 Text: Фил. 1:2 <input>
 Text: Гал. 3:1 <input>
 Text: Об’явл. 4:2 <input>
@@ -38,8 +41,10 @@ Text: Дан. 3:33 <input>
 # Lesson 3
 ## Question: ✍️ ЯКІ МІСЦЯ ПИСАННЯ ВИ ЧИТАЛИ СЬОГОДНІ?
 Type: input
+QuestionId: reading_in_the_bible
 ## Question: ✍️ ЩО ОСОБЛИВОГО ВІДКРИЛОСЯ ВАМ ПІД ЧАС ЧИТАННЯ?
 Type: input
+QuestionId: revealed_to_you_while_reading
 Text: 1. Поставте собі мету – за три місяці (не більше, можна менше) прочитати Новий Завіт по порядку.
 Text: 2. Візьміть зошит і підпишіть: «Читання Нового Завіту». Виписуйте туди відкриття і незрозумілі речі.
 ## Question: ✔️ ПОДІЛІТЬСЯ ВАШИМИ ПЛАНАМИ З НАСТАВНИКОМ
@@ -50,6 +55,7 @@ Type: question
 # Lesson 4
 ## Question: ✍️ ПІДБЕРІТЬ 1-2 МІСЦЯ З БІБЛІЇ, ЯКІ ПІДТВЕРДЖУЮТЬ ВАШЕ ПРОЩЕННЯ (СПАСІННЯ)
 Type: input
+QuestionId: find_bible_passages
 ## Question: ✔️ ЗАСТОСОВУЙТЕ ВСІ ЦІ МІСЦЯ НА ПРАКТИЦІ
 Type: text
 Text: <b><i>Якова 4:7 «Тож підкоріться Богові, протидійте дияволові, й він утече від вас».</i></b>
@@ -61,6 +67,7 @@ Text: <b><i>1 Петра 2:24 «Він Сам Своїм тілом підняв
 # Lesson 5
 ## Question: ✍️ ВСТАВТЕ ПРОПУЩЕНІ СЛОВА З РИМ. 10:9-10:
 Type: text_input
+QuestionId: romans_missing_words
 Text: (9) «Якщо <input> своїми устами Господа Ісуса й <input> у своєму серці, що Бог <input> Його з мертвих, то <input>. (10) Бо серцем <input> для праведності, а устами <input> для спасіння».
 ## Question: 📖 ВИВЧІТЬ ЦІ ВІРШІ НАПАМ’ЯТЬ
 Type: question

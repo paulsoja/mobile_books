@@ -10,13 +10,18 @@ interface PracticalWorkContract {
         val textAnswers: Map<String, String> = emptyMap(),
         val isLoading: Boolean = false,
         val isError: Boolean = false,
+        val isSaving: Boolean = false,
     )
 
     sealed class Event {
         data class ToggleOption(val optionId: String, val checked: Boolean) : Event()
         data class SelectOption(val questionId: String, val optionId: String) : Event()
         data class ChangeText(val key: String, val value: String) : Event()
+        data object Save : Event()
     }
 
-    sealed class Effect
+    sealed class Effect {
+        data object Saved : Effect()
+        data object SaveFailed : Effect()
+    }
 }

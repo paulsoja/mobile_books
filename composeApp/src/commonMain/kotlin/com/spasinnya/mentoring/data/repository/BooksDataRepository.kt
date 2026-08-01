@@ -1,10 +1,15 @@
 package com.spasinnya.mentoring.data.repository
 
+import com.spasinnya.mentoring.data.mapper.toApiRequest
 import com.spasinnya.mentoring.data.mapper.toDataError
 import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
+import com.spasinnya.mentoring.data.model.HomeworkAnswersApiRequest
+import com.spasinnya.mentoring.data.model.HomeworkAnswersApiResponse
 import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
+import com.spasinnya.mentoring.data.net.getFlow
 import com.spasinnya.mentoring.data.net.postFlow
+import com.spasinnya.mentoring.data.net.putFlow
 import com.spasinnya.mentoring.data.parser.HomeworkMarkdownParser
 import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
@@ -77,6 +82,36 @@ class BooksDataRepository(
         }
         emit(result)
     }
+
+    override fun getHomeworkAnswers(
+        bookId: String,
+        weekNumber: Int,
+        lessonNumber: Int,
+    ): Flow<DomainResult<List<HomeworkAnswer>>> =
+        http.getFlow<HomeworkAnswersApiResponse>(
+            path = homeworkAnswersPath(bookId, weekNumber, lessonNumber),
+        ).map { result ->
+            result
+                .map(HomeworkAnswersApiResponse::toDomain)
+                .mapErrors { it.toDomainError() }
+        }
+
+    override fun saveHomeworkAnswers(
+        bookId: String,
+        weekNumber: Int,
+        lessonNumber: Int,
+        answers: List<HomeworkAnswer>,
+    ): Flow<DomainResult<Unit>> =
+        http.putFlow<HomeworkAnswersApiRequest, Unit>(
+            path = homeworkAnswersPath(bookId, weekNumber, lessonNumber),
+            body = answers.toApiRequest(),
+        ).map { result ->
+            val request = result.mapErrors { it.toDomainError() }
+            request
+        }
+
+    private fun homeworkAnswersPath(bookId: String, weekNumber: Int, lessonNumber: Int): String =
+        "homework/$bookId/weeks/$weekNumber/lessons/$lessonNumber"
 
     override fun observeHomework(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedHomeworkWeek>> = flow {
         val result = try {

@@ -1,6 +1,7 @@
 package com.spasinnya.mentoring.data.parser
 
 import com.spasinnya.mentoring.domain.model.HomeworkLesson
+import com.spasinnya.mentoring.domain.model.HomeworkOption
 import com.spasinnya.mentoring.domain.model.HomeworkQuestion
 import com.spasinnya.mentoring.domain.model.HomeworkTextSegment
 import com.spasinnya.mentoring.domain.model.ParsedHomeworkWeek
@@ -87,7 +88,8 @@ class HomeworkMarkdownParser {
         content: String,
     ): HomeworkQuestion {
         var type: String? = null
-        val options = mutableListOf<String>()
+        var questionId: String? = null
+        val options = mutableListOf<ParsedOption>()
         val textLines = mutableListOf<String>()
         val bodyLines = mutableListOf<String>()
 
@@ -99,9 +101,13 @@ class HomeworkMarkdownParser {
                 typeRegex.matches(line) ->
                     type = typeRegex.find(line)?.groupValues?.get(1)?.trim()?.lowercase()
 
+                questionIdRegex.matches(line) ->
+                    questionId = questionIdRegex.find(line)
+                        ?.groupValues?.get(1)?.trim()?.takeIf { it.isNotBlank() }
+
                 optionRegex.matches(line) ->
-                    optionRegex.find(line)?.groupValues?.get(1)?.let { option ->
-                        options += option.trim().trimEnd(';').trim()
+                    optionRegex.find(line)?.groupValues?.get(1)?.let { raw ->
+                        options += parseOption(raw)
                     }
 
                 textRegex.matches(line) ->
@@ -113,8 +119,17 @@ class HomeworkMarkdownParser {
             }
         }
 
+        // A `QuestionId:` from the markdown takes precedence over the positional
+        // fallback id, so answer keys stay stable across content edits.
+        val resolvedId = questionId ?: id
+
         val question = parseRich(questionText)
-        val optionParagraphs = options.map { parseRich(it) }
+        val optionModels = options.mapIndexed { index, option ->
+            HomeworkOption(
+                id = option.id ?: "o$index",
+                text = parseRich(option.text),
+            )
+        }
 
         val hasInlineInput = textLines.any {
             it.contains(INPUT_PLACEHOLDER) || it.contains(NUMBER_INPUT_PLACEHOLDER)
@@ -128,7 +143,7 @@ class HomeworkMarkdownParser {
             val items = parseRadioItems(bodyLines)
             if (items.isNotEmpty()) {
                 return HomeworkQuestion.TextRadioButton(
-                    id = id,
+                    id = resolvedId,
                     question = question,
                     items = items,
                 )
@@ -137,63 +152,81 @@ class HomeworkMarkdownParser {
 
         return when {
             options.isNotEmpty() && type == "checkbox_input" -> HomeworkQuestion.CheckboxInput(
-                id = id,
+                id = resolvedId,
                 question = question,
-                options = optionParagraphs,
+                options = optionModels,
                 description = description,
             )
 
             options.isNotEmpty() && type == "radiobutton" -> HomeworkQuestion.RadioButton(
-                id = id,
+                id = resolvedId,
                 question = question,
-                options = optionParagraphs,
+                options = optionModels,
                 description = description,
             )
 
             options.isNotEmpty() -> HomeworkQuestion.Checkbox(
-                id = id,
+                id = resolvedId,
                 question = question,
-                options = optionParagraphs,
+                options = optionModels,
                 description = description,
             )
 
             hasInlineInput -> HomeworkQuestion.TextInput(
-                id = id,
+                id = resolvedId,
                 question = question,
                 segments = parseSegments(textLines),
             )
 
             type == "text" && textLines.isNotEmpty() -> HomeworkQuestion.Text(
-                id = id,
+                id = resolvedId,
                 question = question,
                 paragraphs = textLines.map { parseRich(cleanText(it)) },
             )
 
             type == "question" -> HomeworkQuestion.Open(
-                id = id,
+                id = resolvedId,
                 question = question,
                 description = description,
             )
 
             type == "input" -> HomeworkQuestion.Input(
-                id = id,
+                id = resolvedId,
                 question = question,
                 description = description,
             )
 
             textLines.isNotEmpty() -> HomeworkQuestion.Text(
-                id = id,
+                id = resolvedId,
                 question = question,
                 paragraphs = textLines.map { parseRich(cleanText(it)) },
             )
 
             else -> HomeworkQuestion.Input(
-                id = id,
+                id = resolvedId,
                 question = question,
                 description = description,
             )
         }
     }
+
+    /**
+     * Extracts the optional leading `<id: ...>` tag from a raw option line and
+     * returns it alongside the cleaned option text. Lines without the tag yield
+     * a `null` id, letting the caller fall back to a positional id.
+     */
+    private fun parseOption(raw: String): ParsedOption {
+        val trimmed = raw.trim()
+        val idMatch = optionIdRegex.find(trimmed)
+        val optionId = idMatch?.groupValues?.get(1)?.trim()
+        val text = (idMatch?.let { trimmed.removeRange(it.range) } ?: trimmed)
+            .trim()
+            .trimEnd(';')
+            .trim()
+        return ParsedOption(id = optionId, text = text)
+    }
+
+    private data class ParsedOption(val id: String?, val text: String)
 
     /**
      * Splits the `Text:` lines into rendered segments. Each `<input>` placeholder
@@ -299,7 +332,9 @@ class HomeworkMarkdownParser {
         val lessonHeaderRegex = Regex("""(?m)^#\s+Lesson\s+(\d+)\s*$""")
         val questionHeaderRegex = Regex("""(?m)^##\s+Question:\s*(.+?)\s*$""")
         val typeRegex = Regex("""(?i)^Type:\s*(.+?)\s*$""")
+        val questionIdRegex = Regex("""(?i)^QuestionId:\s*(.*?)\s*$""")
         val optionRegex = Regex("""^□\s*(.+?)\s*$""")
+        val optionIdRegex = Regex("""^<id:\s*([^>]+)>\s*""")
         val textRegex = Regex("""(?i)^Text:\s*(.+?)\s*$""")
         val radioRowRegex = Regex("""^(.*?)<([^>]*)>\s*$""")
         val inputTokenRegex = Regex(NUMBER_INPUT_PLACEHOLDER + "|" + INPUT_PLACEHOLDER)

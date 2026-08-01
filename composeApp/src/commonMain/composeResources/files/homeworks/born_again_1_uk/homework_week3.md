@@ -12,6 +12,7 @@ Type: question
 Type: question
 ## Question: ✍️ ВСТАВТЕ ПРОПУЩЕНІ СЛОВА:
 Type: text_input
+QuestionId: fill_in_the_missing_words
 Text: «Якщо ж <input> свої гріхи, то Він, вірний і праведний, <input> нам гріхи й <input> нас від усякої неправедності».
 ## Question: 🕊️ ПОДУМАЙТЕ, В ЧОМУ ВИ СЬОГОДНІ ЗГРІШИЛИ? ПОМОЛІТЬСЯ МОЛИТВОЮ ПОКАЯННЯ
 Type: question
@@ -32,12 +33,13 @@ Type: question
 # Lesson 4
 ## Question: ✍️ ЧИ СОРОМИТЕСЬ ВИ ІСУСА ПЕРЕД ЛЮДЬМИ? (ПОЗНАЧТЕ)
 Type: radiobutton
-□ Так
-□ Ні
-□ Іноді
-□ Тільки перед друзями
-□ Сміливо проповідую
-□ Боюся
+QuestionId: shy_of_jesus
+□ <id: yes> Так
+□ <id: no> Ні
+□ <id: something> Іноді
+□ <id: friends> Тільки перед друзями
+□ <id: boldly> Сміливо проповідую
+□ <id: afraid> Боюся
 ## Question: ✔️ ОБГОВОРІТЬ ЦЮ ТЕМУ З НАСТАВНИКОМ
 Type: question
 ## Question: 📖 ВИВЧІТЬ НАПАМ’ЯТЬ І ПРАКТИКУЙТЕ У ЖИТТІ ВІРШ ІЗ 1-ГО ПОСЛАННЯ ІВАНА 1:7:
@@ -51,8 +53,10 @@ Type: question
 # Lesson 5
 ## Question: ✍️ ЩО У ВАШОМУ ЖИТТІ ВИ ВЖЕ ПЕРЕМОГЛИ, СТАВШИ ХРИСТИЯНИНОМ?
 Type: input
+QuestionId: became_a_christian
 ## Question: ✍️ ЯКІ ГРІХИ ЧИ ПРОБЛЕМИ ОСОБЛИВО НАДОКУЧАЮТЬ ВАМ?
 Type: input
+QuestionId: trouble_you_the_most
 ## Question: ✔️ ПРИНЕСІТЬ ПОДЯКИ І ПОТРЕБИ ІСУСУ РАЗОМ ІЗ НАСТАВНИКОМ
 Type: question
 ## Question: 📖 ВИВЧІТЬ НАПАМ’ЯТЬ І ПРАКТИКУЙТЕ У ЖИТТІ ВІРШ ІЗ ПОСЛАННЯ ДО ЄВРЕЇВ 9:14:
