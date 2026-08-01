@@ -20,10 +20,12 @@ import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RegisterUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
+import com.spasinnya.mentoring.domain.usecase.books.GetHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveHomeworkUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
+import com.spasinnya.mentoring.domain.usecase.books.SaveHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.GetProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
@@ -83,6 +85,8 @@ val useCaseModule = module {
     factoryOf(::GetWeeksUseCase)
     factoryOf(::ObserveBookUseCase)
     factoryOf(::ObserveHomeworkUseCase)
+    factoryOf(::GetHomeworkAnswersUseCase)
+    factoryOf(::SaveHomeworkAnswersUseCase)
     factoryOf(::GetProfileUseCase)
     factoryOf(::UpdateProfileUseCase)
     factoryOf(::GetAppLocaleUseCase)
@@ -110,9 +114,12 @@ val viewModelModule = module {
     }
     viewModel { params ->
         PracticalWorkViewModel(
-            bookId = params.get(),
-            weekNumber = params.get(),
-            observeHomeworkUseCase = get()
+            bookId = params.get(0),
+            weekNumber = params.get(1),
+            lessonNumber = params.get(2),
+            observeHomeworkUseCase = get(),
+            getHomeworkAnswersUseCase = get(),
+            saveHomeworkAnswersUseCase = get()
         )
     }
 }

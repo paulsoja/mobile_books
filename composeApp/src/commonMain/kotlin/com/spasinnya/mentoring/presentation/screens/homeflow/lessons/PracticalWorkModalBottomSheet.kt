@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spasinnya.mentoring.domain.mapper.asAnnotatedString
 import com.spasinnya.mentoring.domain.model.HomeworkLesson
+import com.spasinnya.mentoring.domain.model.HomeworkOption
 import com.spasinnya.mentoring.domain.model.HomeworkQuestion
 import com.spasinnya.mentoring.domain.model.HomeworkTextSegment
 import com.spasinnya.mentoring.domain.model.RichParagraph
@@ -37,6 +38,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.question.Que
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionRadioRow
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionSegment
 import org.koin.core.parameter.parametersOf
+import kotlin.jvm.JvmName
 
 @Composable
 fun PracticalWorkModalBottomSheet(
@@ -47,16 +49,17 @@ fun PracticalWorkModalBottomSheet(
 ) {
     CoreModalBottomSheet<PracticalWorkSheetAction>(
         onDismissed = onClose,
-        onAction = { action ->
-            when (action) {
-                PracticalWorkClose -> Unit
-                PracticalWorkConfirm -> Unit
-            }
-        },
+        onAction = { /* handled per-action inside the sheet content */ },
         shouldDismissOnAction = { it is PracticalWorkSheetDismissAction }
     ) {
         val (viewModel, state) = rememberScreenModel<PracticalWorkViewModel, PracticalWorkContract.State, PracticalWorkContract.Effect>(
-            parameters = { parametersOf(bookId, weekNumber) }
+            parameters = { parametersOf(bookId, weekNumber, lessonNumber) },
+            onEffect = { effect ->
+                when (effect) {
+                    PracticalWorkContract.Effect.Saved -> dismiss()
+                    PracticalWorkContract.Effect.SaveFailed -> Unit
+                }
+            },
         )
 
         PracticalWorkModalBottomSheetContent(
@@ -65,7 +68,12 @@ fun PracticalWorkModalBottomSheet(
             selectedOptions = state.selectedOptions,
             textAnswers = state.textAnswers,
             onEvent = viewModel::dispatchEvent,
-            onAction = ::send,
+            onAction = { action ->
+                when (action) {
+                    PracticalWorkClose -> send(action)
+                    PracticalWorkConfirm -> viewModel.dispatchEvent(PracticalWorkContract.Event.Save)
+                }
+            },
         )
     }
 }
@@ -241,11 +249,9 @@ private fun HomeworkQuestionItem(
     }
 }
 
-/** Renders a homework [RichParagraph] into a styled [AnnotatedString]. */
 private fun RichParagraph.rich(): AnnotatedString =
     asAnnotatedString(highlightColor = HomeworkHighlightColor)
 
-/** Joins display paragraphs into a single [AnnotatedString], separated by blank lines. */
 private fun List<RichParagraph>.joinRich(): AnnotatedString =
     buildAnnotatedString {
         this@joinRich.forEachIndexed { index, paragraph ->
@@ -254,18 +260,32 @@ private fun List<RichParagraph>.joinRich(): AnnotatedString =
         }
     }
 
-private fun List<RichParagraph>.toOptions(
+private fun List<HomeworkOption>.toOptions(
     questionId: String,
     checkedOptions: Map<String, Boolean>,
-): List<QuestionOption> = mapIndexed { index, label ->
-    val optionId = "${questionId}_o$index"
+): List<QuestionOption> = map { option ->
+    val optionId = "${questionId}_${option.id}"
     QuestionOption(
         id = optionId,
-        label = label.rich(),
+        label = option.text.rich(),
         checked = checkedOptions[optionId] == true,
     )
 }
 
+@JvmName("homeworkOptionsToRadioOptions")
+private fun List<HomeworkOption>.toRadioOptions(
+    questionId: String,
+    selectedOptions: Map<String, String>,
+): List<QuestionOption> = map { option ->
+    val optionId = "${questionId}_${option.id}"
+    QuestionOption(
+        id = optionId,
+        label = option.text.rich(),
+        checked = selectedOptions[questionId] == optionId,
+    )
+}
+
+@JvmName("richParagraphsToRadioOptions")
 private fun List<RichParagraph>.toRadioOptions(
     questionId: String,
     selectedOptions: Map<String, String>,

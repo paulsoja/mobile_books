@@ -2,20 +2,23 @@
 # Lesson 1
 ## Question: ✍️ А ЧОГО ДЛЯ «ПОВНОГО ЩАСТЯ» НЕ ВИСТАЧАЄ САМЕ ВАМ?
 Type: checkbox
-□ Більше грошей
-□ Вірних друзів
-□ Миру в сім'ї
-□ Здоров'я
-□ Близьких стосунків з Богом
-□ Я вже щасливий
+QuestionId: lack_for_happiness
+□ <id: money> Більше грошей
+□ <id: friends> Вірних друзів
+□ <id: family_peace> Миру в сім'ї
+□ <id: health> Здоров'я
+□ <id: closeness_with_god> Близьких стосунків з Богом
+□ <id: already_happy> Я вже щасливий
 
 ---
 
 # Lesson 2
 ## Question: ✍️ ПРИГАДАЙТЕ ТИХ, ХТО ЗАВДАВ ВАМ БОЛЮ. ЯКЩО ЦЕ МОЖЛИВО, ЗАПИШІТЬ ЇХ ІМЕНА:
 Type: input
+QuestionId: those_who_hurt_you
 ## Question: ✍️ ПОМОЛІТЬСЯ РАЗОМ ЗІ МНОЮ:
 type: text_input
+QuestionId: prayer_of_forgiveness
 Text: <i>Ісусе! Я знаю, що Ти пробачив Своїх ворогів, і прошу у Тебе сили вчинити так само. Сьогодні я прощаю <input> (назвіть імена) і приймаю від Тебе зцілення своєї душі. Амінь.</i>
 
 ---
