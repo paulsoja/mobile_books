@@ -12,7 +12,8 @@ Type: question
 Type: question
 ## Question: ✍️ FILL IN THE MISSING WORDS:
 Type: text_input
-Text: «If we <input> our sins, he is faithful and just and will <input> us our sins and <input> us from all unrighteousness».
+QuestionId: fill_in_the_missing_words
+Text: «If we <id: one> <input> our sins, he is faithful and just and will <id: two> <input> us our sins and <id: three> <input> us from all unrighteousness».
 ## Question: 🕊️ THINK ABOUT THE SINS YOU HAVE DONE TODAY. PRAY THE PRAYER OF REPENTANCE.
 Type: question
 ## Question: ✔️ SHARE IT WITH YOUR MENTOR
@@ -32,12 +33,13 @@ Type: question
 # Lesson 4
 ## Question: ✍️ ARE YOU SHY OF JESUS AROUND OTHER PEOPLE? (MARK)
 Type: radiobutton
-□ Yes
-□ No
-□ Something
-□ Only around friends
-□ I preach boldly
-□ I am afraid
+QuestionId: shy_of_jesus
+□ <id: yes> Yes
+□ <id: no> No
+□ <id: something> Something
+□ <id: friends> Only around friends
+□ <id: boldly> I preach boldly
+□ <id: afraid> I am afraid
 ## Question: ✔️ DISCUSS IT WITH YOUR MENTOR
 Type: question
 ## Question: 📖 MEMORIZE AND APPLY THE PASSAGE FROM 1 JOHN 1:7
@@ -51,8 +53,10 @@ Type: question
 # Lesson 5
 ## Question: ✍️ WHAT DID YOU OVERCOME IN YOUR LIFE AFTER YOU BECAME A CHRISTIAN?
 Type: input
+QuestionId: became_a_christian
 ## Question: ✍️ WHAT SINS AND PROBLEMS TROUBLE YOU THE MOST?
 Type: input
+QuestionId: trouble_you_the_most
 ## Question: ✔️ THANK JESUS AND TELL HIM YOUR NEEDS
 Type: question
 ## Question: 📖 MEMORIZE A PASSAGE FROM HEBREWS 9:14 AND APPLY IT IN YOUR LIFE
