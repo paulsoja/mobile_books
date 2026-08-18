@@ -3,6 +3,7 @@ package com.spasinnya.mentoring.presentation.screens.authflow.otp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.spasinnya.mentoring.domain.enums.OtpPurpose
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.OtpCode
 import com.spasinnya.mentoring.domain.model.OtpCredentials
@@ -21,17 +22,17 @@ import kotlinx.coroutines.launch
 class OtpViewModel(
     private val requestOtpUseCase: RequestOtpCodeUseCase,
     private val otpCodeUseCase: ConfirmOtpCodeUseCase,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : BaseMviViewModel<OtpContract.State, OtpContract.Event, OtpContract.Effect>(
-    initialState = OtpContract.State(
-        email = run {
-            val rawEmail = savedStateHandle.toRoute<Screen.AuthFlow.OtpScreen>().email
-            when (val validated = Email.of(rawEmail)) {
+    initialState = savedStateHandle.toRoute<Screen.AuthFlow.OtpScreen>().let { route ->
+        OtpContract.State(
+            email = when (val validated = Email.of(route.email)) {
                 is Validated.Valid -> validated.value
                 is Validated.Invalid -> error("OtpViewModel got invalid email: $validated")
-            }
-        }
-    )
+            },
+            purpose = OtpPurpose.fromName(route.purpose)
+        )
+    }
 ) {
 
     override fun handleEvent(event: OtpContract.Event) {
@@ -40,20 +41,20 @@ class OtpViewModel(
             is OtpContract.Event.ConfirmClicked -> validateCredentials(
                 email = event.email,
                 code = event.otp,
-                onValid = ::confirmOtp
+                onValid = ::submitOtp
             )
 
             OtpContract.Event.DismissDialog -> hideDialog()
-            is OtpContract.Event.RequestOtp -> requestOtp(event.email)
+            OtpContract.Event.RequestOtp -> requestOtp()
         }
     }
 
     init {
-        dispatchEvent(OtpContract.Event.RequestOtp(state.value.email))
+        dispatchEvent(OtpContract.Event.RequestOtp)
     }
 
-    private fun requestOtp(email: Email.Valid) = viewModelScope.launch(Dispatchers.IO) {
-        requestOtpUseCase.invoke(email)
+    private fun requestOtp() = viewModelScope.launch(Dispatchers.IO) {
+        requestOtpUseCase.invoke(email = state.value.email, purpose = state.value.purpose)
             .withLoading {  }
             .collectLatest { result ->
                 when (result) {
@@ -75,6 +76,20 @@ class OtpViewModel(
             }
             is Validated.Invalid -> {
                 setState { copy(otpError = result.error) }
+            }
+        }
+    }
+
+    private fun submitOtp(otpCredentials: OtpCredentials) {
+        when (state.value.purpose) {
+            OtpPurpose.LOGIN -> confirmOtp(otpCredentials)
+            // Password reset validates the code server-side in /reset-password, so verifying it
+            // here would consume it and sign the user in before the new password is set.
+            OtpPurpose.PASSWORD_RESET -> sendEffect {
+                OtpContract.Effect.NavigateToNewPassword(
+                    email = otpCredentials.email.value,
+                    code = otpCredentials.otp.value
+                )
             }
         }
     }

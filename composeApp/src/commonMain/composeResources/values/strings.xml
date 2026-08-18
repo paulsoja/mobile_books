@@ -31,6 +31,7 @@
     <string name="error_check_email">Please check your email or register again</string>
     <string name="error_otp_expired">Code expired</string>
     <string name="error_request_new_code">Please request a new code and try again</string>
+    <string name="error_passwords_not_match">Passwords don’t match</string>
 
     <!--Auth-->
     <string name="auth_login">Log in</string>
@@ -50,6 +51,8 @@
     <string name="auth_forgot_password">Forgot your password?</string>
     <string name="auth_here_account_login">Log in to your account here</string>
     <string name="auth_create_new_password">Create a new password 🔓</string>
+    <string name="auth_new_password">New password</string>
+    <string name="auth_repeat_password">Repeat password</string>
     <string name="auth_otp_send_again">Send again</string>
     <string name="auth_otp_no_code">Didn’t receive the code?</string>
     <string name="auth_otp_code_sent">The code was sent to</string>

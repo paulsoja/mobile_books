@@ -8,12 +8,13 @@ sealed class Screen {
         data object LoginScreen : AuthFlow()
         @Serializable
         data object RegisterScreen : AuthFlow()
+        // purpose is an OtpPurpose name: enum route arguments are unsupported by navigation on iOS
         @Serializable
-        data class OtpScreen(val email: String) : AuthFlow()
+        data class OtpScreen(val email: String, val purpose: String) : AuthFlow()
         @Serializable
         data object ResetPasswordScreen : AuthFlow()
         @Serializable
-        data object NewPasswordScreen : AuthFlow()
+        data class NewPasswordScreen(val email: String, val code: String) : AuthFlow()
     }
 
     sealed class HomeFlow : Screen() {

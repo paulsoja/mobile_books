@@ -19,6 +19,7 @@ import com.spasinnya.mentoring.domain.usecase.auth.LoginUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RegisterUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.ResetPasswordUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
@@ -77,6 +78,7 @@ val useCaseModule = module {
     factoryOf(::RegisterUseCase)
     factoryOf(::ConfirmOtpCodeUseCase)
     factoryOf(::RequestOtpCodeUseCase)
+    factoryOf(::ResetPasswordUseCase)
     factoryOf(::LogoutUseCase)
     factoryOf(::CheckAuthStepsUseCase)
     factoryOf(::ChangeCongratsShownStatusUseCase)

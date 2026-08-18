@@ -104,7 +104,7 @@ fun OtpContent(
             CoreTextBody(text = stringResource(Res.string.auth_otp_no_code))
             CoreTextButton(
                 text = stringResource(Res.string.auth_otp_send_again),
-                onClick = {}
+                onClick = { onEvent(OtpContract.Event.RequestOtp) }
             )
         }
     }

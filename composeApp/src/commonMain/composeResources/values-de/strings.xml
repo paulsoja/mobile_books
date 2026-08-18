@@ -31,6 +31,7 @@
     <string name="error_check_email">Bitte überprüfen Sie Ihre E-Mail oder registrieren Sie sich erneut</string>
     <string name="error_otp_expired">Code abgelaufen</string>
     <string name="error_request_new_code">Bitte fordern Sie einen neuen Code an und versuchen Sie es erneut</string>
+    <string name="error_passwords_not_match">Passwörter stimmen nicht überein</string>
 
     <!--Auth-->
     <string name="auth_login">Anmelden</string>
@@ -50,6 +51,8 @@
     <string name="auth_forgot_password">Passwort vergessen?</string>
     <string name="auth_here_account_login">Hier melden Sie sich bei Ihrem Konto an</string>
     <string name="auth_create_new_password">Neues Passwort erstellen 🔓</string>
+    <string name="auth_new_password">Neues Passwort</string>
+    <string name="auth_repeat_password">Passwort wiederholen</string>
     <string name="auth_otp_send_again">Erneut senden</string>
     <string name="auth_otp_no_code">Keinen Code erhalten?</string>
     <string name="auth_otp_code_sent">Der Code wurde gesendet an</string>

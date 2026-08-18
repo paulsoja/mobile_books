@@ -1,5 +1,6 @@
 package com.spasinnya.mentoring.data.repository
 
+import com.spasinnya.mentoring.data.mapper.toData
 import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.*
@@ -7,6 +8,7 @@ import com.spasinnya.mentoring.data.net.postFlow
 import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
+import com.spasinnya.mentoring.domain.enums.OtpPurpose
 import com.spasinnya.mentoring.domain.model.DomainResult
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.Token
@@ -55,10 +57,18 @@ class AuthDataRepository(
                 .mapErrors { it.toDomainError() }
         }.alsoValidDo(tokenStore::save)
 
-    override fun requestOtp(email: Email.Valid): Flow<DomainResult<Unit>> =
+    override fun requestOtp(email: Email.Valid, purpose: OtpPurpose): Flow<DomainResult<Unit>> =
         http.postFlow<OtpEmailApiRequest, Unit>(
             path = "request-otp",
-            body = OtpEmailApiRequest(email.value)
+            body = OtpEmailApiRequest(email = email.value, purpose = purpose.toData())
+        ).map { result ->
+            result.mapErrors { it.toDomainError() }
+        }
+
+    override fun resetPassword(request: ResetPasswordApiRequest): Flow<DomainResult<Unit>> =
+        http.postFlow<ResetPasswordApiRequest, Unit>(
+            path = "reset-password",
+            body = request
         ).map { result ->
             result.mapErrors { it.toDomainError() }
         }

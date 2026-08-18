@@ -31,6 +31,7 @@
     <string name="error_check_email">Перевірте email або зареєструйтеся знову</string>
     <string name="error_otp_expired">Код прострочено</string>
     <string name="error_request_new_code">Будь ласка, запросіть новий код і спробуйте ще раз</string>
+    <string name="error_passwords_not_match">Паролі не збігаються</string>
 
     <!--Auth-->
     <string name="auth_login">Увійти</string>
@@ -50,6 +51,8 @@
     <string name="auth_forgot_password">Не пам'ятаєте пароль?</string>
     <string name="auth_here_account_login">Тут вхід в ваш акаунт</string>
     <string name="auth_create_new_password">Створіть новий пароль 🔓</string>
+    <string name="auth_new_password">Новий пароль</string>
+    <string name="auth_repeat_password">Повторіть пароль</string>
     <string name="auth_otp_send_again">Надіслати знову</string>
     <string name="auth_otp_no_code">Не отримали код?</string>
     <string name="auth_otp_code_sent">Код було відправлено на</string>
