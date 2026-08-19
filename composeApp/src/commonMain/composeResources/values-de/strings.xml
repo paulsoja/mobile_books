@@ -32,6 +32,8 @@
     <string name="error_otp_expired">Code abgelaufen</string>
     <string name="error_request_new_code">Bitte fordern Sie einen neuen Code an und versuchen Sie es erneut</string>
     <string name="error_passwords_not_match">Passwörter stimmen nicht überein</string>
+    <string name="error_session_expired">Sitzung abgelaufen</string>
+    <string name="error_login_again">Bitte melden Sie sich erneut an</string>
 
     <!--Auth-->
     <string name="auth_login">Anmelden</string>

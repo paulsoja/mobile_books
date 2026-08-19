@@ -8,6 +8,8 @@ import com.spasinnya.mentoring.data.repository.BooksDataRepository
 import com.spasinnya.mentoring.data.repository.PrefDataRepository
 import com.spasinnya.mentoring.data.repository.ProfileDataRepository
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
+import com.spasinnya.mentoring.data.storage.datastore.AppStore
+import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.AuthRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.PrefRepository
@@ -16,6 +18,7 @@ import com.spasinnya.mentoring.domain.usecase.auth.ChangeCongratsShownStatusUseC
 import com.spasinnya.mentoring.domain.usecase.auth.CheckAuthStepsUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.ConfirmOtpCodeUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.LoginUseCase
+import com.spasinnya.mentoring.domain.usecase.auth.ObserveAuthStepsUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RegisterUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
@@ -61,7 +64,11 @@ val dataModule = module {
         createHttpClient(
             tokenStore = get(),
             readLanguageTag = { get<PrefRepository>().getLocaleTag() },
-            defaultLang = "en"
+            defaultLang = "en",
+            onSessionExpired = {
+                get<TokenStore>().clear()
+                get<AppStore>().clear()
+            }
         )
     }
 }
@@ -81,6 +88,7 @@ val useCaseModule = module {
     factoryOf(::ResetPasswordUseCase)
     factoryOf(::LogoutUseCase)
     factoryOf(::CheckAuthStepsUseCase)
+    factoryOf(::ObserveAuthStepsUseCase)
     factoryOf(::ChangeCongratsShownStatusUseCase)
     factoryOf(::GetBooksUseCase)
     factoryOf(::PurchaseBookUseCase)

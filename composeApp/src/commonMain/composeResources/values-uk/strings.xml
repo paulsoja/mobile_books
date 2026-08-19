@@ -32,6 +32,8 @@
     <string name="error_otp_expired">Код прострочено</string>
     <string name="error_request_new_code">Будь ласка, запросіть новий код і спробуйте ще раз</string>
     <string name="error_passwords_not_match">Паролі не збігаються</string>
+    <string name="error_session_expired">Сесія завершилася</string>
+    <string name="error_login_again">Будь ласка, увійдіть знову</string>
 
     <!--Auth-->
     <string name="auth_login">Увійти</string>
