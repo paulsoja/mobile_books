@@ -100,7 +100,8 @@ class HomeViewModel(
 
     private fun logout() = viewModelScope.launch {
         logoutUseCase.invoke()
-            .collect()
+            .withLoading { loading -> setState { copy(isLoading = loading) } }
+            .collectLatest { sendEffect { HomeContract.Effect.NavigateToLogin } }
     }
 
     private fun toggleLogoutDialog(show: Boolean) {

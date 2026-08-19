@@ -7,6 +7,7 @@ import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collectLatest
@@ -26,6 +27,7 @@ class ProfileViewModel(
             is ProfileContract.Event.UpdateFirstName -> setState { copy(firstName = event.value) }
             is ProfileContract.Event.UpdateLastName -> setState { copy(lastName = event.value) }
             ProfileContract.Event.SaveProfile -> saveProfile()
+            ProfileContract.Event.DismissDialog -> setState { copy(dialog = DialogState.Hidden) }
         }
     }
 
@@ -37,7 +39,7 @@ class ProfileViewModel(
                     is Validated.Valid -> applyProfile(result.value)
                     is Validated.Invalid -> handleDomainErrors(
                         error = result.error,
-                        reduce = { copy(isLoading = false) }
+                        reduce = { errorType -> copy(isLoading = false, dialog = DialogState.Shown(errorType)) }
                     )
                 }
             }
@@ -56,7 +58,7 @@ class ProfileViewModel(
                     is Validated.Invalid -> {
                         handleDomainErrors(
                             error = result.error,
-                            reduce = { copy(isLoading = false) }
+                            reduce = { errorType -> copy(isLoading = false, dialog = DialogState.Shown(errorType)) }
                         )
                         sendEffect { ProfileContract.Effect.SaveFailed }
                     }

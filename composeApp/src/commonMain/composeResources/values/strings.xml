@@ -31,6 +31,8 @@
     <string name="error_check_email">Please check your email or register again</string>
     <string name="error_otp_expired">Code expired</string>
     <string name="error_request_new_code">Please request a new code and try again</string>
+    <string name="error_session_expired">Session expired</string>
+    <string name="error_login_again">Please log in again</string>
 
     <!--Auth-->
     <string name="auth_login">Log in</string>

@@ -10,7 +10,8 @@ fun DomainError.toUiErrorType(): UiErrorType =
 
         DomainError.ServerError -> UiErrorType.Server
 
-        DomainError.Unauthorized,
+        DomainError.Unauthorized -> UiErrorType.SessionExpired
+
         DomainError.Forbidden,
         DomainError.NotFound,
         DomainError.ClientError,

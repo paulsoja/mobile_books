@@ -11,11 +11,15 @@ import com.spasinnya.mentoring.domain.model.DomainResult
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.Token
 import com.spasinnya.mentoring.domain.repository.AuthRepository
+import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.alsoValidDo
 import com.spasinnya.mentoring.presentation.base.map
 import com.spasinnya.mentoring.presentation.base.mapErrors
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.authProvider
+import io.ktor.client.plugins.auth.providers.BearerAuthProvider
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -34,7 +38,7 @@ class AuthDataRepository(
             result
                 .map(TokenApiResponse::toDomain)
                 .mapErrors { it.toDomainError() }
-        }.alsoValidDo(tokenStore::save)
+        }.alsoValidDo(::saveSession)
             .alsoValidDo { appStore.save(true) }
 
     override fun register(credentials: CredentialsApiRequest): Flow<DomainResult<String>> =
@@ -53,7 +57,7 @@ class AuthDataRepository(
             result
                 .map(TokenApiResponse::toDomain)
                 .mapErrors { it.toDomainError() }
-        }.alsoValidDo(tokenStore::save)
+        }.alsoValidDo(::saveSession)
 
     override fun requestOtp(email: Email.Valid): Flow<DomainResult<Unit>> =
         http.postFlow<OtpEmailApiRequest, Unit>(
@@ -64,16 +68,31 @@ class AuthDataRepository(
         }
 
     override fun logout(): Flow<DomainResult<Unit>> = flow {
-        val token = tokenStore.read() ?: throw Exception("Can't logout, no token")
-        
-        http.postFlow<TokenApiRequest, Unit>(
-            path = "logout",
-            body = TokenApiRequest(token.refreshToken)
-        ).map { result ->
-            result.mapErrors { it.toDomainError() }
-        }.alsoValidDo { tokenStore.clear() }
-            .alsoValidDo { appStore.clear() }
-            .alsoValidDo { localeStore.clear() }
-            .collect { emit(it) }
+        val token = tokenStore.read()
+
+        val result = token?.let {
+            http.postFlow<TokenApiRequest, Unit>(
+                path = "logout",
+                body = TokenApiRequest(it.refreshToken)
+            ).map { response ->
+                response.mapErrors { error -> error.toDomainError() }
+            }.first()
+        } ?: Validated.Valid(Unit)
+
+        clearSession()
+
+        emit(result)
+    }
+
+    private suspend fun saveSession(token: Token) {
+        tokenStore.save(token)
+        http.authProvider<BearerAuthProvider>()?.clearToken()
+    }
+
+    private suspend fun clearSession() {
+        tokenStore.clear()
+        appStore.clear()
+        localeStore.clear()
+        http.authProvider<BearerAuthProvider>()?.clearToken()
     }
 }

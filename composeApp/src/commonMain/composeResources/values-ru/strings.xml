@@ -31,6 +31,8 @@
     <string name="error_check_email">Проверьте email или зарегистрируйтесь снова</string>
     <string name="error_otp_expired">Код истёк</string>
     <string name="error_request_new_code">Пожалуйста, запросите новый код и попробуйте снова</string>
+    <string name="error_session_expired">Сессия завершилась</string>
+    <string name="error_login_again">Пожалуйста, войдите снова</string>
 
     <!--Auth-->
     <string name="auth_login">Войти</string>
