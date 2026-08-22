@@ -99,37 +99,52 @@ fun WeekItem(
             onClick.invoke(week.weekNumber)
         },
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                CoreTextBody(
-                    text = stringResource(Res.string.common_week) + " ${week.weekNumber}",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color(0xFFDFA672),
-                        fontWeight = FontWeight.Normal
+                Column(
+                    modifier = Modifier.weight(1f),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    CoreTextBody(
+                        text = stringResource(Res.string.common_week) + " ${week.weekNumber}",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = Color(0xFFDFA672),
+                            fontWeight = FontWeight.Normal
+                        )
                     )
-                )
-                CoreTextBody(
-                    text = week.weekTitle,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = Color(0xFF3C4E73),
-                        fontSize = 14.sp
+                    CoreTextBody(
+                        text = week.weekTitle,
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF3C4E73),
+                            fontSize = 14.sp
+                        )
                     )
+                }
+                Icon(
+                    imageVector = vectorResource(Res.drawable.ic_chevron_right),
+                    contentDescription = "",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(32.dp).padding(all = 2.dp)
                 )
             }
-            Icon(
-                imageVector = vectorResource(Res.drawable.ic_chevron_right),
-                contentDescription = "",
-                tint = Color.Unspecified,
-                modifier = Modifier.size(32.dp).padding(all = 2.dp)
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(4.dp)
+                    .background(Color(0xFFE0E0E0))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(week.completed / 5f)
+                        .height(4.dp)
+                        .background(Color(0xFFDFA672))
+                )
+            }
         }
     }
 }

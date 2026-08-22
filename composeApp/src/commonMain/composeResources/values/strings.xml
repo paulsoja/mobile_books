@@ -73,5 +73,6 @@
     <string name="home_settings_salvation_church">"Salvation" Church</string>
 
     <!--Lessons-->
+    <string name="lessons_lesson">Lesson</string>
     <string name="lessons_practical_work">Workshop</string>
 </resources>

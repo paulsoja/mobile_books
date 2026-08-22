@@ -124,7 +124,7 @@ class PracticalWorkViewModel(
                 Napier.d { "saveHomeworkAnswers: collect=$result" }
                 setState { copy(isSaving = false) }
                 when (result) {
-                    is Validated.Valid -> sendEffect { PracticalWorkContract.Effect.Saved }
+                    is Validated.Valid -> sendEffect { PracticalWorkContract.Effect.Saved(result.value) }
                     is Validated.Invalid -> sendEffect { PracticalWorkContract.Effect.SaveFailed }
                 }
             }

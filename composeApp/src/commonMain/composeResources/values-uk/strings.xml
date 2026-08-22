@@ -73,6 +73,6 @@
     <string name="home_settings_salvation_church">Церква "Спасіння"</string>
 
     <!--Lessons-->
+    <string name="lessons_lesson">Урок</string>
     <string name="lessons_practical_work">Практична робота</string>
-
 </resources>

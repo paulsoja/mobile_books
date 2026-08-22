@@ -21,7 +21,7 @@ interface PracticalWorkContract {
     }
 
     sealed class Effect {
-        data object Saved : Effect()
+        data class Saved(val completedLessons: List<Int>) : Effect()
         data object SaveFailed : Effect()
     }
 }

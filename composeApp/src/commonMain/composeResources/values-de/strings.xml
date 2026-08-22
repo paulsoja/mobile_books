@@ -73,5 +73,6 @@
     <string name="home_settings_salvation_church">Kirche "Rettung"</string>
 
     <!--Lessons-->
+    <string name="lessons_lesson">Lektion</string>
     <string name="lessons_practical_work">Praktische Arbeit</string>
 </resources>
