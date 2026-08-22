@@ -11,12 +11,14 @@ interface LessonsContract {
         val lessonsWithHomework: Set<Int> = emptySet(),
         /** Lesson whose practical-work sheet is open, or null when none. */
         val practicalWorkLesson: Int? = null,
+        val completedLessons: List<Int> = emptyList(),
         val isLoading: Boolean = false,
     )
 
     sealed class Event {
         data class OpenPracticalWork(val lessonNumber: Int) : Event()
         data object ClosePracticalWork : Event()
+        data class UpdateCompletedLessons(val completedLessons: List<Int>) : Event()
     }
 
     sealed class Effect {

@@ -2,6 +2,7 @@ package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
 import androidx.lifecycle.viewModelScope
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
+import com.spasinnya.mentoring.domain.usecase.books.GetCompletedLessonsUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveHomeworkUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
@@ -17,6 +18,7 @@ class LessonsViewModel(
     private val weekNumber: Int,
     private val importBookFromMarkdownUseCase: ObserveBookUseCase,
     private val observeHomeworkUseCase: ObserveHomeworkUseCase,
+    private val getCompletedLessonsUseCase: GetCompletedLessonsUseCase,
 ) : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>(initialState = LessonsContract.State(weekNumber = weekNumber)) {
 
     override fun handleEvent(event: LessonsContract.Event) {
@@ -28,12 +30,16 @@ class LessonsViewModel(
             is LessonsContract.Event.ClosePracticalWork -> setState {
                 copy(practicalWorkLesson = null)
             }
+            is LessonsContract.Event.UpdateCompletedLessons -> setState {
+                copy(completedLessons = event.completedLessons)
+            }
         }
     }
 
     init {
         loadLessons()
         loadHomeworkAvailability()
+        loadCompletedLessons()
     }
 
     private fun loadLessons() = viewModelScope.launch(Dispatchers.IO) {
@@ -82,6 +88,24 @@ class LessonsViewModel(
                         .toSet()
                 }
                 setState { copy(lessonsWithHomework = lessonNumbers) }
+            }
+    }
+
+    private fun loadCompletedLessons() = viewModelScope.launch(Dispatchers.IO) {
+        getCompletedLessonsUseCase.invoke(bookId, weekNumber)
+            .catch {
+                Napier.d { "getCompletedLessonsUseCase: catch=${it.message}" }
+            }
+            .collectLatest { result ->
+                when (result) {
+                    is Validated.Invalid -> Unit
+                    is Validated.Valid -> {
+                        Napier.d { "getCompletedLessonsUseCase: valid=${result.value.joinToString(separator = " | ")}" }
+                        setState {
+                            copy(completedLessons = result.value)
+                        }
+                    }
+                }
             }
     }
 }

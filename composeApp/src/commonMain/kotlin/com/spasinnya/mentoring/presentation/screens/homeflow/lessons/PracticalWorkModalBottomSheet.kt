@@ -21,6 +21,10 @@ import com.spasinnya.mentoring.domain.model.HomeworkOption
 import com.spasinnya.mentoring.domain.model.HomeworkQuestion
 import com.spasinnya.mentoring.domain.model.HomeworkTextSegment
 import com.spasinnya.mentoring.domain.model.RichParagraph
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.common_confirm
+import com.spasinnya.mentoring.generated.resources.lessons_lesson
+import com.spasinnya.mentoring.generated.resources.lessons_practical_work
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreModalTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
@@ -37,6 +41,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.question.Cor
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionOption
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionRadioRow
 import com.spasinnya.mentoring.presentation.designsystem.composable.question.QuestionSegment
+import org.jetbrains.compose.resources.stringResource
 import org.koin.core.parameter.parametersOf
 import kotlin.jvm.JvmName
 
@@ -46,6 +51,7 @@ fun PracticalWorkModalBottomSheet(
     weekNumber: Int,
     lessonNumber: Int,
     onClose: () -> Unit,
+    onSaved: (List<Int>) -> Unit = {},
 ) {
     CoreModalBottomSheet<PracticalWorkSheetAction>(
         onDismissed = onClose,
@@ -56,7 +62,10 @@ fun PracticalWorkModalBottomSheet(
             parameters = { parametersOf(bookId, weekNumber, lessonNumber) },
             onEffect = { effect ->
                 when (effect) {
-                    PracticalWorkContract.Effect.Saved -> dismiss()
+                    is PracticalWorkContract.Effect.Saved -> {
+                        onSaved(effect.completedLessons)
+                        dismiss()
+                    }
                     PracticalWorkContract.Effect.SaveFailed -> Unit
                 }
             },
@@ -94,7 +103,7 @@ private fun PracticalWorkModalBottomSheetContent(
             .padding(horizontal = 16.dp),
     ) {
         CoreModalTopBar(
-            title = "Практична робота",
+            title = stringResource(Res.string.lessons_practical_work),
             onCloseClick = { onAction(PracticalWorkClose) }
         )
 
@@ -113,7 +122,7 @@ private fun PracticalWorkModalBottomSheetContent(
         CoreSpacerVerticalLarge()
 
         CorePrimaryButton(
-            text = "Підтвердити",
+            text = stringResource(Res.string.common_confirm),
             onClick = { onAction(PracticalWorkConfirm) },
         )
 
@@ -134,7 +143,7 @@ private fun LessonSection(
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         CoreTextBody(
-            text = "Урок ${lesson.lessonNumber}",
+            text = "${stringResource(Res.string.lessons_lesson)} ${lesson.lessonNumber}",
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF3C4E73),

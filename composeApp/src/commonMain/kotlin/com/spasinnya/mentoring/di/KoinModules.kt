@@ -20,6 +20,7 @@ import com.spasinnya.mentoring.domain.usecase.auth.LogoutUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RegisterUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.RequestOtpCodeUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
+import com.spasinnya.mentoring.domain.usecase.books.GetCompletedLessonsUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
@@ -81,6 +82,7 @@ val useCaseModule = module {
     factoryOf(::CheckAuthStepsUseCase)
     factoryOf(::ChangeCongratsShownStatusUseCase)
     factoryOf(::GetBooksUseCase)
+    factoryOf(::GetCompletedLessonsUseCase)
     factoryOf(::PurchaseBookUseCase)
     factoryOf(::GetWeeksUseCase)
     factoryOf(::ObserveBookUseCase)
@@ -109,7 +111,8 @@ val viewModelModule = module {
             bookId = params.get(),
             weekNumber = params.get(),
             importBookFromMarkdownUseCase = get(),
-            observeHomeworkUseCase = get()
+            observeHomeworkUseCase = get(),
+            getCompletedLessonsUseCase = get()
         )
     }
     viewModel { params ->

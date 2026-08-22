@@ -63,6 +63,13 @@ class BooksDataRepository(
         emit(result)
     }
 
+    override fun getHomeworkProgress(bookId: String): Flow<DomainResult<List<HomeworkProgress>>> =
+        http.getFlow<List<HomeworkProgress>>(
+            path = "homework/$bookId",
+        ).map { result ->
+            result.mapErrors { it.toDomainError() }
+        }
+
     override fun observeBook(bookId: String, weekNumber: Int): Flow<DomainResult<ParsedWeek>> = flow {
         val result = try {
             val markdown = bookFileDataSource.readWeekMarkdown(
@@ -101,13 +108,22 @@ class BooksDataRepository(
         weekNumber: Int,
         lessonNumber: Int,
         answers: List<HomeworkAnswer>,
-    ): Flow<DomainResult<Unit>> =
-        http.putFlow<HomeworkAnswersApiRequest, Unit>(
+    ): Flow<DomainResult<List<Int>>> =
+        http.putFlow<HomeworkAnswersApiRequest, List<Int>>(
             path = homeworkAnswersPath(bookId, weekNumber, lessonNumber),
             body = answers.toApiRequest(),
         ).map { result ->
-            val request = result.mapErrors { it.toDomainError() }
-            request
+            result.mapErrors { it.toDomainError() }
+        }
+
+    override fun getCompletedLessons(
+        bookId: String,
+        weekNumber: Int,
+    ): Flow<DomainResult<List<Int>>> =
+        http.getFlow<List<Int>>(
+            path = "homework/$bookId/weeks/$weekNumber/lessons",
+        ).map { result ->
+            result.mapErrors { it.toDomainError() }
         }
 
     private fun homeworkAnswersPath(bookId: String, weekNumber: Int, lessonNumber: Int): String =
