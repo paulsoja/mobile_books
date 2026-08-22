@@ -8,10 +8,12 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.loading.Load
 
 @Composable
 fun OtpScreen(
-    navigateTo: () -> Unit
+    navigateTo: () -> Unit,
+    navigateToNewPassword: (email: String, code: String) -> Unit,
 ) {
     val (viewModel, state) = setupOtpScreenModel(
-        navigateTo = navigateTo
+        navigateTo = navigateTo,
+        navigateToNewPassword = navigateToNewPassword
     )
 
     OtpContent(
@@ -31,12 +33,15 @@ fun OtpScreen(
 
 @Composable
 fun setupOtpScreenModel(
-    navigateTo: () -> Unit
+    navigateTo: () -> Unit,
+    navigateToNewPassword: (email: String, code: String) -> Unit,
 ): Pair<OtpViewModel, OtpContract.State> =
     rememberScreenModel<OtpViewModel, OtpContract.State, OtpContract.Effect>(
         onEffect = { effect ->
             when (effect) {
                 OtpContract.Effect.NavigateToCongratScreen -> navigateTo.invoke()
+                is OtpContract.Effect.NavigateToNewPassword ->
+                    navigateToNewPassword.invoke(effect.email, effect.code)
             }
         }
     )

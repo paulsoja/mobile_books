@@ -1,9 +1,13 @@
 package com.spasinnya.mentoring.data.net
 
+import com.spasinnya.mentoring.data.mapper.toDomain
+import com.spasinnya.mentoring.data.model.TokenApiRequest
+import com.spasinnya.mentoring.data.model.TokenApiResponse
 import com.spasinnya.mentoring.data.net.plugin.Connectivity
 import com.spasinnya.mentoring.data.net.plugin.NetStatus
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
@@ -20,14 +24,18 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 private const val API_HOST = "web-books-1.onrender.com"
+private const val REFRESH_PATH = "refresh"
 
 expect fun platformEngine(): HttpClientEngineFactory<*>
 
@@ -35,6 +43,7 @@ fun createHttpClient(
     tokenStore: TokenStore,
     readLanguageTag: suspend () -> String?,
     defaultLang: String,
+    onSessionExpired: suspend () -> Unit,
 ): HttpClient {
     val client = HttpClient(platformEngine()) {
         connectivityPlugin()
@@ -45,7 +54,7 @@ fun createHttpClient(
 
         //expectSuccess = true
 
-        attachAuth(tokenStore)
+        attachAuth(tokenStore = tokenStore, onSessionExpired = onSessionExpired)
 
         defaultRequest {
             url {
@@ -107,7 +116,10 @@ inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.httpTimeoutP
     }
 }
 
-fun HttpClientConfig<*>.attachAuth(tokenStore: TokenStore) {
+fun HttpClientConfig<*>.attachAuth(
+    tokenStore: TokenStore,
+    onSessionExpired: suspend () -> Unit,
+) {
     install(Auth) {
         bearer {
             loadTokens {
@@ -119,8 +131,27 @@ fun HttpClientConfig<*>.attachAuth(tokenStore: TokenStore) {
                 }
             }
             refreshTokens {
-                val new = /* refresh flow/use-case */ tokenStore.read()
-                new?.let { BearerTokens(it.accessToken, it.refreshToken) }
+                val stored = tokenStore.read() ?: return@refreshTokens null
+
+                val response = runCatching {
+                    client.post(REFRESH_PATH) {
+                        markAsRefreshTokenRequest()
+                        setBody(TokenApiRequest(stored.refreshToken))
+                    }
+                }.getOrNull()
+
+                if (response?.status?.isSuccess() != true) {
+                    onSessionExpired()
+                    return@refreshTokens null
+                }
+
+                val token = response.body<TokenApiResponse>().toDomain()
+                tokenStore.save(token)
+
+                BearerTokens(
+                    accessToken = token.accessToken,
+                    refreshToken = token.refreshToken
+                )
             }
         }
     }

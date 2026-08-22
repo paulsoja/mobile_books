@@ -32,6 +32,9 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryB
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toAlertTexts
+import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputEmailDefaults
 import kotlinx.coroutines.launch
@@ -176,6 +179,15 @@ fun ProfileScreen(
                 .navigationBarsPadding()
         )
     }
+
+    LoadingOverlay(visible = state.isLoading)
+
+    AppAlertDialog(
+        state = state.dialog,
+        mapTexts = { it.toAlertTexts() },
+        onDismiss = { viewModel.dispatchEvent(ProfileContract.Event.DismissDialog) },
+        onConfirm = { viewModel.dispatchEvent(ProfileContract.Event.DismissDialog) },
+    )
 }
 
 @Composable

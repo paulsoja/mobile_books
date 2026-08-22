@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.spasinnya.mentoring.domain.enums.OtpPurpose
 import com.spasinnya.mentoring.presentation.navigation.Screen
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginScreen
@@ -80,7 +81,9 @@ fun AuthFlowContainer(
                             navController.navigate(Screen.AuthFlow.LoginScreen)
                         },
                         navigateToOtp = { email ->
-                            navController.navigate(Screen.AuthFlow.OtpScreen(email))
+                            navController.navigate(
+                                Screen.AuthFlow.OtpScreen(email = email, purpose = OtpPurpose.LOGIN.name)
+                            )
                         }
                     )
                 }
@@ -97,10 +100,15 @@ fun AuthFlowContainer(
                         }
                     )
                 }
-                composable<Screen.AuthFlow.OtpScreen> { backStackEntry ->
+                composable<Screen.AuthFlow.OtpScreen> {
                     OtpScreen(
                         navigateTo = {
                             onRegisterSuccess()
+                        },
+                        navigateToNewPassword = { email, code ->
+                            navController.navigate(
+                                Screen.AuthFlow.NewPasswordScreen(email = email, code = code)
+                            )
                         }
                     )
                 }
@@ -110,13 +118,19 @@ fun AuthFlowContainer(
                             navController.navigateUp()
                         },
                         navigateToOtp = { email ->
-                            navController.navigate(Screen.AuthFlow.OtpScreen(email))
+                            navController.navigate(
+                                Screen.AuthFlow.OtpScreen(email = email, purpose = OtpPurpose.PASSWORD_RESET.name)
+                            )
                         }
                     )
                 }
                 composable<Screen.AuthFlow.NewPasswordScreen> {
                     NewPasswordScreen(
-                        navigateToSuccess = onLoginSuccess
+                        navigateToLogin = {
+                            navController.navigate(Screen.AuthFlow.LoginScreen) {
+                                popUpTo(Screen.AuthFlow.LoginScreen) { inclusive = true }
+                            }
+                        }
                     )
                 }
             }
