@@ -14,6 +14,7 @@ data class BookMeta(
     val priceLabel: String,
     val weeksCount: Int,
     val lessonsPerWeek: Int,
+    val progress: Int = 0,
     val isPurchased: Boolean = true,
     val tableOfContents: List<BookWeek>,
 )

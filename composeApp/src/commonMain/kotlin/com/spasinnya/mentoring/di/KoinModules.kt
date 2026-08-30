@@ -5,6 +5,7 @@ import com.spasinnya.mentoring.data.parser.HomeworkMarkdownParser
 import com.spasinnya.mentoring.data.parser.MentorshipMarkdownParser
 import com.spasinnya.mentoring.data.repository.AuthDataRepository
 import com.spasinnya.mentoring.data.repository.BooksDataRepository
+import com.spasinnya.mentoring.data.repository.HomeworkDataRepository
 import com.spasinnya.mentoring.data.repository.PrefDataRepository
 import com.spasinnya.mentoring.data.repository.ProfileDataRepository
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
@@ -12,6 +13,7 @@ import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.AuthRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
+import com.spasinnya.mentoring.domain.repository.HomeworkRepository
 import com.spasinnya.mentoring.domain.repository.PrefRepository
 import com.spasinnya.mentoring.domain.repository.ProfileRepository
 import com.spasinnya.mentoring.domain.usecase.auth.ChangeCongratsShownStatusUseCase
@@ -31,6 +33,7 @@ import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveHomeworkUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.SaveHomeworkAnswersUseCase
+import com.spasinnya.mentoring.domain.usecase.homework.GetHomeworkUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.GetProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
@@ -77,6 +80,7 @@ val dataModule = module {
 val repositoryModule = module {
     singleOf(::AuthDataRepository) bind AuthRepository::class
     singleOf(::BooksDataRepository) bind BooksRepository::class
+    singleOf(::HomeworkDataRepository) bind HomeworkRepository::class
     singleOf(::PrefDataRepository) bind PrefRepository::class
     singleOf(::ProfileDataRepository) bind ProfileRepository::class
 }
@@ -99,6 +103,7 @@ val useCaseModule = module {
     factoryOf(::ObserveHomeworkUseCase)
     factoryOf(::GetHomeworkAnswersUseCase)
     factoryOf(::SaveHomeworkAnswersUseCase)
+    factoryOf(::GetHomeworkUseCase)
     factoryOf(::GetProfileUseCase)
     factoryOf(::UpdateProfileUseCase)
     factoryOf(::GetAppLocaleUseCase)

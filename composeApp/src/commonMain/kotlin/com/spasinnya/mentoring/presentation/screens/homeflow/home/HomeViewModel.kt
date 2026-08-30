@@ -18,13 +18,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val logoutUseCase: LogoutUseCase,
     private val getBooksUseCase: GetBooksUseCase,
     private val purchaseBookUseCase: PurchaseBookUseCase,
-    private val setAppLocaleUseCase: SetAppLocaleUseCase
+    private val setAppLocaleUseCase: SetAppLocaleUseCase,
 ) : BaseMviViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>(initialState = HomeContract.State()) {
 
     override fun handleEvent(event: HomeContract.Event) {
@@ -33,7 +34,9 @@ class HomeViewModel(
             is HomeContract.Event.ToggleSettingsDialog -> setState { copy(showSettingsDialog = event.show) }
             is HomeContract.Event.ToggleLogoutDialog -> toggleLogoutDialog(event.show)
             is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
-            is HomeContract.Event.LoadedBooks -> setState { copy(books = event.books, error = UiErrorType.None) }
+            is HomeContract.Event.LoadedBooks -> {
+                setState { copy(books = event.books, error = UiErrorType.None) }
+            }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
             is HomeContract.Event.PurchaseBook -> purchaseBook(event.bookId)
             is HomeContract.Event.SetPurchasedBook -> {
@@ -55,6 +58,7 @@ class HomeViewModel(
 
     private fun loadBooks() = viewModelScope.launch(Dispatchers.IO) {
         getBooksUseCase.invoke()
+            .distinctUntilChanged()
             .withLoading { loading -> setState { copy(isLoading = loading) } }
             .collectLatest { result ->
                 when (result) {
