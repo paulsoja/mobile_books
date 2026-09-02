@@ -9,6 +9,7 @@ import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.enums.OtpPurpose
+import com.spasinnya.mentoring.domain.model.DomainError
 import com.spasinnya.mentoring.domain.model.DomainResult
 import com.spasinnya.mentoring.domain.model.Email
 import com.spasinnya.mentoring.domain.model.Token
@@ -39,7 +40,7 @@ class AuthDataRepository(
         ).map { result ->
             result
                 .map(TokenApiResponse::toDomain)
-                .mapErrors { it.toDomainError() }
+                .mapErrors { it.toDomainError().asSignInError() }
         }.alsoValidDo(::saveSession)
             .alsoValidDo { appStore.save(true) }
 
@@ -93,6 +94,10 @@ class AuthDataRepository(
 
         emit(result)
     }
+
+    /** A 401 from the sign-in endpoint means the email/password pair is wrong, not a dead session. */
+    private fun DomainError.asSignInError(): DomainError =
+        if (this == DomainError.Unauthorized) DomainError.InvalidCredentials else this
 
     private suspend fun saveSession(token: Token) {
         tokenStore.save(token)

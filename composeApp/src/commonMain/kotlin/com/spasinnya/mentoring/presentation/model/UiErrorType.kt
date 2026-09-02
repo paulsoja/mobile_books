@@ -14,7 +14,10 @@ sealed class UiErrorType {
 
     data object UserNotFound : UiErrorType()
 
-    /** 401 - the session is gone and the user has to sign in again */
+    /** 401 on sign-in - the email/password pair is wrong */
+    data object InvalidCredentials : UiErrorType()
+
+    /** 401 on an authorized call - the session is gone and the user has to sign in again */
     data object SessionExpired : UiErrorType()
 
     data object OtpExpired : UiErrorType()

@@ -20,14 +20,16 @@ fun DomainError.toUiErrorType(): UiErrorType =
 
         DomainError.UserNotFound -> UiErrorType.UserNotFound
 
+        DomainError.InvalidCredentials,
+        DomainError.WrongPassword -> UiErrorType.InvalidCredentials
+
         DomainError.InvalidOtp,
         DomainError.OtpExpired -> UiErrorType.OtpExpired
 
         DomainError.EmailAlreadyExists,
         DomainError.Serialization,
         DomainError.UserAlreadyExists,
-        DomainError.WeakPassword,
-        DomainError.WrongPassword -> UiErrorType.Client
+        DomainError.WeakPassword -> UiErrorType.Client
 
         DomainError.EmptyContent -> TODO()
         DomainError.FileNotFound -> TODO()

@@ -26,9 +26,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
-import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedDropDown
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreOutlinedTextField
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalMedium
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
@@ -111,37 +111,37 @@ fun ProfileScreen(
 
                 CoreSpacerVerticalMedium()
 
-                ProfileFieldLabel(text = "Країна")
-                CoreOutlinedDropDown(
-                    value = state.country,
-                    onValueChange = {},
-                    options = listOf(state.country),
-                    enabled = false,
-                    inputDefaults = InputCommonDefaults(placeholder = "Україна")
-                )
-
-                CoreSpacerVerticalMedium()
-
-                ProfileFieldLabel(text = "Місто")
-                CoreOutlinedDropDown(
-                    value = state.city,
-                    onValueChange = {},
-                    options = listOf(state.city),
-                    enabled = false,
-                    inputDefaults = InputCommonDefaults(placeholder = "Київ")
-                )
-
-                CoreSpacerVerticalMedium()
-
-                ProfileFieldLabel(text = "Церква")
-                CoreOutlinedTextField(
-                    value = state.church,
-                    onValueChange = {},
-                    enabled = false,
-                    inputDefaults = InputCommonDefaults(placeholder = "Спасіння")
-                )
-
-                CoreSpacerVerticalMedium()
+//                 ProfileFieldLabel(text = "Країна")
+//                 CoreOutlinedDropDown(
+//                     value = state.country,
+//                     onValueChange = {},
+//                     options = listOf(state.country),
+//                     enabled = false,
+//                     inputDefaults = InputCommonDefaults(placeholder = "Україна")
+//                 )
+//
+//                 CoreSpacerVerticalMedium()
+//
+//                 ProfileFieldLabel(text = "Місто")
+//                 CoreOutlinedDropDown(
+//                     value = state.city,
+//                     onValueChange = {},
+//                     options = listOf(state.city),
+//                     enabled = false,
+//                     inputDefaults = InputCommonDefaults(placeholder = "Київ")
+//                 )
+//
+//                 CoreSpacerVerticalMedium()
+//
+//                 ProfileFieldLabel(text = "Церква")
+//                 CoreOutlinedTextField(
+//                     value = state.church,
+//                     onValueChange = {},
+//                     enabled = false,
+//                     inputDefaults = InputCommonDefaults(placeholder = "Спасіння")
+//                 )
+//
+//                 CoreSpacerVerticalMedium()
 
                 CoreTextBody(
                     modifier = Modifier
@@ -160,7 +160,7 @@ fun ProfileScreen(
                     textDecoration = TextDecoration.Underline,
                 )
 
-                CoreSpacerVerticalMedium()
+                CoreSpacerVerticalLarge()
 
                 CorePrimaryButton(
                     text = "Зберегти",

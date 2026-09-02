@@ -11,6 +11,7 @@ sealed interface DomainError {
     data object NotFound : DomainError
 
     data object UserNotFound : DomainError
+    data object InvalidCredentials : DomainError
     data object InvalidOtp : DomainError
     data object EmailAlreadyExists : DomainError
     data object WrongPassword : DomainError

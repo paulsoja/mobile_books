@@ -25,6 +25,7 @@
     <string name="error_otp_not_filled">Введите код</string>
     <string name="error_password_invalid">Неверный формат пароля</string>
     <string name="error_invalid_credentials">Неверный email или пароль</string>
+    <string name="error_check_credentials">Проверьте введённые данные и попробуйте снова</string>
     <string name="error_validation">Ошибка валидации</string>
     <string name="error_user_already_exists">Пользователь с таким email уже существует</string>
     <string name="error_user_not_found">Пользователь не найден</string>

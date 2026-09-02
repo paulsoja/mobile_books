@@ -25,6 +25,7 @@
     <string name="error_otp_not_filled">Code eingeben</string>
     <string name="error_password_invalid">Ungültiges Passwortformat</string>
     <string name="error_invalid_credentials">Ungültige E-Mail oder Passwort</string>
+    <string name="error_check_credentials">Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut</string>
     <string name="error_validation">Validierungsfehler</string>
     <string name="error_user_already_exists">Ein Benutzer mit dieser E-Mail existiert bereits</string>
     <string name="error_user_not_found">Konto nicht gefunden</string>
