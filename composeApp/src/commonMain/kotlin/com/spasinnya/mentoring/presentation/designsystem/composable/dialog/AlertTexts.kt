@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.common_ok
 import com.spasinnya.mentoring.generated.resources.error_check_connection
+import com.spasinnya.mentoring.generated.resources.error_check_credentials
 import com.spasinnya.mentoring.generated.resources.error_check_email
+import com.spasinnya.mentoring.generated.resources.error_invalid_credentials
 import com.spasinnya.mentoring.generated.resources.error_login_again
 import com.spasinnya.mentoring.generated.resources.error_no_connection
 import com.spasinnya.mentoring.generated.resources.error_otp_expired
@@ -47,6 +49,12 @@ fun UiErrorType.toAlertTexts(): AlertTexts =
         UiErrorType.UserNotFound -> AlertTexts(
             title = stringResource(Res.string.error_user_not_found),
             message = stringResource(Res.string.error_check_email),
+            confirm = stringResource(Res.string.common_ok),
+        )
+
+        UiErrorType.InvalidCredentials -> AlertTexts(
+            title = stringResource(Res.string.error_invalid_credentials),
+            message = stringResource(Res.string.error_check_credentials),
             confirm = stringResource(Res.string.common_ok),
         )
 

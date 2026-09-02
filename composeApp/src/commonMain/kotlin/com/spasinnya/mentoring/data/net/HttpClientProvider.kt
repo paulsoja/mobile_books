@@ -14,6 +14,7 @@ import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -23,6 +24,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.plugin
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -36,6 +38,18 @@ import kotlinx.serialization.json.Json
 
 private const val API_HOST = "web-books-1.onrender.com"
 private const val REFRESH_PATH = "refresh"
+
+private val PUBLIC_PATHS = setOf(
+    "login",
+    "register",
+    "verify-otp",
+    "request-otp",
+    "reset-password",
+    REFRESH_PATH,
+)
+
+private fun HttpRequestBuilder.isPublicEndpoint(): Boolean =
+    url.encodedPathSegments.filter(String::isNotEmpty).joinToString("/") in PUBLIC_PATHS
 
 expect fun platformEngine(): HttpClientEngineFactory<*>
 
@@ -71,6 +85,11 @@ fun createHttpClient(
 
         request.headers.remove(HttpHeaders.AcceptLanguage)
         request.headers.append(HttpHeaders.AcceptLanguage, tag)
+
+        if (request.isPublicEndpoint()) {
+            request.attributes.put(AuthCircuitBreaker, Unit)
+        }
+
         execute(request)
     }
 
@@ -122,6 +141,8 @@ fun HttpClientConfig<*>.attachAuth(
 ) {
     install(Auth) {
         bearer {
+            sendWithoutRequest { request -> !request.isPublicEndpoint() }
+
             loadTokens {
                 tokenStore.read()?.let {
                     BearerTokens(

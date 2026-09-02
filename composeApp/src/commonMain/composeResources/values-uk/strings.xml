@@ -25,6 +25,7 @@
     <string name="error_otp_not_filled">Введіть код</string>
     <string name="error_password_invalid">Невірний формат пароля</string>
     <string name="error_invalid_credentials">Невірний email або пароль</string>
+    <string name="error_check_credentials">Перевірте введені дані та спробуйте ще раз</string>
     <string name="error_validation">Помилка валідації</string>
     <string name="error_user_already_exists">Користувач з таким email вже існує</string>
     <string name="error_user_not_found">Користувача не знайдено</string>
