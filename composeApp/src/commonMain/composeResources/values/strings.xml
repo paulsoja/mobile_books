@@ -14,6 +14,7 @@
     <string name="common_mentorship">Mentorship</string>
     <string name="common_content">Content</string>
     <string name="common_week">Week</string>
+    <string name="common_completed">Completed</string>
 
     <!--Errors-->
     <string name="error_no_connection">No internet connection</string>
@@ -72,6 +73,10 @@
     <string name="home_settings_app_language">App language:</string>
     <string name="home_settings_autors">Guide authors</string>
     <string name="home_settings_salvation_church">"Salvation" Church</string>
+    <string name="home_no_books_title">No mentorships yet</string>
+    <string name="home_no_books_message">The list of guides is empty. Please try again a bit later.</string>
+    <string name="weeks_empty_title">No weeks yet</string>
+    <string name="weeks_empty_message">The content of this guide is not available yet.</string>
 
     <!--Lessons-->
     <string name="lessons_lesson">Lesson</string>

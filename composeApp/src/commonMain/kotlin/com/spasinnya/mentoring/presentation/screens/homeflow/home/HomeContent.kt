@@ -52,6 +52,8 @@ import com.spasinnya.mentoring.generated.resources.common_buy
 import com.spasinnya.mentoring.generated.resources.common_content
 import com.spasinnya.mentoring.generated.resources.common_open
 import com.spasinnya.mentoring.generated.resources.home_choose_book
+import com.spasinnya.mentoring.generated.resources.home_no_books_message
+import com.spasinnya.mentoring.generated.resources.home_no_books_title
 import com.spasinnya.mentoring.generated.resources.ic_arrow_right
 import com.spasinnya.mentoring.generated.resources.ic_content
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
@@ -61,6 +63,7 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextScreenTitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextSubtitle
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextTitle
+import com.spasinnya.mentoring.presentation.designsystem.composable.states.EmptyState
 import com.spasinnya.mentoring.presentation.designsystem.coverPainter
 import org.jetbrains.compose.resources.stringResource
 
@@ -79,43 +82,49 @@ fun HomeContent(
             text = stringResource(Res.string.home_choose_book),
             modifier = Modifier.padding(horizontal = 24.dp),
         )
-        Pager(
-            list = state.books,
-            pageContent = { _: PagerState, item: BookMeta ->
-                PagerCard(
-                    item = item,
-                    isLoading = state.isPurchaseLoading,
-                    onPurchaseClicked = {
-                        viewModel.dispatchEvent(
-                            HomeContract.Event.PurchaseBook(item.id)
+        if (state.books.isEmpty()) {
+            EmptyState(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp).padding(bottom = 40.dp),
+                title = stringResource(Res.string.home_no_books_title),
+                message = stringResource(Res.string.home_no_books_message)
+            )
+        } else {
+            Pager(
+                list = state.books,
+                pageContent = { _: PagerState, item: BookMeta ->
+                    PagerCard(
+                        item = item,
+                        isLoading = state.isPurchaseLoading,
+                        onPurchaseClicked = {
+                            viewModel.dispatchEvent(HomeContract.Event.PurchaseBook(item.id))
+                        },
+                        onOpenClicked = {
+                            navigateToWeeks.invoke(item.id, item.bookNumber)
+                        }
+                    )
+                },
+                indicatorContent = { pageCount, currentPage ->
+                    Row(
+                        Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth()
+                            .background(color = Color.Transparent)
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = 24.dp),
+                        horizontalArrangement = Arrangement.spacedBy(
+                            12.dp,
+                            Alignment.CenterHorizontally
                         )
-                    },
-                    onOpenClicked = {
-                        navigateToWeeks.invoke(item.id, item.bookNumber)
+                    ) {
+                        PagerIndicator(
+                            modifier = Modifier,
+                            pageCount = pageCount,
+                            currentPage = currentPage
+                        )
                     }
-                )
-            },
-            indicatorContent = { pageCount, currentPage ->
-                Row(
-                    Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .background(color = Color.Transparent)
-                        .align(Alignment.CenterHorizontally)
-                        .padding(bottom = 24.dp),
-                    horizontalArrangement = Arrangement.spacedBy(
-                        12.dp,
-                        Alignment.CenterHorizontally
-                    )
-                ) {
-                    PagerIndicator(
-                        modifier = Modifier,
-                        pageCount = pageCount,
-                        currentPage = currentPage
-                    )
                 }
-            }
-        )
+            )
+        }
     }
 }
 

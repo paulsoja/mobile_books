@@ -14,6 +14,7 @@
     <string name="common_mentorship">Mentoring</string>
     <string name="common_content">Inhalt</string>
     <string name="common_week">Woche</string>
+    <string name="common_completed">Abgeschlossen</string>
 
     <!--Errors-->
     <string name="error_no_connection">Keine Internetverbindung</string>
@@ -72,6 +73,10 @@
     <string name="home_settings_app_language">App-Sprache:</string>
     <string name="home_settings_autors">Autoren der Anleitungen</string>
     <string name="home_settings_salvation_church">Kirche "Rettung"</string>
+    <string name="home_no_books_title">Noch kein Mentoring</string>
+    <string name="home_no_books_message">Die Liste der Leitfäden ist leer. Bitte versuchen Sie es später erneut.</string>
+    <string name="weeks_empty_title">Noch keine Wochen</string>
+    <string name="weeks_empty_message">Der Inhalt dieses Leitfadens ist noch nicht verfügbar.</string>
 
     <!--Lessons-->
     <string name="lessons_lesson">Lektion</string>

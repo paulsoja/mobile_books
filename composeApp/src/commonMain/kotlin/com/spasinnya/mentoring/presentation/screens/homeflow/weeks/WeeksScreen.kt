@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +16,10 @@ import com.spasinnya.mentoring.generated.resources.ic_content
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toAlertTexts
+import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
+import com.spasinnya.mentoring.presentation.designsystem.composable.states.ErrorState
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.parameter.parametersOf
 
@@ -49,15 +52,26 @@ fun WeeksScreen(
                 }
             )
         },
-        content = {
-            WeeksContent(
-                bookNumber = bookNumber,
-                state = state,
-                paddingValues = it,
-                navigateToLessons = {
-                    navigateToLessons.invoke(bookId, it)
-                }
-            )
+        content = { padding ->
+            if (state.error == UiErrorType.None) {
+                WeeksContent(
+                    bookNumber = bookNumber,
+                    state = state,
+                    paddingValues = padding,
+                    onEvent = viewModel::dispatchEvent,
+                    navigateToLessons = { weekNumber ->
+                        navigateToLessons.invoke(bookId, weekNumber)
+                    }
+                )
+            } else {
+                ErrorState(
+                    modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+                    texts = state.error.toAlertTexts(),
+                    onClick = { viewModel.dispatchEvent(WeeksContract.Event.Retry) }
+                )
+            }
+
+            LoadingOverlay(visible = state.isLoading)
         }
     )
 }

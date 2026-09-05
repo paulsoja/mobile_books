@@ -14,6 +14,7 @@
     <string name="common_mentorship">Наставничество</string>
     <string name="common_content">Содержание</string>
     <string name="common_week">Неделя</string>
+    <string name="common_completed">Пройдено</string>
 
     <!--Errors-->
     <string name="error_no_connection">Нет интернета</string>
@@ -72,6 +73,10 @@
     <string name="home_settings_app_language">Язык приложения:</string>
     <string name="home_settings_autors">Авторы пособий</string>
     <string name="home_settings_salvation_church">Церковь "Спасение"</string>
+    <string name="home_no_books_title">Наставничеств пока нет</string>
+    <string name="home_no_books_message">Список пособий пуст. Попробуйте чуть позже.</string>
+    <string name="weeks_empty_title">Недель пока нет</string>
+    <string name="weeks_empty_message">Содержание этого пособия ещё недоступно.</string>
 
     <!--Lessons-->
     <string name="lessons_lesson">Урок</string>
