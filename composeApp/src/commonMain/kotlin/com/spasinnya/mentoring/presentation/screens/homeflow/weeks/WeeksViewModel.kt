@@ -5,6 +5,7 @@ import com.spasinnya.mentoring.domain.usecase.books.GetWeeksUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import com.spasinnya.mentoring.presentation.base.withLoading
+import com.spasinnya.mentoring.presentation.model.UiErrorType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collectLatest
@@ -17,7 +18,11 @@ class WeeksViewModel(
 
     override fun handleEvent(event: WeeksContract.Event) {
         when (event) {
-            else -> {}
+            WeeksContract.Event.Refresh -> loadWeeks(isRefresh = true)
+            WeeksContract.Event.Retry -> {
+                setState { copy(error = UiErrorType.None) }
+                loadWeeks()
+            }
         }
     }
 
@@ -25,9 +30,11 @@ class WeeksViewModel(
         loadWeeks()
     }
 
-    private fun loadWeeks() = viewModelScope.launch(Dispatchers.IO) {
+    private fun loadWeeks(isRefresh: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
         weeksUseCase.invoke(bookId)
-            .withLoading { loading -> setState { copy(isLoading = loading) } }
+            .withLoading { loading ->
+                setState { if (isRefresh) copy(isRefreshing = loading) else copy(isLoading = loading) }
+            }
             .collectLatest { result ->
                 when (result) {
                     is Validated.Invalid -> handleDomainErrors(
@@ -35,10 +42,14 @@ class WeeksViewModel(
                         reduce = { errorType ->
                             copy(
                                 isLoading = false,
+                                isRefreshing = false,
+                                error = errorType
                             )
                         }
                     )
-                    is Validated.Valid -> setState { copy(bookMeta = result.value) }
+                    is Validated.Valid -> setState {
+                        copy(bookMeta = result.value, error = UiErrorType.None)
+                    }
                 }
             }
     }

@@ -1,13 +1,16 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
@@ -26,6 +29,7 @@ import com.spasinnya.mentoring.generated.resources.common_confirm
 import com.spasinnya.mentoring.generated.resources.lessons_lesson
 import com.spasinnya.mentoring.generated.resources.lessons_practical_work
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
+import com.spasinnya.mentoring.presentation.designsystem.composable.CoreCircularProgressIndicator
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreModalTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.CorePrimaryButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVerticalLarge
@@ -72,6 +76,7 @@ fun PracticalWorkModalBottomSheet(
         )
 
         PracticalWorkModalBottomSheetContent(
+            isLoading = state.isLoading,
             lesson = state.lessons.firstOrNull { it.lessonNumber == lessonNumber },
             checkedOptions = state.checkedOptions,
             selectedOptions = state.selectedOptions,
@@ -89,6 +94,7 @@ fun PracticalWorkModalBottomSheet(
 
 @Composable
 private fun PracticalWorkModalBottomSheetContent(
+    isLoading: Boolean,
     lesson: HomeworkLesson?,
     checkedOptions: Map<String, Boolean>,
     selectedOptions: Map<String, String>,
@@ -109,22 +115,31 @@ private fun PracticalWorkModalBottomSheetContent(
 
         CoreSpacerVerticalLarge()
 
-        lesson?.let {
-            LessonSection(
-                lesson = it,
-                checkedOptions = checkedOptions,
-                selectedOptions = selectedOptions,
-                textAnswers = textAnswers,
-                onEvent = onEvent,
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxWidth().height(240.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CoreCircularProgressIndicator()
+            }
+        } else {
+            lesson?.let {
+                LessonSection(
+                    lesson = it,
+                    checkedOptions = checkedOptions,
+                    selectedOptions = selectedOptions,
+                    textAnswers = textAnswers,
+                    onEvent = onEvent,
+                )
+            }
+
+            CoreSpacerVerticalLarge()
+
+            CorePrimaryButton(
+                text = stringResource(Res.string.common_confirm),
+                onClick = { onAction(PracticalWorkConfirm) },
             )
         }
-
-        CoreSpacerVerticalLarge()
-
-        CorePrimaryButton(
-            text = stringResource(Res.string.common_confirm),
-            onClick = { onAction(PracticalWorkConfirm) },
-        )
 
         CoreSpacerVerticalLarge()
     }

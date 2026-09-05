@@ -14,6 +14,7 @@
     <string name="common_mentorship">Наставництво</string>
     <string name="common_content">Зміст</string>
     <string name="common_week">Тиждень</string>
+    <string name="common_completed">Пройдено</string>
 
     <!--Errors-->
     <string name="error_no_connection">Немає інтернету</string>
@@ -72,6 +73,10 @@
     <string name="home_settings_app_language">Мова додатку:</string>
     <string name="home_settings_autors">Автори посібників</string>
     <string name="home_settings_salvation_church">Церква "Спасіння"</string>
+    <string name="home_no_books_title">Наставництв поки немає</string>
+    <string name="home_no_books_message">Список посібників порожній. Спробуйте трохи пізніше.</string>
+    <string name="weeks_empty_title">Тижнів поки немає</string>
+    <string name="weeks_empty_message">Зміст цього посібника ще недоступний.</string>
 
     <!--Lessons-->
     <string name="lessons_lesson">Урок</string>
