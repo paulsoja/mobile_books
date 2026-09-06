@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.ic_settings
 import com.spasinnya.mentoring.presentation.base.OnScreenResumed
+import com.spasinnya.mentoring.presentation.base.UiState
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
@@ -23,7 +24,6 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toAle
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toMessageTexts
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
 import com.spasinnya.mentoring.presentation.designsystem.composable.states.ErrorState
-import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.screens.homeflow.settings.SettingsModalBottomSheet
 import kotlinx.coroutines.launch
 
@@ -64,24 +64,24 @@ fun HomeScreen(
             )
         },
         content = { padding ->
-            if (state.isLoading.not() && state.error == UiErrorType.None) {
-                HomeContent(
-                    state = state,
-                    navigateToWeeks = navigateToWeeks,
-                    padding = padding,
-                    viewModel = viewModel,
-                )
-            }
-
-            LoadingOverlay(visible = state.isLoading)
-
-            if (state.error != UiErrorType.None) {
+            val books = state.books
+            if (state.hasError) {
                 ErrorState(
                     modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
                     texts = state.error.toAlertTexts(),
                     onClick = { viewModel.dispatchEvent(HomeContract.Event.OnErrorClick) }
                 )
+            } else if (books is UiState.Present && state.showLoader.not()) {
+                HomeContent(
+                    books = books.data,
+                    isPurchaseLoading = state.isPurchaseLoading,
+                    navigateToWeeks = navigateToWeeks,
+                    padding = padding,
+                    onEvent = viewModel::dispatchEvent,
+                )
             }
+
+            LoadingOverlay(visible = state.showLoader)
 
             if (state.showSettingsDialog) {
                 SettingsModalBottomSheet(

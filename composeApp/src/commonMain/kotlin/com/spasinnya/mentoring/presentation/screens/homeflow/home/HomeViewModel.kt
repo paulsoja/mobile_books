@@ -8,7 +8,9 @@ import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
+import com.spasinnya.mentoring.presentation.base.UiState
 import com.spasinnya.mentoring.presentation.base.Validated
+import com.spasinnya.mentoring.presentation.base.map
 import com.spasinnya.mentoring.presentation.base.withLoading
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import com.spasinnya.mentoring.presentation.model.UiErrorType
@@ -39,12 +41,12 @@ class HomeViewModel(
             is HomeContract.Event.ToggleLogoutDialog -> toggleLogoutDialog(event.show)
             is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
             is HomeContract.Event.LoadedBooks -> {
-                setState { copy(books = event.books, error = UiErrorType.None) }
+                setState { copy(books = UiState.Present(event.books), error = UiErrorType.None) }
             }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
             is HomeContract.Event.PurchaseBook -> purchaseBook(event.bookId)
             is HomeContract.Event.SetPurchasedBook -> {
-                setState { copy(books = books.setPurchasedBook(event.bookId)) }
+                setState { copy(books = books.map { it.setPurchasedBook(event.bookId) }) }
                 sendEffect { ShowSnackbar("congrats") }
             }
             is HomeContract.Event.PurchaseLoading -> setState { copy(isPurchaseLoading = event.isLoading) }
