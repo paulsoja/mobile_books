@@ -21,7 +21,7 @@ class GetBooksUseCase(
             bookResult.zip(homeworkResult) { books, homework ->
                 books.map { book ->
                     book.copy(
-                        progress = homework.find { it.bookId == book.id }?.completedLessons ?: 0
+                        completedLessons = homework.find { it.bookId == book.id }?.completedLessons ?: 0
                     )
                 }
             }

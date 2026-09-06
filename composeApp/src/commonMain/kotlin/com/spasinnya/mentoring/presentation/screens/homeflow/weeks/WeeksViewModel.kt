@@ -16,37 +16,49 @@ class WeeksViewModel(
     private val weeksUseCase: GetWeeksUseCase
 ) : BaseMviViewModel<WeeksContract.State, WeeksContract.Event, WeeksContract.Effect>(initialState = WeeksContract.State()) {
 
+    private enum class LoadMode { Initial, Manual, Silent }
+
+    private var isInitialResume = true
+
     override fun handleEvent(event: WeeksContract.Event) {
         when (event) {
-            WeeksContract.Event.Refresh -> loadWeeks(isRefresh = true)
+            WeeksContract.Event.Refresh -> loadWeeks(LoadMode.Manual)
+            WeeksContract.Event.ScreenResumed ->
+                if (isInitialResume) isInitialResume = false else loadWeeks(LoadMode.Silent)
             WeeksContract.Event.Retry -> {
                 setState { copy(error = UiErrorType.None) }
-                loadWeeks()
+                loadWeeks(LoadMode.Initial)
             }
         }
     }
 
     init {
-        loadWeeks()
+        loadWeeks(LoadMode.Initial)
     }
 
-    private fun loadWeeks(isRefresh: Boolean = false) = viewModelScope.launch(Dispatchers.IO) {
+    private fun loadWeeks(mode: LoadMode) = viewModelScope.launch(Dispatchers.IO) {
         weeksUseCase.invoke(bookId)
             .withLoading { loading ->
-                setState { if (isRefresh) copy(isRefreshing = loading) else copy(isLoading = loading) }
+                when (mode) {
+                    LoadMode.Initial -> setState { copy(isLoading = loading) }
+                    LoadMode.Manual -> setState { copy(isRefreshing = loading) }
+                    LoadMode.Silent -> Unit
+                }
             }
             .collectLatest { result ->
                 when (result) {
-                    is Validated.Invalid -> handleDomainErrors(
-                        error = result.error,
-                        reduce = { errorType ->
-                            copy(
-                                isLoading = false,
-                                isRefreshing = false,
-                                error = errorType
-                            )
-                        }
-                    )
+                    is Validated.Invalid -> if (mode != LoadMode.Silent) {
+                        handleDomainErrors(
+                            error = result.error,
+                            reduce = { errorType ->
+                                copy(
+                                    isLoading = false,
+                                    isRefreshing = false,
+                                    error = errorType
+                                )
+                            }
+                        )
+                    }
                     is Validated.Valid -> setState {
                         copy(bookMeta = result.value, error = UiErrorType.None)
                     }

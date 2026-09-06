@@ -27,6 +27,7 @@ interface HomeContract {
         data class ToggleSettingsDialog(val show: Boolean) : Event()
         data class ToggleLogoutDialog(val show: Boolean) : Event()
         data class OnLanguageChosen(val language: Language) : Event()
+        data object ScreenResumed : Event()
         data object OnErrorClick : Event()
     }
 

@@ -13,6 +13,7 @@ interface WeeksContract {
 
     sealed class Event {
         data object Refresh : Event()
+        data object ScreenResumed : Event()
         data object Retry : Event()
     }
 

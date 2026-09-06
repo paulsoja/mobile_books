@@ -282,7 +282,7 @@ fun BookCardBottomBar(
     Box(modifier = Modifier.padding(start = 8.dp)) {
         if (item.isPurchased) {
             CircularProgressBar(
-                percentage = item.progress.toFloat() / 100,
+                percentage = item.progress,
                 modifier = Modifier.size(52.dp)
             )
         } else {
