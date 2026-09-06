@@ -9,14 +9,12 @@ import com.spasinnya.mentoring.data.repository.HomeworkDataRepository
 import com.spasinnya.mentoring.data.repository.PrefDataRepository
 import com.spasinnya.mentoring.data.repository.ProfileDataRepository
 import com.spasinnya.mentoring.data.storage.BookFileDataSource
-import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.repository.AuthRepository
 import com.spasinnya.mentoring.domain.repository.BooksRepository
 import com.spasinnya.mentoring.domain.repository.HomeworkRepository
 import com.spasinnya.mentoring.domain.repository.PrefRepository
 import com.spasinnya.mentoring.domain.repository.ProfileRepository
-import com.spasinnya.mentoring.domain.usecase.auth.ChangeCongratsShownStatusUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.CheckAuthStepsUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.ConfirmOtpCodeUseCase
 import com.spasinnya.mentoring.domain.usecase.auth.LoginUseCase
@@ -39,7 +37,6 @@ import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.app.SessionViewModel
-import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratViewModel
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginViewModel
 import com.spasinnya.mentoring.presentation.screens.authflow.newpassword.NewPasswordViewModel
 import com.spasinnya.mentoring.presentation.screens.authflow.otp.OtpViewModel
@@ -71,7 +68,6 @@ val dataModule = module {
             defaultLang = "en",
             onSessionExpired = {
                 get<TokenStore>().clear()
-                get<AppStore>().clear()
             }
         )
     }
@@ -94,7 +90,6 @@ val useCaseModule = module {
     factoryOf(::LogoutUseCase)
     factoryOf(::CheckAuthStepsUseCase)
     factoryOf(::ObserveAuthStepsUseCase)
-    factoryOf(::ChangeCongratsShownStatusUseCase)
     factoryOf(::GetBooksUseCase)
     factoryOf(::GetCompletedLessonsUseCase)
     factoryOf(::PurchaseBookUseCase)
@@ -115,7 +110,6 @@ val viewModelModule = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::RegisterViewModel)
     viewModelOf(::OtpViewModel)
-    viewModelOf(::CongratViewModel)
     viewModelOf(::NewPasswordViewModel)
     viewModelOf(::ResetPasswordViewModel)
     viewModelOf(::HomeViewModel)

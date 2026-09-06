@@ -25,7 +25,6 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.states.Error
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.AuthFlowContainer
-import com.spasinnya.mentoring.presentation.screens.authflow.congrat.CongratScreen
 import com.spasinnya.mentoring.presentation.screens.homeflow.HomeFlowContainer
 import org.jetbrains.compose.resources.stringResource
 
@@ -36,7 +35,6 @@ fun AppContent() {
     val startDestination = when (state.authStep) {
         AuthSteps.Init -> ScreenContainer.SplashFlow
         AuthSteps.Auth -> ScreenContainer.AuthFlow
-        AuthSteps.Congrats -> ScreenContainer.CongratsFlow
         AuthSteps.Home -> ScreenContainer.HomeFlow
     }
 
@@ -57,27 +55,7 @@ fun AppContent() {
                     }
                     composable<ScreenContainer.AuthFlow> {
                         AuthFlowContainer(
-                            onLoginSuccess = {
-                                navController.navigate(ScreenContainer.HomeFlow) {
-                                    launchSingleTop = true
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = true
-                                    }
-                                }
-                            },
-                            onRegisterSuccess = {
-                                navController.navigate(ScreenContainer.CongratsFlow) {
-                                    launchSingleTop = true
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        inclusive = true
-                                    }
-                                }
-                            }
-                        )
-                    }
-                    composable<ScreenContainer.CongratsFlow> { backStackEntry ->
-                        CongratScreen(
-                            navigateTo = {
+                            onAuthSuccess = {
                                 navController.navigate(ScreenContainer.HomeFlow) {
                                     launchSingleTop = true
                                     popUpTo(navController.graph.startDestinationId) {

@@ -108,7 +108,7 @@ class OtpViewModel(
                             )
                         }
                     )
-                    is Validated.Valid -> sendEffect { OtpContract.Effect.NavigateToCongratScreen }
+                    is Validated.Valid -> sendEffect { OtpContract.Effect.NavigateToHome }
                 }
             }
     }

@@ -24,7 +24,7 @@ interface OtpContract {
     }
 
     sealed class Effect {
-        data object NavigateToCongratScreen : Effect()
+        data object NavigateToHome : Effect()
         data class NavigateToNewPassword(val email: String, val code: String) : Effect()
     }
 }
