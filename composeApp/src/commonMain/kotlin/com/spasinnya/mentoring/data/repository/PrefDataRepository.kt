@@ -1,6 +1,5 @@
 package com.spasinnya.mentoring.data.repository
 
-import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.model.DomainError
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.map
 
 class PrefDataRepository(
     private val tokenStore: TokenStore,
-    private val appStore: AppStore,
     private val localeStore: LocaleStore,
 ) : PrefRepository {
 
@@ -23,14 +21,6 @@ class PrefDataRepository(
             token?.let { Validated.Valid(it) }
                 ?: Validated.Invalid(DomainError.NotFound)
         }
-
-    override fun getCongratsShown(): Flow<DomainResult<Boolean>> =
-        appStore.flow().map { Validated.Valid(it) }
-
-    override fun changeCongratsShown(): Flow<DomainResult<Unit>> = flow {
-        appStore.save(true)
-        emit(Validated.Valid(Unit))
-    }
 
     override fun getLocale(): Flow<DomainResult<String?>> {
         return localeStore.flow()

@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.common_mentorship
 import com.spasinnya.mentoring.generated.resources.ic_content
+import com.spasinnya.mentoring.presentation.base.OnScreenResumed
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreIconButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
@@ -32,6 +33,8 @@ fun WeeksScreen(
     navigateToLessons: (bookId: String, weekNumber: Int) -> Unit
 ) {
     val (viewModel, state) = setupWeeksScreenModel(bookId)
+
+    OnScreenResumed { viewModel.dispatchEvent(WeeksContract.Event.ScreenResumed) }
 
     Scaffold(
         modifier = Modifier

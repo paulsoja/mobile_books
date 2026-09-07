@@ -79,4 +79,4 @@ private sealed interface SessionProbe {
 }
 
 private fun DomainResult<AuthSteps>.needsLiveSession(): Boolean =
-    this is Validated.Valid && (value == AuthSteps.Home || value == AuthSteps.Congrats)
+    this is Validated.Valid && value == AuthSteps.Home

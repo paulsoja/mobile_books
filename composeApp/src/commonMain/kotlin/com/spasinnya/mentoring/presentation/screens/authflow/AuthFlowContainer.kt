@@ -10,8 +10,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
@@ -19,26 +17,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.spasinnya.mentoring.domain.enums.OtpPurpose
 import com.spasinnya.mentoring.presentation.navigation.Screen
-import com.spasinnya.mentoring.presentation.navigation.ScreenContainer
 import com.spasinnya.mentoring.presentation.screens.authflow.login.LoginScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.newpassword.NewPasswordScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.otp.OtpScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.register.RegisterScreen
 import com.spasinnya.mentoring.presentation.screens.authflow.resetpassword.ResetPasswordScreen
-import kotlinx.coroutines.flow.filter
 
 @Composable
 fun AuthFlowContainer(
-    onLoginSuccess: () -> Unit,
-    onRegisterSuccess: () -> Unit,
+    onAuthSuccess: () -> Unit,
 ) {
 
     val navController = rememberNavController()
-    LaunchedEffect(navController) {
-        snapshotFlow { navController.currentBackStackEntry?.destination?.route }
-            .filter { it == ScreenContainer.HomeFlow.toString() }
-            .collect { onLoginSuccess() }
-    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = Color(0xFFF5F7FC),
@@ -95,16 +85,12 @@ fun AuthFlowContainer(
                         navigateToResetPassword = {
                             navController.navigate(Screen.AuthFlow.ResetPasswordScreen)
                         },
-                        navigateToHome = {
-                            onLoginSuccess()
-                        }
+                        navigateToHome = onAuthSuccess
                     )
                 }
                 composable<Screen.AuthFlow.OtpScreen> {
                     OtpScreen(
-                        navigateTo = {
-                            onRegisterSuccess()
-                        },
+                        navigateToHome = onAuthSuccess,
                         navigateToNewPassword = { email, code ->
                             navController.navigate(
                                 Screen.AuthFlow.NewPasswordScreen(email = email, code = code)

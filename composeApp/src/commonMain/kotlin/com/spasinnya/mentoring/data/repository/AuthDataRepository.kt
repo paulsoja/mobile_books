@@ -5,7 +5,6 @@ import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.*
 import com.spasinnya.mentoring.data.net.postFlow
-import com.spasinnya.mentoring.data.storage.datastore.AppStore
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.enums.OtpPurpose
@@ -29,7 +28,6 @@ import kotlinx.coroutines.flow.map
 class AuthDataRepository(
     private val http: HttpClient,
     private val tokenStore: TokenStore,
-    private val appStore: AppStore,
     private val localeStore: LocaleStore,
 ) : AuthRepository {
 
@@ -42,7 +40,6 @@ class AuthDataRepository(
                 .map(TokenApiResponse::toDomain)
                 .mapErrors { it.toDomainError().asSignInError() }
         }.alsoValidDo(::saveSession)
-            .alsoValidDo { appStore.save(true) }
 
     override fun register(credentials: CredentialsApiRequest): Flow<DomainResult<String>> =
         http.postFlow<CredentialsApiRequest, String>(
@@ -106,7 +103,6 @@ class AuthDataRepository(
 
     private suspend fun clearSession() {
         tokenStore.clear()
-        appStore.clear()
         localeStore.clear()
         http.authProvider<BearerAuthProvider>()?.clearToken()
     }

@@ -8,7 +8,9 @@ import com.spasinnya.mentoring.domain.usecase.books.GetBooksUseCase
 import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
+import com.spasinnya.mentoring.presentation.base.UiState
 import com.spasinnya.mentoring.presentation.base.Validated
+import com.spasinnya.mentoring.presentation.base.map
 import com.spasinnya.mentoring.presentation.base.withLoading
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
 import com.spasinnya.mentoring.presentation.model.UiErrorType
@@ -28,6 +30,10 @@ class HomeViewModel(
     private val setAppLocaleUseCase: SetAppLocaleUseCase,
 ) : BaseMviViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>(initialState = HomeContract.State()) {
 
+    private enum class LoadMode { Initial, Silent }
+
+    private var isInitialResume = true
+
     override fun handleEvent(event: HomeContract.Event) {
         when (event) {
             is HomeContract.Event.Logout -> logout()
@@ -35,16 +41,18 @@ class HomeViewModel(
             is HomeContract.Event.ToggleLogoutDialog -> toggleLogoutDialog(event.show)
             is HomeContract.Event.OnLanguageChosen -> setNewLanguage(event.language)
             is HomeContract.Event.LoadedBooks -> {
-                setState { copy(books = event.books, error = UiErrorType.None) }
+                setState { copy(books = UiState.Present(event.books), error = UiErrorType.None) }
             }
             is HomeContract.Event.ShowLoading -> setState { copy(isLoading = event.isLoading) }
             is HomeContract.Event.PurchaseBook -> purchaseBook(event.bookId)
             is HomeContract.Event.SetPurchasedBook -> {
-                setState { copy(books = books.setPurchasedBook(event.bookId)) }
+                setState { copy(books = books.map { it.setPurchasedBook(event.bookId) }) }
                 sendEffect { ShowSnackbar("congrats") }
             }
             is HomeContract.Event.PurchaseLoading -> setState { copy(isPurchaseLoading = event.isLoading) }
             is HomeContract.Event.OnProfileClick -> sendEffect { HomeContract.Effect.NavigateToProfile }
+            is HomeContract.Event.ScreenResumed ->
+                if (isInitialResume) isInitialResume = false else loadBooks(LoadMode.Silent)
             is HomeContract.Event.OnErrorClick -> {
                 setState { copy(error = UiErrorType.None) }
                 loadBooks()
@@ -56,21 +64,25 @@ class HomeViewModel(
         loadBooks()
     }
 
-    private fun loadBooks() = viewModelScope.launch(Dispatchers.IO) {
+    private fun loadBooks(mode: LoadMode = LoadMode.Initial) = viewModelScope.launch(Dispatchers.IO) {
         getBooksUseCase.invoke()
             .distinctUntilChanged()
-            .withLoading { loading -> setState { copy(isLoading = loading) } }
+            .withLoading { loading ->
+                if (mode == LoadMode.Initial) setState { copy(isLoading = loading) }
+            }
             .collectLatest { result ->
                 when (result) {
-                    is Validated.Invalid -> handleDomainErrors(
-                        error = result.error,
-                        reduce = { errorType ->
-                            copy(
-                                isLoading = false,
-                                error = errorType
-                            )
-                        }
-                    )
+                    is Validated.Invalid -> if (mode != LoadMode.Silent) {
+                        handleDomainErrors(
+                            error = result.error,
+                            reduce = { errorType ->
+                                copy(
+                                    isLoading = false,
+                                    error = errorType
+                                )
+                            }
+                        )
+                    }
                     is Validated.Valid -> {
                         dispatchEvent(HomeContract.Event.LoadedBooks(result.value))
                     }

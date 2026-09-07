@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +29,14 @@ fun<T> Flow<T>.CollectEffects(effects: (T) -> Unit) =
             effects.invoke(effect)
         }
     }
+
+@Composable
+fun OnScreenResumed(onResumed: () -> Unit) {
+    LifecycleResumeEffect(Unit) {
+        onResumed()
+        onPauseOrDispose { }
+    }
+}
 
 @Composable
 inline fun <reified VM : ViewModel, S, E> rememberScreenModel(

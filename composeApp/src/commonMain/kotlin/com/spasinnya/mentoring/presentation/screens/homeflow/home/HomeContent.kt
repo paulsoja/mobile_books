@@ -69,10 +69,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeContent(
-    state: HomeContract.State,
+    books: List<BookMeta>,
+    isPurchaseLoading: Boolean,
     navigateToWeeks: (bookId: String, bookNumber: Int) -> Unit,
     padding: PaddingValues,
-    viewModel: HomeViewModel,
+    onEvent: (HomeContract.Event) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(top = padding.calculateTopPadding()).padding(top = 16.dp),
@@ -82,7 +83,7 @@ fun HomeContent(
             text = stringResource(Res.string.home_choose_book),
             modifier = Modifier.padding(horizontal = 24.dp),
         )
-        if (state.books.isEmpty()) {
+        if (books.isEmpty()) {
             EmptyState(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp).padding(bottom = 40.dp),
                 title = stringResource(Res.string.home_no_books_title),
@@ -90,13 +91,13 @@ fun HomeContent(
             )
         } else {
             Pager(
-                list = state.books,
+                list = books,
                 pageContent = { _: PagerState, item: BookMeta ->
                     PagerCard(
                         item = item,
-                        isLoading = state.isPurchaseLoading,
+                        isLoading = isPurchaseLoading,
                         onPurchaseClicked = {
-                            viewModel.dispatchEvent(HomeContract.Event.PurchaseBook(item.id))
+                            onEvent(HomeContract.Event.PurchaseBook(item.id))
                         },
                         onOpenClicked = {
                             navigateToWeeks.invoke(item.id, item.bookNumber)
@@ -282,7 +283,7 @@ fun BookCardBottomBar(
     Box(modifier = Modifier.padding(start = 8.dp)) {
         if (item.isPurchased) {
             CircularProgressBar(
-                percentage = item.progress.toFloat() / 100,
+                percentage = item.progress,
                 modifier = Modifier.size(52.dp)
             )
         } else {
