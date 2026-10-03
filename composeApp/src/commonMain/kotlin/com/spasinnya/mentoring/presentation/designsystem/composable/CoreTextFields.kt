@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.spasinnya.mentoring.presentation.designsystem.composable
 
 import androidx.compose.foundation.background
@@ -9,11 +7,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -84,9 +83,10 @@ fun CoreOutlinedTextField(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoreOutlinedDropDown(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     options: List<String>,
@@ -94,19 +94,18 @@ fun CoreOutlinedDropDown(
     inputDefaults: InputDefaults = InputCommonDefaults(),
 ) {
     var expanded by remember { mutableStateOf(false) }
-
     ExposedDropdownMenuBox(
         expanded = expanded, onExpandedChange = { if (enabled) expanded = it }, modifier = modifier
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             value = value,
             onValueChange = {},
             readOnly = true,
             enabled = enabled,
             singleLine = inputDefaults.singleLine,
             shape = inputDefaults.shape,
-            colors = TextFieldDefaults.colors(
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
                 disabledContainerColor = Color(0xFFE7EBF4),
@@ -117,9 +116,6 @@ fun CoreOutlinedDropDown(
                 unfocusedPlaceholderColor = Color(0xFFB6C3D8),
                 focusedPlaceholderColor = Color(0xFFB6C3D8),
                 disabledPlaceholderColor = Color(0xFFB6C3D8),
-                focusedIndicatorColor = Color(0xFFB6C3D8),
-                unfocusedIndicatorColor = Color(0xFFB6C3D8),
-                disabledIndicatorColor = Color(0xFFDDE4EF),
             ),
             placeholder = {
                 inputDefaults.placeholder.takeIf { it.isNotEmpty() }?.let {
@@ -163,7 +159,6 @@ fun CoreOutlinedDropDown(
                         }
                     })
                 }
-
             }
         }
     }
