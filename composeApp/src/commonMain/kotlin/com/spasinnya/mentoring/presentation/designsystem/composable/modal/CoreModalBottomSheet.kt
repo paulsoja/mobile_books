@@ -1,12 +1,13 @@
 package com.spasinnya.mentoring.presentation.designsystem.composable.modal
 
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,15 +24,15 @@ fun <A> CoreModalBottomSheet(
     onDismissed: () -> Unit,
     onAction: (A) -> Unit,
     shouldDismissOnAction: (A) -> Boolean = { true },
-
     containerColor: Color = Color(0xFFF5F7FC), // TODO move to design system
     showDragHandle: Boolean = true,
-    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
-
     content: @Composable CoreBottomSheetScope<A>.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState: SheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded)
+    )
 
     // avoid stale lambdas across recompositions
     val latestOnDismissed by rememberUpdatedState(onDismissed)
@@ -63,13 +64,12 @@ fun <A> CoreModalBottomSheet(
     }
 
     ModalBottomSheet(
-        modifier = modifier,
+        modifier = modifier.systemBarsPadding(),
         onDismissRequest = { sheetScope.dismiss() },
         sheetState = sheetState,
         dragHandle = { if (showDragHandle) DragHandlerBottomSheet() },
         containerColor = containerColor,
         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-        contentWindowInsets = contentWindowInsets
     ) {
         sheetScope.content()
     }
