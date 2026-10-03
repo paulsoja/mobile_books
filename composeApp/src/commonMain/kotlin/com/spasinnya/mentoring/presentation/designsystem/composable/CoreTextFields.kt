@@ -1,19 +1,21 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.spasinnya.mentoring.presentation.designsystem.composable
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.ic_check
@@ -84,9 +88,10 @@ fun CoreOutlinedTextField(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoreOutlinedDropDown(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     options: List<String>,
@@ -94,19 +99,18 @@ fun CoreOutlinedDropDown(
     inputDefaults: InputDefaults = InputCommonDefaults(),
 ) {
     var expanded by remember { mutableStateOf(false) }
-
     ExposedDropdownMenuBox(
         expanded = expanded, onExpandedChange = { if (enabled) expanded = it }, modifier = modifier
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
+            modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
             value = value,
             onValueChange = {},
             readOnly = true,
             enabled = enabled,
             singleLine = inputDefaults.singleLine,
             shape = inputDefaults.shape,
-            colors = TextFieldDefaults.colors(
+            colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
                 disabledContainerColor = Color(0xFFE7EBF4),
@@ -117,9 +121,6 @@ fun CoreOutlinedDropDown(
                 unfocusedPlaceholderColor = Color(0xFFB6C3D8),
                 focusedPlaceholderColor = Color(0xFFB6C3D8),
                 disabledPlaceholderColor = Color(0xFFB6C3D8),
-                focusedIndicatorColor = Color(0xFFB6C3D8),
-                unfocusedIndicatorColor = Color(0xFFB6C3D8),
-                disabledIndicatorColor = Color(0xFFDDE4EF),
             ),
             placeholder = {
                 inputDefaults.placeholder.takeIf { it.isNotEmpty() }?.let {
@@ -163,8 +164,105 @@ fun CoreOutlinedDropDown(
                         }
                     })
                 }
-
             }
         }
     }
+}
+
+@Composable
+fun CoreOutlinedTextField(
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    value: String,
+    onValueChange: (String) -> Unit,
+    errorText: String = "",
+    enabled: Boolean = true,
+    inputDefaults: InputDefaults = InputCommonDefaults(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isError = errorText.isNotEmpty()
+    val visualTransformation = inputDefaults.visualTransformation()
+
+    val textColor = when {
+        !enabled -> Color(0xFFB6C3D8)
+        else -> Color(0xFF54595F)
+    }
+    val cursorColor = when {
+        isError -> Color(0xFFED1A3D)
+        else -> MaterialTheme.colorScheme.primary
+    }
+
+    val colors = OutlinedTextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color(0xFFE7EBF4),
+        errorContainerColor = Color.Transparent,
+        focusedTextColor = Color(0xFF54595F),
+        unfocusedTextColor = Color(0xFF54595F),
+        disabledTextColor = Color(0xFFB6C3D8),
+        errorTextColor = Color(0xFF54595F),
+        unfocusedPlaceholderColor = Color(0xFFB6C3D8),
+        focusedPlaceholderColor = Color(0xFFB6C3D8),
+        disabledPlaceholderColor = Color(0xFFB6C3D8),
+        errorSupportingTextColor = Color(0xFFED1A3D),
+        errorBorderColor = Color(0xFFED1A3D),
+        focusedBorderColor = Color(0xFFB6C3D8),
+        unfocusedBorderColor = Color(0xFFB6C3D8),
+        disabledBorderColor = Color(0xFFDDE4EF),
+    )
+
+    val placeholder: (@Composable () -> Unit)? =
+        if (inputDefaults.placeholder.isNotEmpty()) {
+            {
+                CoreTextBody(
+                    text = inputDefaults.placeholder,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        } else {
+            null
+        }
+
+    BasicTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        enabled = enabled,
+        singleLine = inputDefaults.singleLine,
+        textStyle = inputDefaults.textStyle.invoke().copy(
+            color = textColor,
+            textAlign = TextAlign.Center,
+        ),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = inputDefaults.keyboardType,
+        ),
+        visualTransformation = visualTransformation,
+        interactionSource = interactionSource,
+        cursorBrush = SolidColor(cursorColor),
+        decorationBox = { innerTextField ->
+            OutlinedTextFieldDefaults.DecorationBox(
+                value = value,
+                innerTextField = innerTextField,
+                enabled = enabled,
+                singleLine = true,
+                visualTransformation = visualTransformation,
+                interactionSource = interactionSource,
+                isError = false,
+                placeholder = placeholder,
+                supportingText = null,
+                trailingIcon = null,
+                colors = colors,
+                contentPadding = contentPadding,
+                container = {
+                    OutlinedTextFieldDefaults.Container(
+                        enabled = enabled,
+                        isError = isError,
+                        interactionSource = interactionSource,
+                        colors = colors,
+                        shape = inputDefaults.shape,
+                    )
+                },
+            )
+        },
+    )
 }
