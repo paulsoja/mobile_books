@@ -81,4 +81,6 @@
     <!--Lessons-->
     <string name="lessons_lesson">Урок</string>
     <string name="lessons_practical_work">Практична робота</string>
+    <string name="profile_delete_account">Видалити акаунт</string>
+    <string name="profile_delete_account_warning">Ваш акаунт і всі пов’язані дані, зокрема профіль, відповіді на домашні завдання, покупки та доступ до книг, буде видалено назавжди. Цю дію неможливо скасувати.</string>
 </resources>

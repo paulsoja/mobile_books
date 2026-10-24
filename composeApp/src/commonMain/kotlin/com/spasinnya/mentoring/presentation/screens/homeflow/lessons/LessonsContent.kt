@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -73,7 +74,7 @@ fun LessonsContent(
     onEvent: (LessonsContract.Event) -> Unit,
     navigateBack: () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().navigationBarsPadding()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -114,6 +115,8 @@ fun LessonsContent(
                 LessonPage(
                     lesson = lesson,
                     hasHomework = lesson.lessonNumber in state.lessonsWithHomework,
+                    isConfirming = state.isConfirmingLesson,
+                    onConfirm = { onEvent(LessonsContract.Event.ConfirmLesson(lesson.lessonNumber)) },
                     onOpenPracticalWork = {
                         onEvent(LessonsContract.Event.OpenPracticalWork(lesson.lessonNumber))
                     }
@@ -230,6 +233,8 @@ private fun LessonTabs(
 private fun LessonPage(
     lesson: ParsedLesson,
     hasHomework: Boolean,
+    isConfirming: Boolean,
+    onConfirm: () -> Unit,
     onOpenPracticalWork: () -> Unit,
 ) {
     val content = rememberLessonPageContent(lesson)
@@ -272,7 +277,8 @@ private fun LessonPage(
                 } else {
                     stringResource(Res.string.common_confirm)
                 },
-                onClick = { if (hasHomework) onOpenPracticalWork() }
+                enabled = !isConfirming,
+                onClick = { if (hasHomework) onOpenPracticalWork() else onConfirm() }
             )
         }
     }

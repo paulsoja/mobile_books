@@ -5,6 +5,9 @@ import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.*
 import com.spasinnya.mentoring.data.net.postFlow
+import com.spasinnya.mentoring.data.net.requestDataFlow
+import com.spasinnya.mentoring.data.net.json
+import io.ktor.http.HttpMethod
 import com.spasinnya.mentoring.data.storage.datastore.LocaleStore
 import com.spasinnya.mentoring.data.storage.datastore.TokenStore
 import com.spasinnya.mentoring.domain.enums.OtpPurpose
@@ -91,6 +94,11 @@ class AuthDataRepository(
 
         emit(result)
     }
+
+    override fun deleteAccount(): Flow<DomainResult<Unit>> =
+        http.requestDataFlow<Unit>(json = json, method = HttpMethod.Delete, path = "me")
+            .map { result -> result.mapErrors { it.toDomainError() } }
+            .alsoValidDo { clearSession() }
 
     /** A 401 from the sign-in endpoint means the email/password pair is wrong, not a dead session. */
     private fun DomainError.asSignInError(): DomainError =

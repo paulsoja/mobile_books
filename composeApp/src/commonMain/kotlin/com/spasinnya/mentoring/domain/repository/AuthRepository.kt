@@ -16,4 +16,5 @@ interface AuthRepository {
     fun requestOtp(email: Email.Valid, purpose: OtpPurpose): Flow<DomainResult<Unit>>
     fun resetPassword(request: ResetPasswordApiRequest): Flow<DomainResult<Unit>>
     fun logout(): Flow<DomainResult<Unit>>
+    fun deleteAccount(): Flow<DomainResult<Unit>>
 }
