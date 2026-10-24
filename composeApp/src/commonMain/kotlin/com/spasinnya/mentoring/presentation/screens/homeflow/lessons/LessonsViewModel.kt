@@ -1,12 +1,15 @@
 package com.spasinnya.mentoring.presentation.screens.homeflow.lessons
 
 import androidx.lifecycle.viewModelScope
+import com.spasinnya.mentoring.domain.model.HomeworkAnswer
+import com.spasinnya.mentoring.domain.usecase.books.SaveHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.GetCompletedLessonsUseCase
 import com.spasinnya.mentoring.domain.usecase.books.ObserveHomeworkUseCase
 import com.spasinnya.mentoring.presentation.base.BaseMviViewModel
 import com.spasinnya.mentoring.presentation.base.Validated
 import io.github.aakira.napier.Napier
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.catch
@@ -19,10 +22,12 @@ class LessonsViewModel(
     private val importBookFromMarkdownUseCase: ObserveBookUseCase,
     private val observeHomeworkUseCase: ObserveHomeworkUseCase,
     private val getCompletedLessonsUseCase: GetCompletedLessonsUseCase,
+    private val saveHomeworkAnswersUseCase: SaveHomeworkAnswersUseCase,
 ) : BaseMviViewModel<LessonsContract.State, LessonsContract.Event, LessonsContract.Effect>(initialState = LessonsContract.State(weekNumber = weekNumber)) {
 
     override fun handleEvent(event: LessonsContract.Event) {
         when (event) {
+            is LessonsContract.Event.ConfirmLesson -> confirmLesson(event.lessonNumber)
             is LessonsContract.Event.OpenPracticalWork -> setState {
                 copy(practicalWorkLesson = event.lessonNumber)
             }
@@ -40,6 +45,39 @@ class LessonsViewModel(
         loadLessons()
         loadHomeworkAvailability()
         loadCompletedLessons()
+    }
+
+    private fun confirmLesson(lessonNumber: Int) {
+        if (state.value.isConfirmingLesson) return
+        setState { copy(isConfirmingLesson = true) }
+        viewModelScope.launch {
+            try {
+                // The server counts stored question answers as completed lessons.
+                // An empty answers list would not persist completion.
+                saveHomeworkAnswersUseCase(
+                    bookId = bookId,
+                    weekNumber = weekNumber,
+                    lessonNumber = lessonNumber,
+                    answers = listOf(
+                        HomeworkAnswer(
+                            questionId = "w${weekNumber}_l${lessonNumber}_confirmation",
+                            values = emptyList(),
+                        )
+                    ),
+                ).collectLatest { result ->
+                    when (result) {
+                        is Validated.Valid -> setState { copy(completedLessons = result.value) }
+                        is Validated.Invalid -> Napier.d { "confirmLesson: error=${result.error}" }
+                    }
+                }
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                Napier.d { "confirmLesson: catch=${exception.message}" }
+            } finally {
+                setState { copy(isConfirmingLesson = false) }
+            }
+        }
     }
 
     private fun loadLessons() = viewModelScope.launch(Dispatchers.IO) {

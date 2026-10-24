@@ -123,7 +123,8 @@ val viewModelModule = module {
             weekNumber = params.get(),
             importBookFromMarkdownUseCase = get(),
             observeHomeworkUseCase = get(),
-            getCompletedLessonsUseCase = get()
+            getCompletedLessonsUseCase = get(),
+            saveHomeworkAnswersUseCase = get()
         )
     }
     viewModel { params ->

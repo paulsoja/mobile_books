@@ -115,6 +115,8 @@ fun LessonsContent(
                 LessonPage(
                     lesson = lesson,
                     hasHomework = lesson.lessonNumber in state.lessonsWithHomework,
+                    isConfirming = state.isConfirmingLesson,
+                    onConfirm = { onEvent(LessonsContract.Event.ConfirmLesson(lesson.lessonNumber)) },
                     onOpenPracticalWork = {
                         onEvent(LessonsContract.Event.OpenPracticalWork(lesson.lessonNumber))
                     }
@@ -231,6 +233,8 @@ private fun LessonTabs(
 private fun LessonPage(
     lesson: ParsedLesson,
     hasHomework: Boolean,
+    isConfirming: Boolean,
+    onConfirm: () -> Unit,
     onOpenPracticalWork: () -> Unit,
 ) {
     val content = rememberLessonPageContent(lesson)
@@ -273,7 +277,8 @@ private fun LessonPage(
                 } else {
                     stringResource(Res.string.common_confirm)
                 },
-                onClick = { if (hasHomework) onOpenPracticalWork() }
+                enabled = !isConfirming,
+                onClick = { if (hasHomework) onOpenPracticalWork() else onConfirm() }
             )
         }
     }

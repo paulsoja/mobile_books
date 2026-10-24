@@ -13,9 +13,11 @@ interface LessonsContract {
         val practicalWorkLesson: Int? = null,
         val completedLessons: List<Int> = emptyList(),
         val isLoading: Boolean = false,
+        val isConfirmingLesson: Boolean = false,
     )
 
     sealed class Event {
+        data class ConfirmLesson(val lessonNumber: Int) : Event()
         data class OpenPracticalWork(val lessonNumber: Int) : Event()
         data object ClosePracticalWork : Event()
         data class UpdateCompletedLessons(val completedLessons: List<Int>) : Event()
