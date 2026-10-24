@@ -64,6 +64,7 @@ fun HomeFlowContainer(onLogout: () -> Unit) {
         }
         composable<Screen.HomeFlow.ProfileScreen> {
             ProfileScreen(
+                navigateToLogin = onLogout,
                 navigateBack = { navController.navigateUp() },
                 navigateToChangePassword = {
                     // TODO: ChangePasswordScreen

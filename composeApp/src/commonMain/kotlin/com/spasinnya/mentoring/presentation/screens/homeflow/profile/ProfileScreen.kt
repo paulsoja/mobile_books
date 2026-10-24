@@ -33,6 +33,14 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.CoreSpacerVe
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTextBody
 import com.spasinnya.mentoring.presentation.designsystem.composable.CoreTopAppBar
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AppAlertDialog
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.AlertTexts
+import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.DialogState
+import com.spasinnya.mentoring.generated.resources.Res
+import com.spasinnya.mentoring.generated.resources.profile_delete_account
+import com.spasinnya.mentoring.generated.resources.profile_delete_account_warning
+import com.spasinnya.mentoring.generated.resources.common_cancel
+import org.jetbrains.compose.resources.stringResource
+import androidx.compose.material3.TextButton
 import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.toAlertTexts
 import com.spasinnya.mentoring.presentation.designsystem.composable.loading.LoadingOverlay
 import com.spasinnya.mentoring.presentation.designsystem.defaults.InputCommonDefaults
@@ -43,6 +51,7 @@ import kotlinx.coroutines.launch
 fun ProfileScreen(
     navigateBack: () -> Unit,
     navigateToChangePassword: () -> Unit,
+    navigateToLogin: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -50,6 +59,7 @@ fun ProfileScreen(
     val (viewModel, state) = rememberScreenModel<ProfileViewModel, ProfileContract.State, ProfileContract.Effect>(
         onEffect = { effect ->
             when (effect) {
+                ProfileContract.Effect.AccountDeleted -> navigateToLogin()
                 ProfileContract.Effect.ProfileSaved ->
                     scope.launch { snackbarHostState.showSnackbar("Профіль збережено") }
 
@@ -168,6 +178,19 @@ fun ProfileScreen(
                     onClick = { viewModel.dispatchEvent(ProfileContract.Event.SaveProfile) }
                 )
 
+                CoreSpacerVerticalLarge()
+
+                TextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !state.isLoading,
+                    onClick = { viewModel.dispatchEvent(ProfileContract.Event.ShowDeleteConfirmation) }
+                ) {
+                    CoreTextBody(
+                        text = stringResource(Res.string.profile_delete_account),
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error)
+                    )
+                }
+
                 CoreSpacerVerticalMedium()
             }
         }
@@ -181,6 +204,20 @@ fun ProfileScreen(
     }
 
     LoadingOverlay(visible = state.isLoading)
+
+    AppAlertDialog(
+        state = if (state.showDeleteConfirmation) DialogState.Shown(Unit) else DialogState.Hidden,
+        mapTexts = {
+            AlertTexts(
+                title = stringResource(Res.string.profile_delete_account),
+                message = stringResource(Res.string.profile_delete_account_warning),
+                confirm = stringResource(Res.string.profile_delete_account),
+                cancel = stringResource(Res.string.common_cancel),
+            )
+        },
+        onDismiss = { viewModel.dispatchEvent(ProfileContract.Event.DismissDeleteConfirmation) },
+        onConfirm = { viewModel.dispatchEvent(ProfileContract.Event.DeleteAccount) },
+    )
 
     AppAlertDialog(
         state = state.dialog,

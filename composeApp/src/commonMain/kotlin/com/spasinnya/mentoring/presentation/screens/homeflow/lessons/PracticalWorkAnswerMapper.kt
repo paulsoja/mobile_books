@@ -21,6 +21,7 @@ private const val SELECTED_ID = "__selected__"
 /**
  * Builds the request payload for a single lesson from the current UI state.
  * Empty selections/inputs are serialized as empty strings.
+ * Questions without answer controls are sent with their question id only.
  */
 fun buildHomeworkAnswers(
     lesson: HomeworkLesson,
@@ -28,7 +29,7 @@ fun buildHomeworkAnswers(
     selectedOptions: Map<String, String>,
     textAnswers: Map<String, String>,
 ): List<HomeworkAnswer> =
-    lesson.questions.mapNotNull { question ->
+    lesson.questions.map { question ->
         val qid = question.id
         val values: List<HomeworkAnswerValue> = when (question) {
             is HomeworkQuestion.Checkbox -> question.options.map { option ->
@@ -80,7 +81,7 @@ fun buildHomeworkAnswers(
             }
 
             is HomeworkQuestion.Text,
-            is HomeworkQuestion.Open -> return@mapNotNull null
+            is HomeworkQuestion.Open -> emptyList()
         }
 
         HomeworkAnswer(questionId = qid, values = values)

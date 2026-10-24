@@ -81,4 +81,6 @@
     <!--Lessons-->
     <string name="lessons_lesson">Lesson</string>
     <string name="lessons_practical_work">Workshop</string>
+    <string name="profile_delete_account">Delete account</string>
+    <string name="profile_delete_account_warning">Your account and all associated data, including your profile, homework answers, purchases, and book access, will be permanently deleted. This action cannot be undone.</string>
 </resources>

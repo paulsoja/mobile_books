@@ -12,6 +12,7 @@ interface ProfileContract {
         val city: String = "Київ",
         val church: String = "",
         val isLoading: Boolean = false,
+        val showDeleteConfirmation: Boolean = false,
         val dialog: DialogState<UiErrorType> = DialogState.Hidden,
     )
 
@@ -19,12 +20,16 @@ interface ProfileContract {
         data class UpdateFirstName(val value: String) : Event()
         data class UpdateLastName(val value: String) : Event()
         data object SaveProfile : Event()
+        data object ShowDeleteConfirmation : Event()
+        data object DismissDeleteConfirmation : Event()
+        data object DeleteAccount : Event()
         data object DismissDialog : Event()
     }
 
     sealed class Effect {
         data object NavigateToChangePassword : Effect()
         data object ProfileSaved : Effect()
+        data object AccountDeleted : Effect()
         data object SaveFailed : Effect()
     }
 }

@@ -20,6 +20,7 @@ import com.spasinnya.mentoring.generated.resources.ic_eye_off
 import com.spasinnya.mentoring.generated.resources.ic_eye_on
 import org.jetbrains.compose.resources.painterResource
 
+@Immutable
 interface InputDefaults {
     val placeholder: String
     val singleLine: Boolean

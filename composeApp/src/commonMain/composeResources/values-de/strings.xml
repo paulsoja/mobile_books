@@ -81,4 +81,6 @@
     <!--Lessons-->
     <string name="lessons_lesson">Lektion</string>
     <string name="lessons_practical_work">Praktische Arbeit</string>
+    <string name="profile_delete_account">Konto löschen</string>
+    <string name="profile_delete_account_warning">Dein Konto und alle zugehörigen Daten, einschließlich Profil, Hausaufgabenantworten, Käufen und Buchzugriff, werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
 </resources>

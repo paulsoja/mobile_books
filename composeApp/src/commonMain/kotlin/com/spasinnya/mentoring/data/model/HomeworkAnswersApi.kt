@@ -1,5 +1,7 @@
 package com.spasinnya.mentoring.data.model
 
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -13,9 +15,11 @@ data class HomeworkAnswersApiResponse(
 )
 
 @Serializable
+@OptIn(ExperimentalSerializationApi::class)
 data class HomeworkAnswerApi(
     val questionId: String,
-    val values: List<HomeworkValueApi>
+    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    val values: List<HomeworkValueApi> = emptyList()
 )
 
 @Serializable

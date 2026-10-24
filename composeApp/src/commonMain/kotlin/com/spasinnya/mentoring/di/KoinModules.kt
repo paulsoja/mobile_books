@@ -33,6 +33,7 @@ import com.spasinnya.mentoring.domain.usecase.books.PurchaseBookUseCase
 import com.spasinnya.mentoring.domain.usecase.books.SaveHomeworkAnswersUseCase
 import com.spasinnya.mentoring.domain.usecase.homework.GetHomeworkUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.GetProfileUseCase
+import com.spasinnya.mentoring.domain.usecase.profile.DeleteAccountUseCase
 import com.spasinnya.mentoring.domain.usecase.profile.UpdateProfileUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.GetAppLocaleUseCase
 import com.spasinnya.mentoring.domain.usecase.settings.SetAppLocaleUseCase
@@ -100,6 +101,7 @@ val useCaseModule = module {
     factoryOf(::SaveHomeworkAnswersUseCase)
     factoryOf(::GetHomeworkUseCase)
     factoryOf(::GetProfileUseCase)
+    factoryOf(::DeleteAccountUseCase)
     factoryOf(::UpdateProfileUseCase)
     factoryOf(::GetAppLocaleUseCase)
     factoryOf(::SetAppLocaleUseCase)
