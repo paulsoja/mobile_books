@@ -8,6 +8,8 @@ import com.spasinnya.mentoring.presentation.designsystem.composable.dialog.Dialo
 import com.spasinnya.mentoring.presentation.model.UiErrorType
 import com.spasinnya.mentoring.presentation.model.UiMessageType
 
+enum class PurchaseMessageKind { Success, Pending, Failed }
+
 interface HomeContract {
     data class State(
         val books: UiState<List<BookMeta>> = UiState.Absent,
@@ -26,9 +28,7 @@ interface HomeContract {
         data object OnProfileClick : Event()
         data class LoadedBooks(val books: List<BookMeta>) : Event()
         data class ShowLoading(val isLoading: Boolean) : Event()
-        data class PurchaseLoading(val isLoading: Boolean) : Event()
         data class PurchaseBook(val bookId: String) : Event()
-        data class SetPurchasedBook(val bookId: String) : Event()
         data class ToggleSettingsDialog(val show: Boolean) : Event()
         data class ToggleLogoutDialog(val show: Boolean) : Event()
         data class OnLanguageChosen(val language: Language) : Event()
@@ -39,6 +39,6 @@ interface HomeContract {
     sealed class Effect {
         data object NavigateToLogin : Effect()
         data object NavigateToProfile : Effect()
-        data class ShowSnackbar(val message: String) : Effect()
+        data class PurchaseMessage(val kind: PurchaseMessageKind) : Effect()
     }
 }

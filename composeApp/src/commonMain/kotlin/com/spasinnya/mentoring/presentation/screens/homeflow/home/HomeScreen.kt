@@ -15,6 +15,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.ic_settings
+import com.spasinnya.mentoring.generated.resources.billing_success
+import com.spasinnya.mentoring.generated.resources.billing_pending
+import com.spasinnya.mentoring.generated.resources.billing_failed
+import org.jetbrains.compose.resources.stringResource
 import com.spasinnya.mentoring.presentation.base.OnScreenResumed
 import com.spasinnya.mentoring.presentation.base.UiState
 import com.spasinnya.mentoring.presentation.base.rememberScreenModel
@@ -117,13 +121,21 @@ fun setupHomeScreenModel(
     navigateToLogin: () -> Unit,
     navigateToProfile: () -> Unit,
     showSnackbar: (String) -> Unit,
-): Pair<HomeViewModel, HomeContract.State> =
-    rememberScreenModel<HomeViewModel, HomeContract.State, HomeContract.Effect>(
+): Pair<HomeViewModel, HomeContract.State> {
+    val purchaseSuccess = stringResource(Res.string.billing_success)
+    val purchasePending = stringResource(Res.string.billing_pending)
+    val purchaseFailed = stringResource(Res.string.billing_failed)
+    return rememberScreenModel<HomeViewModel, HomeContract.State, HomeContract.Effect>(
         onEffect = { effect ->
             when (effect) {
                 HomeContract.Effect.NavigateToLogin -> navigateToLogin.invoke()
-                is HomeContract.Effect.ShowSnackbar -> showSnackbar.invoke(effect.message)
+                is HomeContract.Effect.PurchaseMessage -> showSnackbar(when (effect.kind) {
+                    PurchaseMessageKind.Success -> purchaseSuccess
+                    PurchaseMessageKind.Pending -> purchasePending
+                    PurchaseMessageKind.Failed -> purchaseFailed
+                })
                 HomeContract.Effect.NavigateToProfile -> navigateToProfile.invoke()
             }
         }
     )
+}

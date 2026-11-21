@@ -83,4 +83,8 @@
     <string name="lessons_practical_work">Практическая работа</string>
     <string name="profile_delete_account">Удалить аккаунт</string>
     <string name="profile_delete_account_warning">Ваш аккаунт и все связанные данные, включая профиль, ответы на домашние задания, покупки и доступ к книгам, будут удалены навсегда. Это действие нельзя отменить.</string>
+    <string name="billing_success">Покупка завершена.</string>
+    <string name="billing_pending">Ожидаем оплату. Доступ появится после подтверждения платежа.</string>
+    <string name="billing_failed">Не удалось завершить или проверить покупку. Попробуйте ещё раз.</string>
+    <string name="billing_unavailable">Недоступно</string>
 </resources>

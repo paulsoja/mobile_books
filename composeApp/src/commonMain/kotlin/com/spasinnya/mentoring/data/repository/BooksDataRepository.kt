@@ -6,7 +6,6 @@ import com.spasinnya.mentoring.data.mapper.toDomain
 import com.spasinnya.mentoring.data.mapper.toDomainError
 import com.spasinnya.mentoring.data.model.HomeworkAnswersApiRequest
 import com.spasinnya.mentoring.data.model.HomeworkAnswersApiResponse
-import com.spasinnya.mentoring.data.model.PurchaseStatusApiResponse
 import com.spasinnya.mentoring.data.net.getFlow
 import com.spasinnya.mentoring.data.net.postFlow
 import com.spasinnya.mentoring.data.net.putFlow
@@ -31,27 +30,32 @@ class BooksDataRepository(
     private val parser: MentorshipMarkdownParser,
     private val homeworkParser: HomeworkMarkdownParser,
     private val localeStore: LocaleStore,
+    private val billing: com.spasinnya.mentoring.domain.repository.BookBilling,
 ) : BooksRepository {
 
     override fun getBooks(): Flow<DomainResult<List<BookMeta>>> = flow {
         val currentLanguage = localeStore.read()
         val result = try {
             val meta = bookFileDataSource.readAllMetaJson(currentLanguage ?: "en")
-            Validated.Valid(meta.map { it.toDomain() })
+            Validated.Valid(billing.refresh(meta.map { it.toDomain() }))
+        } catch (cancelled: kotlinx.coroutines.CancellationException) {
+            throw cancelled
         } catch (t: Throwable) {
             Validated.Invalid(t.toDataError())
         }.mapErrors { it.toDomainError() }
         emit(result)
     }
 
-    override fun purchaseBook(bookId: String): Flow<DomainResult<PurchaseStatus>> =
-        http.postFlow<Unit, PurchaseStatusApiResponse>(
-            path = "books/$bookId/purchase",
-        ).map { result ->
-            result
-                .map(PurchaseStatusApiResponse::toDomain)
-                .mapErrors { it.toDomainError() }
+    override fun purchaseBook(bookId: String): Flow<DomainResult<PurchaseStatus>> = flow {
+        try {
+            val book = bookFileDataSource.readMetaJson(bookId).toDomain()
+            emit(Validated.Valid(billing.purchase(book)))
+        } catch (cancelled: kotlinx.coroutines.CancellationException) {
+            throw cancelled
+        } catch (t: Throwable) {
+            emit(Validated.Invalid(t.toDataError().toDomainError()))
         }
+    }
 
     override fun getWeeks(bookId: String): Flow<DomainResult<BookMeta>> = flow {
         val result = try {

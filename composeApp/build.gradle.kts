@@ -17,7 +17,6 @@ compose.resources {
 
 kotlin {
     androidTarget {
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }
@@ -40,6 +39,7 @@ kotlin {
     
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.play.billing)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.kotlinx.coroutines.android)
@@ -92,8 +92,8 @@ android {
         applicationId = "com.books.spasinnya"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 2
-        versionName = "0.1.1"
+        versionCode = 3
+        versionName = "0.1.2"
     }
     packaging {
         resources {
