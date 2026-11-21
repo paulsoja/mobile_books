@@ -83,4 +83,8 @@
     <string name="lessons_practical_work">Workshop</string>
     <string name="profile_delete_account">Delete account</string>
     <string name="profile_delete_account_warning">Your account and all associated data, including your profile, homework answers, purchases, and book access, will be permanently deleted. This action cannot be undone.</string>
+    <string name="billing_success">Purchase completed.</string>
+    <string name="billing_pending">Payment is pending. Access will appear after payment is confirmed.</string>
+    <string name="billing_failed">Could not complete or verify the purchase. Please try again.</string>
+    <string name="billing_unavailable">Unavailable</string>
 </resources>

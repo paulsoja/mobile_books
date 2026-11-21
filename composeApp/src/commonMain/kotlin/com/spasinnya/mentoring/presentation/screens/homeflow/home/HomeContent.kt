@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import com.spasinnya.mentoring.domain.model.BookMeta
 import com.spasinnya.mentoring.generated.resources.Res
 import com.spasinnya.mentoring.generated.resources.common_buy
+import com.spasinnya.mentoring.generated.resources.billing_unavailable
 import com.spasinnya.mentoring.generated.resources.common_content
 import com.spasinnya.mentoring.generated.resources.common_open
 import com.spasinnya.mentoring.generated.resources.home_choose_book
@@ -305,7 +306,12 @@ fun BookCardBottomBar(
     } else {
         CorePrimaryButton(
             modifier = Modifier.weight(1f).height(68.dp),
-            text = if (item.isPurchased) stringResource(Res.string.common_open) else stringResource(Res.string.common_buy),
+            text = when {
+                item.isPurchased -> stringResource(Res.string.common_open)
+                !item.canPurchase -> stringResource(Res.string.billing_unavailable)
+                else -> "${stringResource(Res.string.common_buy)} ${item.priceLabel}"
+            },
+            enabled = item.isPurchased || item.canPurchase,
             onClick = { if (item.isPurchased) onOpenClicked() else onPurchaseClicked(item.id) },
             iconAfter = if (item.isPurchased) Res.drawable.ic_arrow_right else null
         )

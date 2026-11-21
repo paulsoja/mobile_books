@@ -81,7 +81,8 @@ fun createHttpClient(
     }
 
     client.plugin(HttpSend).intercept { request ->
-        val tag = readLanguageTag()?.trim()?.ifBlank { null } ?: defaultLang
+        val tag = request.headers[HttpHeaders.AcceptLanguage]
+            ?: readLanguageTag()?.trim()?.ifBlank { null } ?: defaultLang
 
         request.headers.remove(HttpHeaders.AcceptLanguage)
         request.headers.append(HttpHeaders.AcceptLanguage, tag)
@@ -123,7 +124,8 @@ inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.contentNegot
 inline fun <reified T : HttpClientEngineConfig> HttpClientConfig<T>.loggingPlugin() {
     install(Logging) {
         logger = Logger.SIMPLE
-        level = LogLevel.BODY
+        level = LogLevel.HEADERS
+        sanitizeHeader { it == HttpHeaders.Authorization }
     }
 }
 

@@ -8,6 +8,9 @@ import androidx.core.view.WindowCompat
 import com.spasinnya.mentoring.di.initKoin
 import com.spasinnya.mentoring.presentation.app.AppContent
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.android.get
+import org.koin.core.context.GlobalContext
+import com.spasinnya.mentoring.billing.AndroidBookBilling
 
 class MainActivity : ComponentActivity() {
 
@@ -15,9 +18,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        initKoin {
-            androidContext(this@MainActivity)
+        if (GlobalContext.getOrNull() == null) initKoin {
+            androidContext(applicationContext)
         }
+
+        get<AndroidBookBilling>().attach(this)
 
         val insets = WindowCompat.getInsetsController(window, window.decorView.rootView)
         insets.isAppearanceLightStatusBars = true
@@ -26,5 +31,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppContent()
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        get<AndroidBookBilling>().attach(this)
+    }
+
+    override fun onDestroy() {
+        get<AndroidBookBilling>().detach(this)
+        super.onDestroy()
     }
 }
